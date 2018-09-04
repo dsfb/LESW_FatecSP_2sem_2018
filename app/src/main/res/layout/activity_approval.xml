@@ -1,0 +1,163 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="14dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aprovar competência"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:text="Diego Alves"
+                android:editable="false"
+                android:id="@+id/input_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/employee"
+                android:textColor="@color/jet"
+                android:textColorHighlight="@color/black"
+                android:textColorHint="@color/jumbo" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:text="Java"
+                android:editable="false"
+                android:id="@+id/input_knowledge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/knowledge"
+                android:textColor="@color/jet"
+                android:textColorHighlight="@color/black"
+                android:textColorHint="@color/jumbo" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:text="Java SE 7 Programmer I"
+                android:editable="false"
+                android:id="@+id/input_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/certification"
+                android:textColor="@color/jet"
+                android:textColorHighlight="@color/black"
+                android:textColorHint="@color/jumbo" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp">-->
+        <!--<EditText android:id="@+id/input_institute"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/intitute"-->
+        <!--android:textColorHint="@color/jumbo"-->
+        <!--android:textColor="@color/jet"-->
+        <!--android:textColorHighlight="@color/black"-->
+        <!--/>-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:text="11/10/2017"
+                android:id="@+id/input_test_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:hint="@string/test_date"
+                android:textColor="@color/jet"
+                android:textColorHighlight="@color/black"
+                android:textColorHint="@color/jumbo"
+                tools:ignore="KeyboardInaccessibleWidget,TextFields" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnAttachImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_on"
+            android:drawableLeft="@drawable/attach"
+            android:text="@string/attach_image"
+            android:textColor="@color/jet"
+            android:textSize="12sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnDisapprove"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/red"
+                android:padding="12dp"
+                android:text="@string/reprove"
+                android:textColor="@android:color/white" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnApprove"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="1dp"
+                android:background="@color/accent"
+                android:padding="12dp"
+                android:text="@string/approve"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,139 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.ihc.tree_knowledge.UploadFragment">
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/cardMarginVertical"
+        android:layout_marginLeft="@dimen/cardMarginHorizontal"
+        android:layout_marginRight="@dimen/cardMarginHorizontal"
+        android:layout_marginTop="120dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fitsSystemWindows="true">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:text="@string/send_cert_title" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+                    <EditText android:id="@+id/input_knowledge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/knowledge"
+                        android:textColorHint="@color/jumbo"
+                        android:textColor="@color/jet"
+                        android:textColorHighlight="@color/black"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+                    <EditText android:id="@+id/input_test"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/certification"
+                        android:textColorHint="@color/jumbo"
+                        android:textColor="@color/jet"
+                        android:textColorHighlight="@color/black"
+                        />
+                </android.support.design.widget.TextInputLayout>
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:layout_marginBottom="8dp">-->
+                    <!--<EditText android:id="@+id/input_institute"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:hint="@string/intitute"-->
+                        <!--android:textColorHint="@color/jumbo"-->
+                        <!--android:textColor="@color/jet"-->
+                        <!--android:textColorHighlight="@color/black"-->
+                        <!--/>-->
+                <!--</android.support.design.widget.TextInputLayout>-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/input_test_date"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:hint="@string/test_date"
+                        android:focusable="false"
+                        android:textColorHint="@color/jumbo"
+                        android:textColor="@color/jet"
+                        android:textColorHighlight="@color/black"
+                        tools:ignore="KeyboardInaccessibleWidget,TextFields" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:drawableLeft="@drawable/attach"
+                    android:textSize="12sp"
+                    android:background="@drawable/button_on"
+                    android:textColor="@color/jet"
+                    android:id="@+id/btnAttachImage"
+                    android:text="@string/attach_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/txtImagePath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_send"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:padding="12dp"
+                    android:textColor="@android:color/white"
+                    android:background="@color/accent"
+                    android:text="@string/send"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
