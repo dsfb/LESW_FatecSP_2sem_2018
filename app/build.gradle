@@ -20,6 +20,10 @@ android {
         // javaMaxHeapSize "2048m"
     }
 
+    aaptOptions {
+        cruncherEnabled false
+    }
+
     buildTypes {
         debug {
             ext.enableCrashlytics = false
