@@ -12,7 +12,14 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
+        }
+
         release {
+            ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
