@@ -1,11 +1,10 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;

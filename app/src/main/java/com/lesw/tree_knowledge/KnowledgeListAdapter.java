@@ -1,4 +1,4 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;

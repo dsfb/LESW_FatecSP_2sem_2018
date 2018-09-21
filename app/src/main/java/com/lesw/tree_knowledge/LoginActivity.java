@@ -1,4 +1,4 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

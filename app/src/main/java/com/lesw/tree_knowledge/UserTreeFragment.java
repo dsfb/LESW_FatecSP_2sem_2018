@@ -1,6 +1,5 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,13 +7,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.Serializable;
 
-public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickListener {
+public class UserTreeFragment extends Fragment implements TreeNode.TreeNodeClickListener {
 
     ViewGroup containerView;
     private static final String NAME = "Conhecimento";
@@ -32,6 +32,27 @@ public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        TreeNode root = TreeNode.root();
+
+        DummyDB db = DummyDB.getInstance();
+
+        Employee employee = DummyDB.getInstance().findEmployeeByEmail(this.getActivity().getIntent().getStringExtra("EMAIL"));
+
+        TreeNode tn = Knowledge.generateUserTree(employee, getActivity());
+
+        root.addChildren(tn);
+
+        tView = new AndroidTreeView(getActivity(), root);
+        tView.setDefaultAnimation(true);
+        tView.setUse2dScroll(true);
+        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
+        tView.setDefaultNodeClickListener(UserTreeFragment.this);
+        tView.setDefaultViewHolder(TreeHolder.class);
+        containerView.addView(tView.getView());
+        tView.setUseAutoToggle(false);
+
+        tView.expandAll();
+
         if (savedInstanceState != null) {
             String state = savedInstanceState.getString("tState");
             if (!TextUtils.isEmpty(state)) {
@@ -40,28 +61,6 @@ public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickLi
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        DummyDB db = DummyDB.getInstance();
-        TreeNode tn = Knowledge.generateHRTree(db.getCompanyRoot(), getActivity());
-
-        TreeNode root = TreeNode.root();
-
-        root.addChildren(tn);
-
-        tView = new AndroidTreeView(getActivity(), root);
-        tView.setDefaultAnimation(true);
-        tView.setUse2dScroll(true);
-        tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-        tView.setDefaultNodeClickListener(HRTreeFragment.this);
-        tView.setDefaultViewHolder(TreeHolder.class);
-        containerView.removeAllViews();
-        containerView.addView(tView.getView());
-        tView.setUseAutoToggle(false);
-
-        tView.expandAll();
-    }
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
@@ -71,10 +70,7 @@ public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickLi
 
     @Override
     public void onClick(TreeNode node, Object value) {
-        Intent intent = new Intent(getActivity(), EmployeeListActivity.class);
-        intent.putExtra("TITLE", ((IconTreeItem)value).text);
-        intent.putExtra("WARNING", ((IconTreeItem)value).warningCounter);
-        intent.putExtra("ID", ((IconTreeItem)value).knowledge.getId());
-        startActivity(intent);
+        Toast toast = Toast.makeText(getActivity(), ((IconTreeItem)value).text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

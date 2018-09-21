@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ihc.tree_knowledge">
+    package="com.lesw.tree_knowledge">
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,7 @@
         <!-- &lt;!&ndash;</intent-filter>&ndash;&gt; -->
         <!-- </activity> -->
         <activity
-            android:name=".LoginActivity"
+            android:name="com.lesw.tree_knowledge.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
@@ -27,17 +27,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignupActivity"
+            android:name="com.lesw.tree_knowledge.SignupActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
-            android:name=".MenuActivity"
+            android:name="com.lesw.tree_knowledge.MenuActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".EmployeeListActivity"
+            android:name="com.lesw.tree_knowledge.EmployeeListActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".EmployeeActivity" />
-        <activity android:name=".ApprovalActivity"/>
+        <activity android:name="com.lesw.tree_knowledge.EmployeeActivity" />
+        <activity android:name="com.lesw.tree_knowledge.ApprovalActivity"/>
     </application>
 
 </manifest>

@@ -1,8 +1,6 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 class Employee {

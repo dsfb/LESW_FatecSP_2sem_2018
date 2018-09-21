@@ -1,11 +1,9 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.content.ContentValues.TAG;
-import static com.ihc.tree_knowledge.UploadFragment.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/LESW_FatecSP_2sem_2018.iml" filepath="$PROJECT_DIR$/LESW_FatecSP_2sem_2018.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/knowledge_tree.iml" filepath="$PROJECT_DIR$/knowledge_tree.iml" />
     </modules>
   </component>
 </project>

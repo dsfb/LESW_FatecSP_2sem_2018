@@ -1,4 +1,4 @@
-package com.ihc.tree_knowledge;
+package com.lesw.tree_knowledge;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +8,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.Serializable;
 
-public class ManagerTreeFragment extends Fragment implements TreeNode.TreeNodeClickListener {
+public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickListener {
 
     ViewGroup containerView;
     private static final String NAME = "Conhecimento";
@@ -45,7 +44,7 @@ public class ManagerTreeFragment extends Fragment implements TreeNode.TreeNodeCl
     public void onResume() {
         super.onResume();
         DummyDB db = DummyDB.getInstance();
-        TreeNode tn = Knowledge.generateManagerTree(db.getCompanyRoot(), getActivity());
+        TreeNode tn = Knowledge.generateHRTree(db.getCompanyRoot(), getActivity());
 
         TreeNode root = TreeNode.root();
 
@@ -55,7 +54,7 @@ public class ManagerTreeFragment extends Fragment implements TreeNode.TreeNodeCl
         tView.setDefaultAnimation(true);
         tView.setUse2dScroll(true);
         tView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
-        tView.setDefaultNodeClickListener(ManagerTreeFragment.this);
+        tView.setDefaultNodeClickListener(HRTreeFragment.this);
         tView.setDefaultViewHolder(TreeHolder.class);
         containerView.removeAllViews();
         containerView.addView(tView.getView());
