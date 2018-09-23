@@ -1,19 +1,31 @@
 package com.lesw.tree_knowledge;
 
+import com.reactiveandroid.annotation.Column;
+import com.reactiveandroid.annotation.PrimaryKey;
+import com.reactiveandroid.annotation.Table;
+
+@Table(name = "Certification", database = LoginActivity.class)
 public class Certification {
 
+    @PrimaryKey
     private Integer id;
+
+    @Column(name = "title")
     private String knowledge;
+
+    @Column(name = "title")
     private String userName;
+
+    @Column(name = "title")
     private String date;
+
+    @Column(name = "title")
     private String status;
+
+    @Column(name = "title")
     private String certification;
 
-    public Certification() {
-    }
-
     public Certification(String knowledge, String userName, String date, String status, String certification) {
-//        this.id = id;
         this.knowledge = knowledge;
         this.userName = userName;
         this.date = date;

@@ -38,6 +38,9 @@
             android:theme="@style/AppTheme" />
         <activity android:name="com.lesw.tree_knowledge.EmployeeActivity" />
         <activity android:name="com.lesw.tree_knowledge.ApprovalActivity"/>
+
+        <meta-data android:name="AA_DB_NAME" android:value="KnowledgeTree" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
     </application>
 
 </manifest>

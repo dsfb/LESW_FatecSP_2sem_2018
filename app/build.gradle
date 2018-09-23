@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.github.florent37:materialviewpager:1.2.3'
     implementation 'com.shawnlin:number-picker:2.4.4'
 
+    implementation 'com.reactiveandroid:reactiveandroid:1.4.3'
+
 //dependencies
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.jpardogo.materialtabstrip:library:1.1.0'

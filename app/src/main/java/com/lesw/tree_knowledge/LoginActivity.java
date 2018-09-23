@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.reactiveandroid.ReActiveAndroid;
+import com.reactiveandroid.ReActiveConfig;
+import com.reactiveandroid.internal.database.DatabaseConfig;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -54,6 +58,13 @@ public class LoginActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        DatabaseConfig appDatabase = new DatabaseConfig.Builder(LoginActivity.class)
+                .build();
+
+        ReActiveAndroid.init(new ReActiveConfig.Builder(this)
+                .addDatabaseConfigs(appDatabase)
+                .build());
     }
 
     public void login() {

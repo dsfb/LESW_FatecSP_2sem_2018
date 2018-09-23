@@ -1,24 +1,44 @@
 package com.lesw.tree_knowledge;
 
+import com.reactiveandroid.annotation.Column;
+import com.reactiveandroid.annotation.PrimaryKey;
+import com.reactiveandroid.annotation.Table;
+import com.reactiveandroid.query.Select;
+
 import java.util.HashSet;
 import java.util.Set;
 
+@Table(name = "Employee", database = LoginActivity.class)
 class Employee {
 
+    @PrimaryKey
     private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "role")
     private String role;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "pin")
     private String pin;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "function")
     private RoleEnum function;
+
     private Boolean logged = false;
 
-    private Set<Knowledge> knowledgeList;
+    private Set<Knowledge> knowledgeSet;
 
     public Employee() {
-        knowledgeList = new HashSet<>();
-        knowledgeList.add(Knowledge.ROOT);
+        knowledgeSet = new HashSet<>();
+        knowledgeSet.add(Knowledge.ROOT);
     }
 
     public Employee(String name, String role) {
@@ -88,22 +108,22 @@ class Employee {
     public void setFunction(RoleEnum function) { this.function = function; }
 
     public Set<Knowledge> getKnowledgeSet() {
-        return knowledgeList;
+        return knowledgeSet;
     }
 
     public void addKnowledge(Knowledge knowledge){
         if(knowledge != null){
-            knowledgeList.add(knowledge);
+            knowledgeSet.add(knowledge);
             knowledge.count(this);
-            if(knowledge.getUp() != null){
-                addKnowledge(knowledge.getUp());
-            }
+            Knowledge up = Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            addKnowledge(up);
         }
     }
 
     public Knowledge getRootKnowledge(){
-        for (Knowledge knowledge : knowledgeList) {
-            if(knowledge.getUp() == null) return knowledge;
+        for (Knowledge knowledge : knowledgeSet) {
+            Knowledge up =  Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            if(up == null) return knowledge;
         }
         return null;
     }
@@ -121,7 +141,7 @@ class Employee {
     }
 
     public boolean hasAKnowledge(String knowledgeName) {
-        for (Knowledge knowledge : knowledgeList) {
+        for (Knowledge knowledge : knowledgeSet) {
             if (knowledge.getName().equals(knowledgeName)) {
                 return true;
             }

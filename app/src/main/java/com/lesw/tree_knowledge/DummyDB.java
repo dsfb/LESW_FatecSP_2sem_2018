@@ -1,5 +1,7 @@
 package com.lesw.tree_knowledge;
 
+import com.reactiveandroid.query.Select;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class DummyDB {
     }
 
     public void addKnowledgeToRoot(String nome) {
-        Knowledge k = new Knowledge(this.companyKnowledges.size() + 1, nome, Knowledge.ROOT);
+        Knowledge k = new Knowledge(nome, Knowledge.ROOT.getId());
         this.companyKnowledges.add(k);
     }
 
@@ -104,44 +106,26 @@ public class DummyDB {
     }
 
     private void initData(){
-        Employee e1 = new Employee(1, "Diego Alves", "Desenvolvedor Java",
-                "diego.alves@acme.com", "1234", "123456", RoleEnum.USER);
-
-        Employee e2 = new Employee(2, "Pedro Santana", "Gerente de projetos",
-                "pedro.santana@acme.com", "1234", "123456", RoleEnum.MANAGER);
-
-        Employee e3 = new Employee(3, "Rodrigo Silva", "Desenvolvedor Java",
-                "rodrigo.silva@acme.com", "1234", "123456", RoleEnum.USER);
-
-        Employee e4 = new Employee(4, "Mariana Garcia", "Coordenadora",
-                "mariana.garcia@acme.com", "1234", "123456", RoleEnum.HR);
-
-        Employee e5 = new Employee(5, "Roger Flores", "Desenvolvedor Python",
-                "roger.flores@acme.com", "1234", "123456", RoleEnum.USER);
-
-        companyEmployees.add(e1);
-        companyEmployees.add(e2);
-        companyEmployees.add(e3);
-        companyEmployees.add(e4);
-        companyEmployees.add(e5);
+        //getting all table records
+        companyEmployees = Select.from(Employee.class).fetch();
 
         Knowledge k1 = Knowledge.ROOT;
 
-        Knowledge k2 = new Knowledge(2, "Lógica de Programação", k1);
-        Knowledge k3 = new Knowledge(3, "Microsoft Windows", k1);
+        Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
+        Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());
 
-        Knowledge k4 = new Knowledge(4, "Java", k2);
-        Knowledge k5 = new Knowledge(5, "Python", k2);
+        Knowledge k4 = new Knowledge("Java", k2.getId());
+        Knowledge k5 = new Knowledge("Python", k2.getId());
 
-        Knowledge k6 = new Knowledge(6, "Word 2013", k3);
-        Knowledge k7 = new Knowledge(7, "Excel 2013", k3);
+        Knowledge k6 = new Knowledge("Word 2013", k3.getId());
+        Knowledge k7 = new Knowledge("Excel 2013", k3.getId());
 
-        Knowledge k8 = new Knowledge(8, "JavaFX", k4);
-        Knowledge k9 = new Knowledge(9, "JPA", k4);
-        Knowledge k10 = new Knowledge(10, "JAX-RS", k4);
+        Knowledge k8 = new Knowledge("JavaFX", k4.getId());
+        Knowledge k9 = new Knowledge("JPA", k4.getId());
+        Knowledge k10 = new Knowledge("JAX-RS", k4.getId());
 
-        Knowledge k11 = new Knowledge(11, "NumPy", k5);
-        Knowledge k12 = new Knowledge(12, "PyTorch", k5);
+        Knowledge k11 = new Knowledge("NumPy", k5.getId());
+        Knowledge k12 = new Knowledge("PyTorch", k5.getId());
 
         companyKnowledges.add(k1);
         companyKnowledges.add(k2);
@@ -156,18 +140,16 @@ public class DummyDB {
         companyKnowledges.add(k11);
         companyKnowledges.add(k12);
 
-        e1.addKnowledge(k4);
+        /*
         e1.addKnowledge(k8);
         e1.addKnowledge(k9);
         e1.addKnowledge(k10);
         e1.addKnowledge(k11);
         e1.addKnowledge(k12);
 
-        e2.addKnowledge(k4);
         e2.addKnowledge(k6);
         e2.addKnowledge(k7);
 
-        e3.addKnowledge(k4);
         e3.addKnowledge(k9);
         e3.addKnowledge(k10);
         e3.addKnowledge(k6);
@@ -181,7 +163,7 @@ public class DummyDB {
         e5.addKnowledge(k12);
         e5.addKnowledge(k6);
         e5.addKnowledge(k7);
-
+        */
         String[][] certificationArray = {
                 {"C#", "Diego Alves", "18/10/2017", "PENDENTE", "C# Certificado XPTO!"},
                 {"C++", "Diego Alves", "31/10/2017", "PENDENTE", "C++ Certificado XPTO!"},

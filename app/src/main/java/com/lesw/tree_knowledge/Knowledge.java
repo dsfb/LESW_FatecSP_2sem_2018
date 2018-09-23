@@ -2,6 +2,10 @@ package com.lesw.tree_knowledge;
 
 import android.content.Context;
 
+import com.reactiveandroid.annotation.Column;
+import com.reactiveandroid.annotation.PrimaryKey;
+import com.reactiveandroid.annotation.Table;
+import com.reactiveandroid.query.Select;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.ArrayList;
@@ -9,27 +13,34 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Table(name = "Knowledge", database = LoginActivity.class)
 public class Knowledge {
 
-    public final static Knowledge ROOT = new Knowledge(0, "Árvore do Conhecimento", null);
+    public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=", 1).fetchSingle();
+    //public final static Knowledge ROOT = new Knowledge(0, "Árvore do Conhecimento", null);
 
+    @PrimaryKey
     private int id;
+
+    @Column(name = "name")
     private String name;
+
     private int count = 0;
     private int warningCount = 1;
-    private Knowledge up;
+
+    @Column(name = "up")
+    private int up;
+
     private List<Knowledge> children;
     private Set<Employee> employeeSet = new HashSet<>();
 
-    Knowledge(int id, String name, Knowledge up) {
-        this.id = id;
+    Knowledge(String name, int up) {
         this.name = name;
         this.up = up;
         this.children = new ArrayList<>();
 
-        if(up != null){
-            up.addChild(this);
-        }
+        Knowledge knowledge = Select.from(Knowledge.class).where("id=", this.up).fetchSingle();
+        knowledge.addChild(this);
     }
 
     public static Knowledge getById(int id, Knowledge root){
@@ -77,11 +88,11 @@ public class Knowledge {
         return count;
     }
 
-    public Knowledge getUp() {
+    public int getUp() {
         return up;
     }
 
-    public void setUp(Knowledge up) {
+    public void setUp(int up) {
         this.up = up;
     }
 
@@ -101,7 +112,9 @@ public class Knowledge {
         for (Knowledge child : children) {
             if(child.redLeaf()) return true;
         }
-        return up != null && up.blackLeaf();
+
+        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+        return knowledge != null && knowledge.blackLeaf();
     }
 
     private boolean redLeaf(){
@@ -111,9 +124,10 @@ public class Knowledge {
     void count(Employee employee) {
         employeeSet.add(employee);
         count = employeeSet.size();
-        if(up != null){
-            up.count(employee);
-        }
+
+        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+
+        knowledge.count(employee);
     }
 
     static TreeNode generateHRTree(Knowledge knowledge, Context context){
