@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Table(name = "Knowledge", database = LoginActivity.class)
+@Table(name = "Knowledge", database = AppDatabase.class)
 public class Knowledge {
 
     public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=", 1).fetchSingle();

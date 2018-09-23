@@ -4,7 +4,7 @@ import com.reactiveandroid.annotation.Column;
 import com.reactiveandroid.annotation.PrimaryKey;
 import com.reactiveandroid.annotation.Table;
 
-@Table(name = "Certification", database = LoginActivity.class)
+@Table(name = "Certification", database = AppDatabase.class)
 public class Certification {
 
     @PrimaryKey

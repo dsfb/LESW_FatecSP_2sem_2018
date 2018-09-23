@@ -8,7 +8,7 @@ import com.reactiveandroid.query.Select;
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name = "Employee", database = LoginActivity.class)
+@Table(name = "Employee", database = AppDatabase.class)
 class Employee {
 
     @PrimaryKey
