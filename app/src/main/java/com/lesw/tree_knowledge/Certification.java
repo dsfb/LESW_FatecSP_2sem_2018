@@ -8,21 +8,21 @@ import com.reactiveandroid.annotation.Table;
 public class Certification {
 
     @PrimaryKey
-    private Integer id;
+    private Long id;
 
-    @Column(name = "title")
+    @Column(name = "knowledge")
     private String knowledge;
 
-    @Column(name = "title")
+    @Column(name = "userName")
     private String userName;
 
-    @Column(name = "title")
+    @Column(name = "date")
     private String date;
 
-    @Column(name = "title")
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "title")
+    @Column(name = "certification")
     private String certification;
 
     public Certification(String knowledge, String userName, String date, String status, String certification) {

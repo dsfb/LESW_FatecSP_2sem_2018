@@ -16,11 +16,10 @@ import java.util.Set;
 @Table(name = "Knowledge", database = AppDatabase.class)
 public class Knowledge {
 
-    public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=", 1).fetchSingle();
-    //public final static Knowledge ROOT = new Knowledge(0, "Árvore do Conhecimento", null);
+    public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=?", 1).fetchSingle();
 
     @PrimaryKey
-    private int id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -29,12 +28,12 @@ public class Knowledge {
     private int warningCount = 1;
 
     @Column(name = "up")
-    private int up;
+    private Long up;
 
     private List<Knowledge> children;
     private Set<Employee> employeeSet = new HashSet<>();
 
-    Knowledge(String name, int up) {
+    Knowledge(String name, Long up) {
         this.name = name;
         this.up = up;
         this.children = new ArrayList<>();
@@ -64,7 +63,7 @@ public class Knowledge {
         }
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -88,11 +87,11 @@ public class Knowledge {
         return count;
     }
 
-    public int getUp() {
+    public Long getUp() {
         return up;
     }
 
-    public void setUp(int up) {
+    public void setUp(Long up) {
         this.up = up;
     }
 

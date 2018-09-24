@@ -1,5 +1,7 @@
 package com.lesw.tree_knowledge;
 
+import android.util.Log;
+
 import com.reactiveandroid.query.Select;
 
 import java.util.ArrayList;
@@ -109,7 +111,15 @@ public class DummyDB {
         //getting all table records
         companyEmployees = Select.from(Employee.class).fetch();
 
+        Log.d("TK", "company.size(): " + companyEmployees.size());
+
         Knowledge k1 = Knowledge.ROOT;
+
+        if (k1 == null) {
+            Log.d("TK", "Opa! Root eh null!");
+        } else {
+            Log.d("TK", "Certo! Root nao eh null!");
+        }
 
         Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
         Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());

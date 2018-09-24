@@ -12,7 +12,7 @@ import java.util.Set;
 class Employee {
 
     @PrimaryKey
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -48,7 +48,7 @@ class Employee {
         this.role = role;
     }
 
-    public Employee(int id, String name, String role, String email, String pin, String password,
+    public Employee(Long id, String name, String role, String email, String pin, String password,
                     RoleEnum function) {
         this();
 

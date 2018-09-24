@@ -12,3 +12,5 @@ INSERT INTO Employee (Id, name, role, email, pin, password, function) VALUES (4,
 
 INSERT INTO Employee (Id, name, role, email, pin, password, function) VALUES (5, 'Roger Flores', 'Desenvolvedor Python',
                 'roger.flores@acme.com', '1234', '123456', RoleEnum.USER);
+
+INSERT INTO Knowledge (Id, name) VALUES (0, 'Árvore do Conhecimento');
