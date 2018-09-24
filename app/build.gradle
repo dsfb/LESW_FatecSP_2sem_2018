@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "com.lesw.tree_kwonledge"
+        applicationId "com.lesw.tree_knowledge"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 1
