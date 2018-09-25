@@ -3,7 +3,7 @@
     package="com.lesw.tree_knowledge">
 
     <application
-        android:name="com.lesw.tree_knowledge.App"
+        android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,5 +39,9 @@
             android:theme="@style/AppTheme" />
         <activity android:name="com.lesw.tree_knowledge.EmployeeActivity" />
         <activity android:name="com.lesw.tree_knowledge.ApprovalActivity"/>
+
+        <meta-data android:name="AA_DB_NAME" android:value="TreeKnowledge" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data android:name="AA_SERIALIZERS" android:value="com.lesw.tree_knowledge.RoleEnumSerializer" />
     </application>
 </manifest>

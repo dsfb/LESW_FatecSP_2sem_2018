@@ -2,7 +2,7 @@ package com.lesw.tree_knowledge;
 
 import android.util.Log;
 
-import com.reactiveandroid.query.Select;
+import com.activeandroid.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +109,7 @@ public class DummyDB {
 
     private void initData(){
         //getting all table records
-        companyEmployees = Select.from(Employee.class).fetch();
+        companyEmployees = new Select().from(Employee.class).execute();
 
         Log.d("TK", "company.size(): " + companyEmployees.size());
 
@@ -121,21 +121,21 @@ public class DummyDB {
             Log.d("TK", "Certo! Root nao eh null!");
         }
 
-        Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
-        Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());
+        Knowledge k2 = new Knowledge("Lógica de Programação", 1l);
+        Knowledge k3 = new Knowledge("Microsoft Windows", 1l);
 
-        Knowledge k4 = new Knowledge("Java", k2.getId());
-        Knowledge k5 = new Knowledge("Python", k2.getId());
+        Knowledge k4 = new Knowledge("Java", 2l);
+        Knowledge k5 = new Knowledge("Python", 2l);
 
-        Knowledge k6 = new Knowledge("Word 2013", k3.getId());
-        Knowledge k7 = new Knowledge("Excel 2013", k3.getId());
+        Knowledge k6 = new Knowledge("Word 2013", 3l);
+        Knowledge k7 = new Knowledge("Excel 2013", 3l);
 
-        Knowledge k8 = new Knowledge("JavaFX", k4.getId());
-        Knowledge k9 = new Knowledge("JPA", k4.getId());
-        Knowledge k10 = new Knowledge("JAX-RS", k4.getId());
+        Knowledge k8 = new Knowledge("JavaFX", 4l);
+        Knowledge k9 = new Knowledge("JPA", 4l);
+        Knowledge k10 = new Knowledge("JAX-RS", 4l);
 
-        Knowledge k11 = new Knowledge("NumPy", k5.getId());
-        Knowledge k12 = new Knowledge("PyTorch", k5.getId());
+        Knowledge k11 = new Knowledge("NumPy", 5l);
+        Knowledge k12 = new Knowledge("PyTorch", 5l);
 
         companyKnowledges.add(k1);
         companyKnowledges.add(k2);

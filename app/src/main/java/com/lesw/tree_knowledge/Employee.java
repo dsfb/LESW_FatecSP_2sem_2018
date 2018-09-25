@@ -1,18 +1,16 @@
 package com.lesw.tree_knowledge;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
-import com.reactiveandroid.query.Select;
+
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Table(name = "Employee", database = AppDatabase.class)
-class Employee {
-
-    @PrimaryKey
-    private Long id;
+@Table(name = "Employee")
+public class Employee extends Model {
 
     @Column(name = "name")
     private String name;
@@ -48,11 +46,8 @@ class Employee {
         this.role = role;
     }
 
-    public Employee(Long id, String name, String role, String email, String pin, String password,
+    public Employee(String name, String role, String email, String pin, String password,
                     RoleEnum function) {
-        this();
-
-        this.id = id;
         this.name = name;
         this.role = role;
         this.email = email;
@@ -115,14 +110,14 @@ class Employee {
         if(knowledge != null){
             knowledgeSet.add(knowledge);
             knowledge.count(this);
-            Knowledge up = Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            Knowledge up = new Select().from(Knowledge.class).where("id = ?", knowledge.getUp()).executeSingle();
             addKnowledge(up);
         }
     }
 
     public Knowledge getRootKnowledge(){
         for (Knowledge knowledge : knowledgeSet) {
-            Knowledge up =  Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            Knowledge up =  new Select().from(Knowledge.class).where("id = ?", knowledge.getUp()).executeSingle();
             if(up == null) return knowledge;
         }
         return null;

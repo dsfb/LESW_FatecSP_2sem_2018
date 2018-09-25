@@ -1,17 +1,13 @@
 package com.lesw.tree_knowledge;
 
-import com.reactiveandroid.internal.serializer.TypeSerializer;
+import com.google.gson.reflect.TypeToken;
 
-import io.reactivex.annotations.NonNull;
+import java.lang.reflect.Type;
 
-public class RoleEnumSerializer extends TypeSerializer<RoleEnum, String> {
-    @NonNull
-    public String serialize(@NonNull RoleEnum re) {
-        return re.toString();
-    }
-
-    @NonNull
-    public RoleEnum deserialize(@NonNull String reString) {
-        return RoleEnum.valueOf(reString);
+public class RoleEnumSerializer extends BaseGsonSerializer {
+    @Override
+    protected Type getTypeDeserialize() {
+        return new TypeToken<RoleEnum>() {
+        }.getType();
     }
 }

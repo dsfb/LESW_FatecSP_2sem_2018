@@ -1,11 +1,12 @@
 package com.lesw.tree_knowledge;
 
 import android.content.Context;
+import android.view.Display;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
-import com.reactiveandroid.query.Select;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.ArrayList;
@@ -13,13 +14,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Table(name = "Knowledge", database = AppDatabase.class)
-public class Knowledge {
+@Table(name = "Knowledge")
+public class Knowledge extends Model {
 
-    public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=?", 1).fetchSingle();
-
-    @PrimaryKey
-    private Long id;
+    public final static Knowledge ROOT = new Select().from(Knowledge.class).where("id = ?", 1).executeSingle();
 
     @Column(name = "name")
     private String name;
@@ -30,16 +28,22 @@ public class Knowledge {
     @Column(name = "up")
     private Long up;
 
-    private List<Knowledge> children;
+    private List<Knowledge> children = new ArrayList<>();
     private Set<Employee> employeeSet = new HashSet<>();
 
-    Knowledge(String name, Long up) {
+    public Knowledge() {
+
+    }
+
+    public Knowledge(String name, Long up) {
         this.name = name;
         this.up = up;
-        this.children = new ArrayList<>();
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", this.up).fetchSingle();
-        knowledge.addChild(this);
+        Knowledge knowledge = new Select().from(Knowledge.class).where("id = ?", this.up).executeSingle();
+
+        if (knowledge != null) {
+            knowledge.addChild(this);
+        }
     }
 
     public static Knowledge getById(int id, Knowledge root){
@@ -63,16 +67,12 @@ public class Knowledge {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
     private List<Knowledge> getChildren() {
-        return children;
+        return this.children;
     }
 
     private void addChild(Knowledge knowledge) {
-        children.add(knowledge);
+        this.children.add(knowledge);
     }
 
     public String getName() {
@@ -112,7 +112,7 @@ public class Knowledge {
             if(child.redLeaf()) return true;
         }
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+        Knowledge knowledge = new Select().from(Knowledge.class).where("id = ?", up).executeSingle();
         return knowledge != null && knowledge.blackLeaf();
     }
 
@@ -124,7 +124,7 @@ public class Knowledge {
         employeeSet.add(employee);
         count = employeeSet.size();
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+        Knowledge knowledge = new Select().from(Knowledge.class).where("id = ?", up).executeSingle();
 
         knowledge.count(employee);
     }

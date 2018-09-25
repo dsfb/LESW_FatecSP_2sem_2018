@@ -1,14 +1,11 @@
 package com.lesw.tree_knowledge;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-@Table(name = "Certification", database = AppDatabase.class)
-public class Certification {
-
-    @PrimaryKey
-    private Long id;
+@Table(name = "Certification")
+public class Certification extends Model {
 
     @Column(name = "knowledge")
     private String knowledge;
@@ -24,6 +21,10 @@ public class Certification {
 
     @Column(name = "certification")
     private String certification;
+
+    public Certification() {
+
+    }
 
     public Certification(String knowledge, String userName, String date, String status, String certification) {
         this.knowledge = knowledge;
