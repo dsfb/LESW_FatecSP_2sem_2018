@@ -1,44 +1,80 @@
 package com.lesw.tree_knowledge;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
-import com.reactiveandroid.query.Select;
 import com.unnamed.b.atv.model.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
-@Table(name = "Knowledge", database = AppDatabase.class)
+import io.reactivex.Observable;
+
+@Entity
 public class Knowledge {
 
-    public final static Knowledge ROOT = Select.from(Knowledge.class).where("id=?", 1).fetchSingle();
+    public final static Knowledge ROOT;
+
+    static {
+        Observable<Knowledge> observer = Observable.just(AppDatabase.
+                getInstance(ApplicationContextProvider.getContext()).
+                knowledgeDao().findById(1));
+        final AtomicReference<Knowledge> ref = new AtomicReference<>();
+        observer.subscribe(k -> ref.set(k));
+        ROOT = ref.get();
+    }
+
 
     @PrimaryKey
-    private Long id;
+    private int id;
 
-    @Column(name = "name")
+    @ColumnInfo(name = "name")
     private String name;
 
+    @Ignore
     private int count = 0;
+
+    @Ignore
     private int warningCount = 1;
 
-    @Column(name = "up")
-    private Long up;
+    @ColumnInfo(name = "up")
+    private int up;
 
-    private List<Knowledge> children;
+    @Ignore
+    private List<Knowledge> children = new ArrayList<>();
+
+    @Ignore
     private Set<Employee> employeeSet = new HashSet<>();
 
-    Knowledge(String name, Long up) {
+    public static Knowledge[] populateData() {
+        return new Knowledge[] {
+                new Knowledge("Árvore do Conhecimento"),
+                new Knowledge("Lógica de Programação", 1),
+                new Knowledge("Microsoft Windows", 1)
+        };
+    }
+
+    @Ignore
+    public Knowledge(String name) {
+        this.name = name;
+    }
+
+    public Knowledge(String name, int up) {
         this.name = name;
         this.up = up;
-        this.children = new ArrayList<>();
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", this.up).fetchSingle();
+        Observable<Knowledge> observer = Observable.just(AppDatabase.
+                getInstance(ApplicationContextProvider.getContext()).
+                knowledgeDao().findById(this.up));
+        final AtomicReference<Knowledge> ref = new AtomicReference<>();
+        observer.subscribe(k -> ref.set(k));
+        Knowledge knowledge = ref.get();
         knowledge.addChild(this);
     }
 
@@ -63,9 +99,11 @@ public class Knowledge {
         }
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
+
+    public void setId(int id) { this.id = id; }
 
     private List<Knowledge> getChildren() {
         return children;
@@ -87,11 +125,11 @@ public class Knowledge {
         return count;
     }
 
-    public Long getUp() {
+    public int getUp() {
         return up;
     }
 
-    public void setUp(Long up) {
+    public void setUp(int up) {
         this.up = up;
     }
 
@@ -112,7 +150,12 @@ public class Knowledge {
             if(child.redLeaf()) return true;
         }
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+        Observable<Knowledge> observer = Observable.just(AppDatabase.
+                getInstance(ApplicationContextProvider.getContext()).
+                knowledgeDao().findById(this.up));
+        final AtomicReference<Knowledge> ref = new AtomicReference<>();
+        observer.subscribe(k -> ref.set(k));
+        Knowledge knowledge = ref.get();
         return knowledge != null && knowledge.blackLeaf();
     }
 
@@ -124,7 +167,12 @@ public class Knowledge {
         employeeSet.add(employee);
         count = employeeSet.size();
 
-        Knowledge knowledge = Select.from(Knowledge.class).where("id=", up).fetchSingle();
+        Observable<Knowledge> observer = Observable.just(AppDatabase.
+                getInstance(ApplicationContextProvider.getContext()).
+                knowledgeDao().findById(this.up));
+        final AtomicReference<Knowledge> ref = new AtomicReference<>();
+        observer.subscribe(k -> ref.set(k));
+        Knowledge knowledge = ref.get();
 
         knowledge.count(employee);
     }

@@ -1,40 +1,57 @@
 package com.lesw.tree_knowledge;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
-import com.reactiveandroid.query.Select;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
-@Table(name = "Employee", database = AppDatabase.class)
+import io.reactivex.Observable;
+
+@Entity
 class Employee {
 
     @PrimaryKey
-    private Long id;
+    private int id;
 
-    @Column(name = "name")
+    @ColumnInfo(name = "name")
     private String name;
 
-    @Column(name = "role")
+    @ColumnInfo(name = "role")
     private String role;
 
-    @Column(name = "email")
+    @ColumnInfo(name = "email")
     private String email;
 
-    @Column(name = "pin")
+    @ColumnInfo(name = "pin")
     private String pin;
 
-    @Column(name = "password")
+    @ColumnInfo(name = "password")
     private String password;
 
-    @Column(name = "function")
+    @ColumnInfo(name = "function")
     private RoleEnum function;
 
+    @Ignore
     private Boolean logged = false;
 
+    @Ignore
     private Set<Knowledge> knowledgeSet;
+
+    public static Employee[] populateData() {
+        return new Employee[] {
+                new Employee("Diego Alves", "Desenvolvedor Java", "diego.alves@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee("Pedro Santana", "Gerente de projetos", "pedro.santana@acme.com", "1234", "123456", RoleEnum.MANAGER),
+                new Employee("Rodrigo Silva", "Desenvolvedor Java", "rodrigo.silva@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee("Mariana Garcia", "Coordenadora", "mariana.garcia@acme.com", "1234", "123456", RoleEnum.HR),
+                new Employee("Roger Flores", "Desenvolvedor Python", "roger.flores@acme.com", "1234", "123456", RoleEnum.USER)
+        };
+    }
 
     public Employee() {
         knowledgeSet = new HashSet<>();
@@ -48,17 +65,24 @@ class Employee {
         this.role = role;
     }
 
-    public Employee(Long id, String name, String role, String email, String pin, String password,
+    public Employee(String name, String role, String email, String pin, String password,
                     RoleEnum function) {
         this();
 
-        this.id = id;
         this.name = name;
         this.role = role;
         this.email = email;
         this.pin = pin;
         this.password = password;
         this.function = function;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -115,14 +139,24 @@ class Employee {
         if(knowledge != null){
             knowledgeSet.add(knowledge);
             knowledge.count(this);
-            Knowledge up = Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            Observable<Knowledge> observer = Observable.just(AppDatabase.
+                    getInstance(ApplicationContextProvider.getContext()).
+                    knowledgeDao().findById(knowledge.getUp()));
+            final AtomicReference<Knowledge> ref = new AtomicReference<>();
+            observer.subscribe(k -> ref.set(k));
+            Knowledge up = ref.get();
             addKnowledge(up);
         }
     }
 
     public Knowledge getRootKnowledge(){
         for (Knowledge knowledge : knowledgeSet) {
-            Knowledge up =  Select.from(Knowledge.class).where("id=", knowledge.getUp()).fetchSingle();
+            Observable<Knowledge> observer = Observable.just(AppDatabase.
+                    getInstance(ApplicationContextProvider.getContext()).
+                    knowledgeDao().findById(knowledge.getUp()));
+            final AtomicReference<Knowledge> ref = new AtomicReference<>();
+            observer.subscribe(k -> ref.set(k));
+            Knowledge up = ref.get();
             if(up == null) return knowledge;
         }
         return null;

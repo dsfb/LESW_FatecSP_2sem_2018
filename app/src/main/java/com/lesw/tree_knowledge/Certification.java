@@ -1,28 +1,28 @@
 package com.lesw.tree_knowledge;
 
-import com.reactiveandroid.annotation.Column;
-import com.reactiveandroid.annotation.PrimaryKey;
-import com.reactiveandroid.annotation.Table;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
-@Table(name = "Certification", database = AppDatabase.class)
+@Entity
 public class Certification {
 
     @PrimaryKey
-    private Long id;
+    private int id;
 
-    @Column(name = "knowledge")
+    @ColumnInfo(name = "knowledge")
     private String knowledge;
 
-    @Column(name = "userName")
+    @ColumnInfo(name = "userName")
     private String userName;
 
-    @Column(name = "date")
+    @ColumnInfo(name = "date")
     private String date;
 
-    @Column(name = "status")
+    @ColumnInfo(name = "status")
     private String status;
 
-    @Column(name = "certification")
+    @ColumnInfo(name = "certification")
     private String certification;
 
     public Certification(String knowledge, String userName, String date, String status, String certification) {
@@ -32,6 +32,10 @@ public class Certification {
         this.status = status;
         this.certification = certification;
     }
+
+    public int getId() { return this.id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getUserName() {
         return userName;

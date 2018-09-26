@@ -2,10 +2,11 @@ package com.lesw.tree_knowledge;
 
 import android.util.Log;
 
-import com.reactiveandroid.query.Select;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.Observable;
 
 public class DummyDB {
 
@@ -109,7 +110,12 @@ public class DummyDB {
 
     private void initData(){
         //getting all table records
-        companyEmployees = Select.from(Employee.class).fetch();
+        Observable<List<Employee>> observer = Observable.just(AppDatabase.
+                getInstance(ApplicationContextProvider.getContext()).
+                employeeDao().getAll());
+        final AtomicReference<List<Employee>> ref = new AtomicReference<>();
+        observer.subscribe(k -> ref.set(k));
+        companyEmployees = ref.get();
 
         Log.d("TK", "company.size(): " + companyEmployees.size());
 
@@ -120,7 +126,6 @@ public class DummyDB {
         } else {
             Log.d("TK", "Certo! Root nao eh null!");
         }
-
         Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
         Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());
 
