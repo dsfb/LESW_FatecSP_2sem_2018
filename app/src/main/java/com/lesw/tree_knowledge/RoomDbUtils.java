@@ -1,5 +1,7 @@
 package com.lesw.tree_knowledge;
 
+import android.content.Context;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -10,12 +12,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class RoomDbUtils {
-    public static Knowledge getKnowledgeById(int id) {
+    public static Knowledge getKnowledgeById(int id, Context context) {
         final Single<Knowledge> knowledgeObservable = Single.create(emitter -> {
             Thread thread = new Thread(() -> {
                 try {
                     Knowledge knowledge = AppDatabase.
-                            getInstance(ApplicationContextProvider.getContext()).
+                            getInstance(context).
                             knowledgeDao().findById(id);
 
                     emitter.onSuccess(knowledge);
@@ -33,12 +35,12 @@ public class RoomDbUtils {
         return ref.get();
     }
 
-    public static List<Employee> getAllEmployees() {
-        final Observable<List<Employee>> observer = Observable.create(emitter -> {
+    public static List<Employee> getAllEmployees(Context context) {
+        final Single<List<Employee>> listEmployeeObserved = Single.create(emitter -> {
             Thread thread = new Thread(() -> {
                 try {
                     List<Employee> le = AppDatabase.
-                            getInstance(ApplicationContextProvider.getContext()).
+                            getInstance(context).
                             employeeDao().getAll();
 
                     emitter.onSuccess(le);
@@ -50,7 +52,8 @@ public class RoomDbUtils {
         });
 
         final AtomicReference<List<Employee>> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
+        listEmployeeObserved.subscribe(k -> ref.set(k));
+        return ref.get();
     }
 }
 

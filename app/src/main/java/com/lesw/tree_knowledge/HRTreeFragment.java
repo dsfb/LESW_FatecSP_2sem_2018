@@ -43,7 +43,7 @@ public class HRTreeFragment extends Fragment implements TreeNode.TreeNodeClickLi
     @Override
     public void onResume() {
         super.onResume();
-        DummyDB db = DummyDB.getInstance();
+        DummyDB db = DummyDB.getInstance(getContext());
         TreeNode tn = Knowledge.generateHRTree(db.getCompanyRoot(), getActivity());
 
         TreeNode root = TreeNode.root();

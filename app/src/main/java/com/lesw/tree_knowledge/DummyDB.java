@@ -1,5 +1,6 @@
 package com.lesw.tree_knowledge;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,13 +18,15 @@ public class DummyDB {
     private Employee lastFoundEmployee;
     private List<Certification> companyCertifications;
     private Employee loggedUser;
+    private Context context;
 
-    public static DummyDB getInstance(){
+    public static DummyDB getInstance(Context context){
         if(instance == null){
             instance = new DummyDB();
             instance.initData();
         }
 
+        instance.context = context;
         return instance;
     }
 
@@ -110,14 +113,13 @@ public class DummyDB {
 
     private void initData(){
         //getting all table records
-        Observable<List<Employee>> observer = Observable.just(AppDatabase.
-                getInstance(ApplicationContextProvider.getContext()).
-                employeeDao().getAll());
-        final AtomicReference<List<Employee>> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
-        companyEmployees = ref.get();
+        companyEmployees = RoomDbUtils.getAllEmployees(this.context);
 
         Log.d("TK", "company.size(): " + companyEmployees.size());
+
+        if (Knowledge.ROOT == null) {
+            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+        }
 
         Knowledge k1 = Knowledge.ROOT;
 
@@ -126,6 +128,9 @@ public class DummyDB {
         } else {
             Log.d("TK", "Certo! Root nao eh null!");
         }
+
+        List<Knowledge> fakeKnowledges = new ArrayList<>();
+
         Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
         Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());
 
@@ -142,18 +147,24 @@ public class DummyDB {
         Knowledge k11 = new Knowledge("NumPy", k5.getId());
         Knowledge k12 = new Knowledge("PyTorch", k5.getId());
 
+        fakeKnowledges.add(k2);
+        fakeKnowledges.add(k3);
+        fakeKnowledges.add(k4);
+        fakeKnowledges.add(k5);
+        fakeKnowledges.add(k6);
+        fakeKnowledges.add(k7);
+        fakeKnowledges.add(k8);
+        fakeKnowledges.add(k9);
+        fakeKnowledges.add(k10);
+        fakeKnowledges.add(k11);
+        fakeKnowledges.add(k12);
+
         companyKnowledges.add(k1);
-        companyKnowledges.add(k2);
-        companyKnowledges.add(k3);
-        companyKnowledges.add(k4);
-        companyKnowledges.add(k5);
-        companyKnowledges.add(k6);
-        companyKnowledges.add(k7);
-        companyKnowledges.add(k8);
-        companyKnowledges.add(k9);
-        companyKnowledges.add(k10);
-        companyKnowledges.add(k11);
-        companyKnowledges.add(k12);
+        companyKnowledges.addAll(fakeKnowledges);
+
+        for (Knowledge k : fakeKnowledges) {
+            k.manageUp(this.context);
+        }
 
         /*
         e1.addKnowledge(k8);
@@ -221,7 +232,7 @@ public class DummyDB {
             }
 
             if (the_emp != null) {
-                the_emp.addKnowledge(k);
+                the_emp.addKnowledge(k, context);
             }
 
             return true;

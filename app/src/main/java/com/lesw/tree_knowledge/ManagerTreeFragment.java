@@ -43,7 +43,7 @@ public class ManagerTreeFragment extends Fragment implements TreeNode.TreeNodeCl
     @Override
     public void onResume() {
         super.onResume();
-        DummyDB db = DummyDB.getInstance();
+        DummyDB db = DummyDB.getInstance(getContext());
         TreeNode tn = Knowledge.generateManagerTree(db.getCompanyRoot(), getActivity());
 
         TreeNode root = TreeNode.root();

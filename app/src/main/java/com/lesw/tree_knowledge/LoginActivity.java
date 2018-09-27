@@ -1,6 +1,7 @@
 package com.lesw.tree_knowledge;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Autenticando...");
         progressDialog.show();
 
-        final Employee employee = DummyDB.getInstance().findEmployee(_emailText.getText().toString(),
+        final Employee employee = DummyDB.getInstance(getApplicationContext()).findEmployee(_emailText.getText().toString(),
                 _passwordText.getText().toString());
 
         if (employee != null) {
@@ -82,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        DummyDB.getInstance().loginEmployee(_emailText.getText().toString());
+                        DummyDB.getInstance(getApplicationContext()).loginEmployee(_emailText.getText().toString());
                         onLoginSuccess(employee);
                         progressDialog.setMessage("Autenticação bem-sucedida!");
                         // onLoginFailed();

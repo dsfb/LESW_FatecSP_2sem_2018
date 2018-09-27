@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -135,28 +136,18 @@ class Employee {
         return knowledgeSet;
     }
 
-    public void addKnowledge(Knowledge knowledge){
+    public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
             knowledgeSet.add(knowledge);
-            knowledge.count(this);
-            Observable<Knowledge> observer = Observable.just(AppDatabase.
-                    getInstance(ApplicationContextProvider.getContext()).
-                    knowledgeDao().findById(knowledge.getUp()));
-            final AtomicReference<Knowledge> ref = new AtomicReference<>();
-            observer.subscribe(k -> ref.set(k));
-            Knowledge up = ref.get();
-            addKnowledge(up);
+            knowledge.count(this, context);
+            Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
+            addKnowledge(up, context);
         }
     }
 
-    public Knowledge getRootKnowledge(){
+    public Knowledge getRootKnowledge(Context context){
         for (Knowledge knowledge : knowledgeSet) {
-            Observable<Knowledge> observer = Observable.just(AppDatabase.
-                    getInstance(ApplicationContextProvider.getContext()).
-                    knowledgeDao().findById(knowledge.getUp()));
-            final AtomicReference<Knowledge> ref = new AtomicReference<>();
-            observer.subscribe(k -> ref.set(k));
-            Knowledge up = ref.get();
+            Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
             if(up == null) return knowledge;
         }
         return null;

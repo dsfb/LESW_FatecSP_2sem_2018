@@ -142,7 +142,7 @@ public class HRSignupFragment extends Fragment {
         employee.setPin(pin);
         employee.setFunction(RoleEnum.USER);
 
-        DummyDB.getInstance().addEmployee(employee);
+        DummyDB.getInstance(getContext()).addEmployee(employee);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

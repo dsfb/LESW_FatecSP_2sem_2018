@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.unnamed.b.atv.model.TreeNode;
@@ -19,17 +20,7 @@ import io.reactivex.Observable;
 @Entity
 public class Knowledge {
 
-    public final static Knowledge ROOT;
-
-    static {
-        Observable<Knowledge> observer = Observable.just(AppDatabase.
-                getInstance(ApplicationContextProvider.getContext()).
-                knowledgeDao().findById(1));
-        final AtomicReference<Knowledge> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
-        ROOT = ref.get();
-    }
-
+    public static Knowledge ROOT = null;
 
     @PrimaryKey
     private int id;
@@ -68,13 +59,10 @@ public class Knowledge {
     public Knowledge(String name, int up) {
         this.name = name;
         this.up = up;
+    }
 
-        Observable<Knowledge> observer = Observable.just(AppDatabase.
-                getInstance(ApplicationContextProvider.getContext()).
-                knowledgeDao().findById(this.up));
-        final AtomicReference<Knowledge> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
-        Knowledge knowledge = ref.get();
+    public void manageUp(Context context) {
+        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
         knowledge.addChild(this);
     }
 
@@ -145,36 +133,26 @@ public class Knowledge {
         return (getCount() > getWarningCount());
     }
 
-    private boolean blackLeaf(){
+    private boolean blackLeaf(Context context){
         for (Knowledge child : children) {
             if(child.redLeaf()) return true;
         }
 
-        Observable<Knowledge> observer = Observable.just(AppDatabase.
-                getInstance(ApplicationContextProvider.getContext()).
-                knowledgeDao().findById(this.up));
-        final AtomicReference<Knowledge> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
-        Knowledge knowledge = ref.get();
-        return knowledge != null && knowledge.blackLeaf();
+        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
+        return knowledge != null && knowledge.blackLeaf(context);
     }
 
     private boolean redLeaf(){
         return (getCount() <= getWarningCount());
     }
 
-    void count(Employee employee) {
+    void count(Employee employee, Context context) {
         employeeSet.add(employee);
         count = employeeSet.size();
 
-        Observable<Knowledge> observer = Observable.just(AppDatabase.
-                getInstance(ApplicationContextProvider.getContext()).
-                knowledgeDao().findById(this.up));
-        final AtomicReference<Knowledge> ref = new AtomicReference<>();
-        observer.subscribe(k -> ref.set(k));
-        Knowledge knowledge = ref.get();
+        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
 
-        knowledge.count(employee);
+        knowledge.count(employee, context);
     }
 
     static TreeNode generateHRTree(Knowledge knowledge, Context context){
@@ -198,29 +176,29 @@ public class Knowledge {
     static TreeNode generateManagerTree(Knowledge knowledge, Context context){
         TreeNode root = new TreeNode(new IconTreeItem(R.string.fa_leaf, ColorEnum.GREEN, knowledge)).setViewHolder(new TreeHolder(context));
         for (Knowledge child : knowledge.getChildren()) {
-            root.addChild(generateManagerItem(child));
+            root.addChild(generateManagerItem(child, context));
         }
         return root;
     }
 
-    private static TreeNode generateManagerItem(Knowledge knowledge){
+    private static TreeNode generateManagerItem(Knowledge knowledge, Context context){
         ColorEnum color;
         if(knowledge.redLeaf()){
             color = ColorEnum.RED;
-        } else if(knowledge.blackLeaf()){
+        } else if(knowledge.blackLeaf(context)){
             color = ColorEnum.BLACK;
         } else {
             color = ColorEnum.GREEN;
         }
         TreeNode node = new TreeNode(new IconTreeItem(R.string.fa_leaf, color, knowledge));
         for (Knowledge child : knowledge.getChildren()) {
-            node.addChild(generateManagerItem(child));
+            node.addChild(generateManagerItem(child, context));
         }
         return node;
     }
 
     static TreeNode generateUserTree(Employee employee, Context context){
-        Knowledge rootKnowledge = employee.getRootKnowledge();
+        Knowledge rootKnowledge = employee.getRootKnowledge(context);
         Set<Knowledge> knowledgeSet = employee.getKnowledgeSet();
 
         if(rootKnowledge == null) return new TreeNode(new IconTreeItem(R.string.fa_leaf,

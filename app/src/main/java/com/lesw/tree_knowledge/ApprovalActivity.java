@@ -39,9 +39,9 @@ public class ApprovalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //public boolean disapproveCertification(String knowledge, String userName, String date, String certification)
-                if (DummyDB.getInstance().approveCertification(knowledge, username, date, certification)) {
+                if (DummyDB.getInstance(getApplicationContext()).approveCertification(knowledge, username, date, certification)) {
                     Toast.makeText(getBaseContext(), "A competência foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
-                    if (!DummyDB.getInstance().handleApprovedCertificationInCommonCase(knowledge, username)) {
+                    if (!DummyDB.getInstance(getApplicationContext()).handleApprovedCertificationInCommonCase(knowledge, username)) {
                         // TODO: Implementar caso de incorporação de conhecimento na árvore de conhecimento da empresa!
                     }
                 } else {
@@ -55,7 +55,7 @@ public class ApprovalActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if (DummyDB.getInstance().disapproveCertification(knowledge, username, date, certification)) {
+                if (DummyDB.getInstance(getApplicationContext()).disapproveCertification(knowledge, username, date, certification)) {
                     Toast.makeText(getBaseContext(), "A competência foi reprovada com sucesso!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getBaseContext(), "Opa! Infelizmente, a competência não foi reprovada com sucesso!", Toast.LENGTH_SHORT).show();
