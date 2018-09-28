@@ -23,6 +23,7 @@ public class DummyDB {
     public static DummyDB getInstance(Context context){
         if(instance == null){
             instance = new DummyDB();
+            instance.context = context;
             instance.initData();
         }
 

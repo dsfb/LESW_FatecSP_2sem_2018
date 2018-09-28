@@ -2,6 +2,7 @@ package com.lesw.tree_knowledge;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -53,7 +54,14 @@ public class RoomDbUtils {
 
         final AtomicReference<List<Employee>> ref = new AtomicReference<>();
         listEmployeeObserved.subscribe(k -> ref.set(k));
-        return ref.get();
+
+        List<Employee> employees = ref.get();
+
+        if (employees == null) {
+            employees = new ArrayList<>();
+        }
+
+        return employees;
     }
 }
 
