@@ -33,29 +33,7 @@ public abstract class AppDatabase extends RoomDatabase {
         AppDatabase db = Room.databaseBuilder(context,
                 AppDatabase.class,
                 "TreeKnowledge")
-                .addCallback(new Callback() {
-                    @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-                        Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("TreeKnowledge", "Populating DB!");
-                                Toast.makeText(context, "Populating DB!", Toast.LENGTH_LONG).show();
-                                getInstance(context).knowledgeDao().insertAll(Knowledge.populateData());
-                                getInstance(context).employeeDao().insertAll(Employee.populateData());
-                                Log.d("TreeKnowledge", "DB was Populated!");
-                                Toast.makeText(context, "DB was Populated!", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                })
                 .build();
-
-        db.beginTransaction();
-        db.endTransaction();
-
-        db.query("select 1", null);
 
         return db;
     }

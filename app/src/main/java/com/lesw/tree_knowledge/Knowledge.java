@@ -22,7 +22,7 @@ public class Knowledge {
 
     public static Knowledge ROOT = null;
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "name")

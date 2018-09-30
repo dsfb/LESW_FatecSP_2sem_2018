@@ -113,21 +113,28 @@ public class DummyDB {
     }
 
     private void initData(){
+        Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+
+        if (Knowledge.ROOT == null) {
+            Knowledge[] knowledgeArray = Knowledge.populateData();
+            RoomDbUtils.insertKnowledgeArray(knowledgeArray, this.context);
+            Employee[] employees = Employee.populateData();
+            RoomDbUtils.insertEmployees(employees, this.context);
+
+            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+        }
+
         //getting all table records
         companyEmployees = RoomDbUtils.getAllEmployees(this.context);
 
         Log.d("TK", "company.size(): " + companyEmployees.size());
 
-        if (Knowledge.ROOT == null) {
-            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
-        }
-
         Knowledge k1 = Knowledge.ROOT;
 
         if (k1 == null) {
-            Log.d("TK", "Opa! Root eh null!");
+            Log.d("TK", "Opa! Conhecimento Root eh null!");
         } else {
-            Log.d("TK", "Certo! Root nao eh null!");
+            Log.d("TK", "Certo! Conhecimento Root nao eh null!");
         }
 
         List<Knowledge> fakeKnowledges = new ArrayList<>();

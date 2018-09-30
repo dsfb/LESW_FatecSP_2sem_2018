@@ -17,7 +17,7 @@ import io.reactivex.Observable;
 @Entity
 class Employee {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "name")
