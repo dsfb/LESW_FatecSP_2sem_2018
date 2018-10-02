@@ -2,11 +2,13 @@ package com.lesw.tree_knowledge;
 
 import android.arch.persistence.room.RoomSQLiteQuery;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
@@ -21,23 +23,29 @@ public class RoomDbUtils {
     }
 
     public static boolean insertKnowledgeArray(Knowledge[] knowledgeArray, Context context) {
-        final Single<Boolean> knowledgeObservable = Single.create(emitter -> {
-            Thread thread = new Thread(() -> {
-                try {
-                    AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
-                    emitter.onSuccess(true);
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-            });
-            thread.start();
-        });
-
         final AtomicReference<Boolean> ref = new AtomicReference<>();
-        knowledgeObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(k -> ref.set(k));
-        return ref.get();
+
+        Completable.fromAction(() -> AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray))
+            .subscribeOn(Schedulers.io())
+            .subscribe(() -> {
+                ref.set(true);
+            }, throwable -> {
+                ref.set(false);
+            });
+
+        Boolean value;
+
+        do {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.e("TreeKnowledge", "Opa! insertKnowledgeArray forçou InterruptedException!");
+            } finally {
+                value = ref.get();
+            }
+        } while (value == null);
+
+        return value;
     }
 
     public static Knowledge getKnowledgeById(int id, Context context) {
@@ -97,23 +105,29 @@ public class RoomDbUtils {
     }
 
     public static boolean insertEmployees(Employee[] employees, Context context) {
-        final Single<Boolean> employeeObervable = Single.create(emitter -> {
-            Thread thread = new Thread(() -> {
-                try {
-                    AppDatabase.getInstance(context).employeeDao().insertAll(employees);
-                    emitter.onSuccess(true);
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-            });
-            thread.start();
-        });
-
         final AtomicReference<Boolean> ref = new AtomicReference<>();
-        employeeObervable.observeOn(AndroidSchedulers.mainThread())
+
+        Completable.fromAction(() -> AppDatabase.getInstance(context).employeeDao().insertAll(employees))
                 .subscribeOn(Schedulers.io())
-                .subscribe(k -> ref.set(k));
-        return ref.get();
+                .subscribe(() -> {
+                    ref.set(true);
+                }, throwable -> {
+                    ref.set(false);
+                });
+
+        Boolean value;
+
+        do {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.e("TreeKnowledge", "Opa! insertEmployees forçou InterruptedException!");
+            } finally {
+                value = ref.get();
+            }
+        } while (value == null);
+
+        return value;
     }
 }
 
