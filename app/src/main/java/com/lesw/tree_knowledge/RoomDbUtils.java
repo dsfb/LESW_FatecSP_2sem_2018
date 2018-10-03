@@ -68,7 +68,20 @@ public class RoomDbUtils {
         knowledgeObservable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(k -> ref.set(k));
-        return ref.get();
+
+        Knowledge knowledge;
+
+        do {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.e("TreeKnowledge", "Opa! getKnowledgeById forçou InterruptedException!");
+            } finally {
+                knowledge = ref.get();
+            }
+        } while (knowledge == null);
+
+        return knowledge;
     }
 
     public static List<Employee> getAllEmployees(Context context) {
@@ -88,13 +101,21 @@ public class RoomDbUtils {
         });
 
         final AtomicReference<List<Employee>> ref = new AtomicReference<>();
-        listEmployeeObserved.subscribe(k -> ref.set(k));
+        listEmployeeObserved.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(k -> ref.set(k));
 
-        List<Employee> employees = ref.get();
+        List<Employee> employees;
 
-        if (employees == null) {
-            employees = new ArrayList<>();
-        }
+        do {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.e("TreeKnowledge", "Opa! getAllEmployees forçou InterruptedException!");
+            } finally {
+                employees = ref.get();
+            }
+        } while (employees == null);
 
         return employees;
     }
