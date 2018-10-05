@@ -170,7 +170,15 @@ public class DummyDB {
         companyKnowledges.add(k1);
         companyKnowledges.addAll(fakeKnowledges);
 
+        Knowledge[] fakeKnowledgeArray = new Knowledge[fakeKnowledges.size()];
+        fakeKnowledgeArray = fakeKnowledges.toArray(fakeKnowledgeArray);
+
+        boolean val = RoomDbUtils.insertKnowledgeArray(fakeKnowledgeArray, this.context);
+
+        Log.d("TreeKnowledge", "Inserção aconteceu: " + val + "!");
+
         for (Knowledge k : fakeKnowledges) {
+
             k.manageUp(this.context);
         }
 

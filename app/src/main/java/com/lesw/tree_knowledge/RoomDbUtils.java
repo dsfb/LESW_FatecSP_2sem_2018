@@ -23,101 +23,36 @@ public class RoomDbUtils {
     }
 
     public static boolean insertKnowledgeArray(Knowledge[] knowledgeArray, Context context) {
-        final AtomicReference<Boolean> ref = new AtomicReference<>();
-
-        Completable.fromAction(() -> AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray))
-            .subscribeOn(Schedulers.io())
-            .subscribe(() -> {
-                ref.set(true);
-            }, throwable -> {
-                ref.set(false);
-            });
-
-        Boolean value;
-
-        do {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Log.e("TreeKnowledge", "Opa! insertKnowledgeArray forçou InterruptedException!");
-            } finally {
-                value = ref.get();
-            }
-        } while (value == null);
-
-        return value;
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage());
+            return false;
+        }
     }
 
     public static Knowledge getKnowledgeById(int id, Context context) {
-        final Single<Knowledge> knowledgeObservable = Single.create(emitter -> {
-            Thread thread = new Thread(() -> {
-                try {
-                    Knowledge knowledge = AppDatabase.
-                            getInstance(context).
-                            knowledgeDao().findById(id);
-
-                    emitter.onSuccess(knowledge);
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-            });
-            thread.start();
-        });
-
-        final AtomicReference<Knowledge> ref = new AtomicReference<>();
-        knowledgeObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(k -> ref.set(k));
-
-        Knowledge knowledge;
-
-        do {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Log.e("TreeKnowledge", "Opa! getKnowledgeById forçou InterruptedException!");
-            } finally {
-                knowledge = ref.get();
-            }
-        } while (knowledge == null);
-
-        return knowledge;
+        try {
+            return AppDatabase.
+                    getInstance(context).
+                    knowledgeDao().findById(id);
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getKnowledgeById):\n" + e.getMessage());
+            return null;
+        }
     }
 
     public static List<Employee> getAllEmployees(Context context) {
-        final Single<List<Employee>> listEmployeeObserved = Single.create(emitter -> {
-            Thread thread = new Thread(() -> {
-                try {
-                    List<Employee> le = AppDatabase.
-                            getInstance(context).
-                            employeeDao().getAll();
-
-                    emitter.onSuccess(le);
-                } catch (Exception e) {
-                    emitter.onError(e);
-                }
-            });
-            thread.start();
-        });
-
-        final AtomicReference<List<Employee>> ref = new AtomicReference<>();
-        listEmployeeObserved.observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(k -> ref.set(k));
-
-        List<Employee> employees;
-
-        do {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Log.e("TreeKnowledge", "Opa! getAllEmployees forçou InterruptedException!");
-            } finally {
-                employees = ref.get();
-            }
-        } while (employees == null);
-
-        return employees;
+        try {
+            return AppDatabase.
+                    getInstance(context).
+                    employeeDao().getAll();
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage());
+            List<Employee> employees = new ArrayList<>();
+            return employees;
+        }
     }
 
     public static boolean insertEmployee(Employee employee, Context context) {
@@ -126,29 +61,13 @@ public class RoomDbUtils {
     }
 
     public static boolean insertEmployees(Employee[] employees, Context context) {
-        final AtomicReference<Boolean> ref = new AtomicReference<>();
-
-        Completable.fromAction(() -> AppDatabase.getInstance(context).employeeDao().insertAll(employees))
-                .subscribeOn(Schedulers.io())
-                .subscribe(() -> {
-                    ref.set(true);
-                }, throwable -> {
-                    ref.set(false);
-                });
-
-        Boolean value;
-
-        do {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Log.e("TreeKnowledge", "Opa! insertEmployees forçou InterruptedException!");
-            } finally {
-                value = ref.get();
-            }
-        } while (value == null);
-
-        return value;
+        try {
+            AppDatabase.getInstance(context).employeeDao().insertAll(employees);
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(insertEmployees):\n" + e.getMessage());
+            return false;
+        }
     }
 }
 

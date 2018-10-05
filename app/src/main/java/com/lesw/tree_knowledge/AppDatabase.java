@@ -33,6 +33,7 @@ public abstract class AppDatabase extends RoomDatabase {
         AppDatabase db = Room.databaseBuilder(context,
                 AppDatabase.class,
                 "TreeKnowledge")
+                .allowMainThreadQueries()
                 .build();
 
         return db;
