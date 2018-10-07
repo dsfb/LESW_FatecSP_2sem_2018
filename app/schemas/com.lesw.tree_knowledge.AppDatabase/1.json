@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7606bc05612aa6a85e7ebac4f28a5ae4",
+    "identityHash": "c3ad364e0dde11f3843f946dd091107b",
     "entities": [
       {
-        "tableName": "Knowledge",
+        "tableName": "knowledge",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `up` INTEGER NOT NULL)",
         "fields": [
           {
@@ -87,7 +87,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Employee",
+        "tableName": "employee",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `role` TEXT, `email` TEXT, `pin` TEXT, `password` TEXT, `function` TEXT, `knowledge_set` TEXT)",
         "fields": [
           {
@@ -151,7 +151,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7606bc05612aa6a85e7ebac4f28a5ae4\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c3ad364e0dde11f3843f946dd091107b\")"
     ]
   }
 }

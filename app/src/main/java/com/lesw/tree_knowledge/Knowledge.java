@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observable;
 
-@Entity
+@Entity(tableName = "knowledge")
 public class Knowledge {
 
     public static Knowledge ROOT = null;

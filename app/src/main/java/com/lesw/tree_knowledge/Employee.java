@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-@Entity
+@Entity(tableName = "employee")
 class Employee {
 
     @PrimaryKey(autoGenerate = true)
