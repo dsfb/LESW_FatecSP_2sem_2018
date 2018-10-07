@@ -9,7 +9,7 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String dateToTimestamp(RoleEnum re) {
+    public static String roleEnumToString(RoleEnum re) {
         return re == null ? null : re.toString();
     }
 }

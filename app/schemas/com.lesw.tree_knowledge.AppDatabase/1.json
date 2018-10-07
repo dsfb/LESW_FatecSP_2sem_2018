@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "09f42989cb9b6e7269aeeea42a0050fd",
+    "identityHash": "7606bc05612aa6a85e7ebac4f28a5ae4",
     "entities": [
       {
         "tableName": "Knowledge",
@@ -88,7 +88,7 @@
       },
       {
         "tableName": "Employee",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `role` TEXT, `email` TEXT, `pin` TEXT, `password` TEXT, `function` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `role` TEXT, `email` TEXT, `pin` TEXT, `password` TEXT, `function` TEXT, `knowledge_set` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -131,6 +131,12 @@
             "columnName": "function",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "knowledgeSetStr",
+            "columnName": "knowledge_set",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -145,7 +151,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"09f42989cb9b6e7269aeeea42a0050fd\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7606bc05612aa6a85e7ebac4f28a5ae4\")"
     ]
   }
 }

@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.util.Log;
 
 import com.unnamed.b.atv.model.TreeNode;
 
@@ -43,14 +44,6 @@ public class Knowledge {
     @Ignore
     private Set<Employee> employeeSet = new HashSet<>();
 
-    public static Knowledge[] populateData() {
-        return new Knowledge[] {
-                new Knowledge("Árvore do Conhecimento"),
-                new Knowledge("Lógica de Programação", 1),
-                new Knowledge("Microsoft Windows", 1)
-        };
-    }
-
     @Ignore
     public Knowledge(String name) {
         this.name = name;
@@ -63,7 +56,10 @@ public class Knowledge {
 
     public void manageUp(Context context) {
         Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
-        knowledge.addChild(this);
+
+        if (knowledge != null) {
+            knowledge.addChild(this);
+        }
     }
 
     public static Knowledge getById(int id, Knowledge root){

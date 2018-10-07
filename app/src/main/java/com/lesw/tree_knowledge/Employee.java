@@ -6,6 +6,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observable;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Entity
 class Employee {
@@ -44,6 +48,15 @@ class Employee {
     @Ignore
     private Set<Knowledge> knowledgeSet;
 
+    @ColumnInfo(name = "knowledge_set")
+    private String knowledgeSetStr;
+
+    @Ignore
+    private static Type setType = new TypeToken<ArrayList<Set<Knowledge>>>(){}.getType();
+
+    @Ignore
+    private static Gson gson = new Gson();
+
     public static Employee[] populateData() {
         return new Employee[] {
                 new Employee("Diego Alves", "Desenvolvedor Java", "diego.alves@acme.com", "1234", "123456", RoleEnum.USER),
@@ -57,6 +70,7 @@ class Employee {
     public Employee() {
         knowledgeSet = new HashSet<>();
         knowledgeSet.add(Knowledge.ROOT);
+        this.knowledgeSetStr = gson.toJson(this.knowledgeSet, setType);
     }
 
     public Employee(String name, String role) {
@@ -132,6 +146,14 @@ class Employee {
 
     public void setFunction(RoleEnum function) { this.function = function; }
 
+    public String getKnowledgeSetStr() {
+        return knowledgeSetStr;
+    }
+
+    public void setKnowledgeSetStr(String knowledgeSetStr) {
+        this.knowledgeSetStr = knowledgeSetStr;
+    }
+
     public Set<Knowledge> getKnowledgeSet() {
         return knowledgeSet;
     }
@@ -139,6 +161,7 @@ class Employee {
     public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
             knowledgeSet.add(knowledge);
+            this.knowledgeSetStr = gson.toJson(this.knowledgeSet, setType);
             knowledge.count(this, context);
             Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
             addKnowledge(up, context);

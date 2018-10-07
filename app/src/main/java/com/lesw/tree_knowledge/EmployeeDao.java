@@ -20,8 +20,14 @@ public interface EmployeeDao {
             + "password LIKE :last LIMIT 1")
     Employee findByName(String first, String last);
 
+    @Query("SELECT * FROM employee WHERE id LIKE :id LIMIT 1")
+    Employee findById(int id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Employee... employees);
+
+    @Query("UPDATE employee SET knowledge_set = :knowledge_set  WHERE id = :tid")
+    int updateEmployeeByKnowledgeSet(int tid, String knowledge_set);
 
     @Delete
     void delete(Employee employee);
