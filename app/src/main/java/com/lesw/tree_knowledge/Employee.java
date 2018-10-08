@@ -36,6 +36,16 @@ class Employee {
 
     private Set<Knowledge> knowledgeSet;
 
+    public static Employee[] populateData() {
+        return new Employee[] {
+                new Employee(1l, "Diego Alves", "Desenvolvedor Java", "diego.alves@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee(2l, "Pedro Santana", "Gerente de projetos", "pedro.santana@acme.com", "1234", "123456", RoleEnum.MANAGER),
+                new Employee(3l, "Rodrigo Silva", "Desenvolvedor Java", "rodrigo.silva@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee(4l, "Mariana Garcia", "Coordenadora", "mariana.garcia@acme.com", "1234", "123456", RoleEnum.HR),
+                new Employee(5l, "Roger Flores", "Desenvolvedor Python", "roger.flores@acme.com", "1234", "123456", RoleEnum.USER)
+        };
+    }
+
     public Employee() {
         knowledgeSet = new HashSet<>();
         knowledgeSet.add(Knowledge.ROOT);

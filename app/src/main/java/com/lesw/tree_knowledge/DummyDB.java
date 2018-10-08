@@ -117,6 +117,7 @@ public class DummyDB {
 
         if (k1 == null) {
             Log.d("TK", "Opa! Root eh null!");
+            return;
         } else {
             Log.d("TK", "Certo! Root nao eh null!");
         }
