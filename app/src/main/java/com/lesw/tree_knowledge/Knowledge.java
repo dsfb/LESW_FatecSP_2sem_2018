@@ -1,10 +1,5 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,6 +12,11 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observable;
+
+import androidx.room.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.ColumnInfo;
+import androidx.room.Ignore;
 
 @Entity(tableName = "knowledge")
 public class Knowledge {

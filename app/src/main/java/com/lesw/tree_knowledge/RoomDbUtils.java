@@ -1,6 +1,5 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.room.RoomSQLiteQuery;
 import android.content.Context;
 import android.util.Log;
 

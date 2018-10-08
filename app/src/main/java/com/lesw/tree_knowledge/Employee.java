@@ -1,9 +1,5 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
 import java.lang.reflect.Type;
@@ -13,6 +9,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 import io.reactivex.Observable;
 
 import com.google.gson.Gson;

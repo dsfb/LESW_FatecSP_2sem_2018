@@ -1,6 +1,6 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 public class Converters {
     @TypeConverter

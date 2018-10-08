@@ -1,10 +1,5 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,6 +7,11 @@ import android.widget.Toast;
 import java.util.concurrent.Executors;
 
 import io.reactivex.annotations.NonNull;
+
+import androidx.room.Database;
+import androidx.room.TypeConverters;
+import androidx.room.RoomDatabase;
+import androidx.room.Room;
 
 @Database(entities = {Knowledge.class, Certification.class, Employee.class}, version = 1)
 @TypeConverters({Converters.class})
