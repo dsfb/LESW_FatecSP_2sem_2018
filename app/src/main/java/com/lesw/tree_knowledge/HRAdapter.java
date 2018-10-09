@@ -1,8 +1,8 @@
 package com.lesw.tree_knowledge;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
 
 public class HRAdapter extends FragmentStatePagerAdapter {
 

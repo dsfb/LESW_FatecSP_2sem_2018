@@ -2,9 +2,7 @@ package com.lesw.tree_knowledge;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,6 +11,8 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.Serializable;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class EmployeeActivity extends AppCompatActivity {
 

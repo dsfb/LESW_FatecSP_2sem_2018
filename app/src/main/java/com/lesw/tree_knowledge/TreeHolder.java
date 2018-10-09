@@ -2,13 +2,15 @@ package com.lesw.tree_knowledge;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.github.johnkil.print.PrintView;
 import com.unnamed.b.atv.model.TreeNode;
+
+import androidx.core.content.ContextCompat;
 
 public class TreeHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem> {
 

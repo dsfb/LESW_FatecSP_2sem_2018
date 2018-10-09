@@ -3,8 +3,6 @@ package com.lesw.tree_knowledge;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,9 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
 
 public class ApprovalsFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
@@ -46,7 +47,7 @@ public class ApprovalsFragment extends Fragment implements SearchView.OnQueryTex
         sv = (SearchView) view.findViewById(R.id.search_view);
         lv = (ListView) view.findViewById(R.id.lv);
 
-        EditText searchEditText = (EditText) sv.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText searchEditText = (EditText) sv.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
 
