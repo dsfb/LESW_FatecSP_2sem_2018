@@ -62,6 +62,7 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:textColor="@android:color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:background="@color/accent"
             android:text="@string/login"/>
 
