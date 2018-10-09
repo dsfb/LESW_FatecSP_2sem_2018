@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     tools:context="com.ihc.tree_knowledge.UploadFragment">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 >
 
                 <!-- Name Label -->
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -43,10 +43,10 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
                         android:hint="@string/name" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Role Label -->
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -57,11 +57,11 @@
                         android:layout_height="wrap_content"
                         android:inputType="textNoSuggestions"
                         android:hint="@string/role" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <!--  Email Label -->
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -72,11 +72,11 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:hint="@string/email" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <!-- Password Label
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -87,11 +87,11 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:hint="@string/password"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
                 -->
 
                 <!-- Password Confirmation Label
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -102,11 +102,11 @@
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:hint="@string/re_enter_password"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
                 -->
 
                 <!-- PIN Label -->
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -118,10 +118,10 @@
                         android:inputType="textNoSuggestions"
                         android:hint="@string/pin"
                         tools:ignore="TextFields" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Signup Button -->
-                <android.support.v7.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:background="@color/accent"
                     android:id="@+id/btn_hrsignup"
                     android:layout_width="fill_parent"
@@ -134,5 +134,5 @@
             </LinearLayout>
 
         </ScrollView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>
