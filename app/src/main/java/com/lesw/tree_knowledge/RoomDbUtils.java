@@ -56,10 +56,14 @@ public class RoomDbUtils {
 
     public static List<Employee> getAllEmployees(Context context) {
         try {
-            Object obj = AppDatabase.
+            List<Employee> employees = AppDatabase.
                     getInstance(context).
                     employeeDao().getAll();
-            List<Employee> employees = (List<Employee>) obj;
+
+            for (Employee e : employees) {
+                e.setKnowledgeSet(context);
+            }
+
             return employees;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage());
@@ -95,9 +99,13 @@ public class RoomDbUtils {
 
     public static Employee getEmployeeById(int id, Context context) {
         try {
-            return AppDatabase.
+            Employee e = AppDatabase.
                     getInstance(context).
                     employeeDao().findById(id);
+
+            e.setKnowledgeSet(context);
+
+            return e;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage());
             return null;

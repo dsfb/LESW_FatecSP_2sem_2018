@@ -39,7 +39,7 @@
                     android:textSize="18sp"
                     android:text="@string/send_cert_title" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -52,9 +52,9 @@
                         android:textColor="@color/jet"
                         android:textColorHighlight="@color/black"
                         />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -67,9 +67,9 @@
                         android:textColor="@color/jet"
                         android:textColorHighlight="@color/black"
                         />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <!--<android.support.design.widget.TextInputLayout-->
+                <!--<com.google.android.material.textfield.TextInputLayout-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
                     <!--android:layout_marginTop="8dp"-->
@@ -82,9 +82,9 @@
                         <!--android:textColor="@color/jet"-->
                         <!--android:textColorHighlight="@color/black"-->
                         <!--/>-->
-                <!--</android.support.design.widget.TextInputLayout>-->
+                <!--</com.google.android.material.textfield.TextInputLayout>-->
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -101,7 +101,7 @@
                         android:textColor="@color/jet"
                         android:textColorHighlight="@color/black"
                         tools:ignore="KeyboardInaccessibleWidget,TextFields" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:drawableLeft="@drawable/attach"
