@@ -56,9 +56,11 @@ public class RoomDbUtils {
 
     public static List<Employee> getAllEmployees(Context context) {
         try {
-            return AppDatabase.
+            Object obj = AppDatabase.
                     getInstance(context).
                     employeeDao().getAll();
+            List<Employee> employees = (List<Employee>) obj;
+            return employees;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage());
             List<Employee> employees = new ArrayList<>();
@@ -73,8 +75,7 @@ public class RoomDbUtils {
 
     public static boolean updateEmployee(Employee employee, Context context) {
         try {
-            AppDatabase.getInstance(context).employeeDao().updateEmployeeByKnowledgeSet(employee.getId(),
-                    employee.getKnowledgeSetStr());
+            AppDatabase.getInstance(context).employeeDao().update(employee);
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateEmployees):\n" + e.getMessage());

@@ -19,8 +19,8 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
     public abstract KnowledgeDao knowledgeDao();
-    public abstract CertificationDao certificationDao();
     public abstract EmployeeDao employeeDao();
+    public abstract CertificationDao certificationDao();
 
     public synchronized static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {

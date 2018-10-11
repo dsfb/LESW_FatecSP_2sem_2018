@@ -9,26 +9,17 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Delete;
 
 @Dao
-public interface EmployeeDao {
+public abstract class EmployeeDao implements BaseDao<Employee> {
     @Query("SELECT * FROM employee")
-    List<Employee> getAll();
+    abstract List<Employee> getAll();
 
     @Query("SELECT * FROM employee WHERE id IN (:employeeIds)")
-    List<Employee> loadAllByIds(int[] employeeIds);
+    abstract List<Employee> loadAllByIds(int[] employeeIds);
 
     @Query("SELECT * FROM employee WHERE email LIKE :first AND "
             + "password LIKE :last LIMIT 1")
-    Employee findByName(String first, String last);
+    abstract Employee findByEmailAndPassword(String first, String last);
 
     @Query("SELECT * FROM employee WHERE id LIKE :id LIMIT 1")
-    Employee findById(int id);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Employee... employees);
-
-    @Query("UPDATE employee SET knowledge_set = :knowledge_set  WHERE id = :tid")
-    int updateEmployeeByKnowledgeSet(int tid, String knowledge_set);
-
-    @Delete
-    void delete(Employee employee);
+    abstract Employee findById(int id);
 }

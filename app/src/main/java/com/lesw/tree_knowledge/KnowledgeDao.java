@@ -9,22 +9,16 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Delete;
 
 @Dao
-public interface KnowledgeDao {
+public abstract class KnowledgeDao implements BaseDao<Knowledge> {
     @Query("SELECT * FROM knowledge")
-    List<Knowledge> getAll();
+    abstract List<Knowledge> getAll();
 
     @Query("SELECT * FROM knowledge WHERE id IN (:knowledgeIds)")
-    List<Knowledge> loadAllByIds(int[] knowledgeIds);
+    abstract List<Knowledge> loadAllByIds(int[] knowledgeIds);
 
     @Query("SELECT * FROM knowledge WHERE name LIKE :name LIMIT 1")
-    Knowledge findByName(String name);
+    abstract Knowledge findByName(String name);
 
     @Query("SELECT * FROM knowledge WHERE id LIKE :id LIMIT 1")
-    Knowledge findById(int id);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Knowledge... knowledges);
-
-    @Delete
-    void delete(Knowledge knowledge);
+    abstract Knowledge findById(int id);
 }

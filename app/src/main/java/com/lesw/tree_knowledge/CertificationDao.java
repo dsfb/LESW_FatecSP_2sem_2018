@@ -9,20 +9,14 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Delete;
 
 @Dao
-public interface CertificationDao {
+public abstract class CertificationDao implements BaseDao<Certification> {
     @Query("SELECT * FROM certification")
-    List<Certification> getAll();
+    abstract List<Certification> getAll();
 
     @Query("SELECT * FROM certification WHERE id IN (:certificationIds)")
-    List<Certification> loadAllByIds(int[] certificationIds);
+    abstract List<Certification> loadAllByIds(int[] certificationIds);
 
     @Query("SELECT * FROM certification WHERE certification LIKE :first AND "
             + "userName LIKE :last LIMIT 1")
-    Certification findByName(String first, String last);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Certification... certifications);
-
-    @Delete
-    void delete(Certification certification);
+    abstract Certification findByCertificationAndUserName(String first, String last);
 }
