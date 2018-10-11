@@ -52,7 +52,7 @@ class Employee {
     private String knowledgeSetStr;
 
     @Ignore
-    private static Type setType = new TypeToken<ArrayList<Set<Knowledge>>>(){}.getType();
+    private static Type listType = new TypeToken<List<Integer>>(){}.getType();
 
     @Ignore
     private static Gson gson = new Gson();
@@ -70,7 +70,12 @@ class Employee {
     public Employee() {
         knowledgeSet = new HashSet<>();
         knowledgeSet.add(Knowledge.ROOT);
-        this.knowledgeSetStr = gson.toJson(this.knowledgeSet, setType);
+
+        List<Integer> list = new ArrayList<>();
+        for (Knowledge k : knowledgeSet) {
+            list.add(k.getId());
+        }
+        this.knowledgeSetStr = gson.toJson(list, listType);
     }
 
     public Employee(String name, String role) {
@@ -90,6 +95,15 @@ class Employee {
         this.pin = pin;
         this.password = password;
         this.function = function;
+    }
+
+    public void setKnowledgeSet(Context context) {
+        knowledgeSet = new HashSet<>();
+        List<Integer> list = new ArrayList<>();
+        list = gson.fromJson(this.knowledgeSetStr, listType);
+        for (int i : list) {
+            knowledgeSet.add(RoomDbUtils.getKnowledgeById(i, context));
+        }
     }
 
     public int getId() {
@@ -161,7 +175,14 @@ class Employee {
     public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
             knowledgeSet.add(knowledge);
-            this.knowledgeSetStr = gson.toJson(this.knowledgeSet, setType);
+
+            List<Integer> list = new ArrayList<>();
+            for (Knowledge k : knowledgeSet) {
+                list.add(k.getId());
+            }
+
+            this.knowledgeSetStr = gson.toJson(list, listType);
+
             knowledge.count(this, context);
             Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
             addKnowledge(up, context);

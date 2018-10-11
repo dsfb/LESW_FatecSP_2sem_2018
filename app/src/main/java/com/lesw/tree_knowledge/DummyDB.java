@@ -118,50 +118,32 @@ public class DummyDB {
         if (Knowledge.ROOT == null) {
             List<Knowledge> fakeKnowledges = new ArrayList<>();
 
-            Knowledge k1 = new Knowledge("Árvore do Conhecimento");
+            Knowledge[] knowledges = {new Knowledge("Árvore do Conhecimento"),
+                    new Knowledge("Lógica de Programação", 1),
+                    new Knowledge("Microsoft Windows", 1),
+                    new Knowledge("Java", 2),
+                    new Knowledge("Python", 2),
+                    new Knowledge("Word 2013", 3),
+                    new Knowledge("Excel 2013", 3),
+                    new Knowledge("JavaFX", 4),
+                    new Knowledge("JPA", 4),
+                    new Knowledge("JAX-RS", 4),
+                    new Knowledge("NumPy", 5),
+                    new Knowledge("PyTorch", 5)
+            };
 
-            Knowledge k2 = new Knowledge("Lógica de Programação", k1.getId());
-            Knowledge k3 = new Knowledge("Microsoft Windows", k1.getId());
-
-            Knowledge k4 = new Knowledge("Java", k2.getId());
-            Knowledge k5 = new Knowledge("Python", k2.getId());
-
-            Knowledge k6 = new Knowledge("Word 2013", k3.getId());
-            Knowledge k7 = new Knowledge("Excel 2013", k3.getId());
-
-            Knowledge k8 = new Knowledge("JavaFX", k4.getId());
-            Knowledge k9 = new Knowledge("JPA", k4.getId());
-            Knowledge k10 = new Knowledge("JAX-RS", k4.getId());
-
-            Knowledge k11 = new Knowledge("NumPy", k5.getId());
-            Knowledge k12 = new Knowledge("PyTorch", k5.getId());
-
-            fakeKnowledges.add(k1);
-            fakeKnowledges.add(k2);
-            fakeKnowledges.add(k3);
-            fakeKnowledges.add(k4);
-            fakeKnowledges.add(k5);
-            fakeKnowledges.add(k6);
-            fakeKnowledges.add(k7);
-            fakeKnowledges.add(k8);
-            fakeKnowledges.add(k9);
-            fakeKnowledges.add(k10);
-            fakeKnowledges.add(k11);
-            fakeKnowledges.add(k12);
-
-            Knowledge[] fakeKnowledgeArray = new Knowledge[fakeKnowledges.size()];
-            fakeKnowledgeArray = fakeKnowledges.toArray(fakeKnowledgeArray);
+            Knowledge[] fakeKnowledgeArray = knowledges;
 
             boolean val = RoomDbUtils.insertKnowledgeArray(fakeKnowledgeArray, this.context);
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
+            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+
             Employee[] employees = Employee.populateData();
             val = RoomDbUtils.insertEmployees(employees, this.context);
 
             Log.d("TreeKnowledge", "Inserção(Empregados) aconteceu: " + val + "!");
-
-            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
 
             //getting all table records
             companyEmployees = RoomDbUtils.getAllEmployees(this.context);
@@ -178,9 +160,9 @@ public class DummyDB {
                 Log.d("TK", "(I)empregado(Rodrigo Silva): null!");
             }
 
-            e3.addKnowledge(k9, this.context);
-            e3.addKnowledge(k10, this.context);
-            e3.addKnowledge(k6, this.context);
+            e3.addKnowledge(companyKnowledges.get(8), this.context);
+            e3.addKnowledge(companyKnowledges.get(10), this.context);
+            e3.addKnowledge(companyKnowledges.get(5), this.context);
 
             val = RoomDbUtils.updateEmployee(e3, this.context);
 

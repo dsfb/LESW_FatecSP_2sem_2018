@@ -1,20 +1,10 @@
 package com.lesw.tree_knowledge;
 
-import android.arch.persistence.room.RoomSQLiteQuery;
 import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class RoomDbUtils {
     public static boolean insertKnowledgeByNameAndUp(String name, int up, Context context) {
@@ -27,7 +17,7 @@ public class RoomDbUtils {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
             return true;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage(), e);
             return false;
         }
     }
@@ -38,7 +28,7 @@ public class RoomDbUtils {
                     getInstance(context).
                     knowledgeDao().findById(id);
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(getKnowledgeById):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(getKnowledgeById):\n" + e.getMessage(), e);
             return null;
         }
     }
@@ -49,7 +39,7 @@ public class RoomDbUtils {
                     getInstance(context).
                     knowledgeDao().getAll();
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(getAllKnowledge):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(getAllKnowledge):\n" + e.getMessage(), e);
             List<Knowledge> knowledge = new ArrayList<>();
             return knowledge;
         }
@@ -57,11 +47,17 @@ public class RoomDbUtils {
 
     public static List<Employee> getAllEmployees(Context context) {
         try {
-            return AppDatabase.
+            List<Employee> employees = AppDatabase.
                     getInstance(context).
                     employeeDao().getAll();
+
+            for (Employee e : employees) {
+                e.setKnowledgeSet(context);
+            }
+
+            return employees;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage(), e);
             List<Employee> employees = new ArrayList<>();
             return employees;
         }
@@ -78,7 +74,7 @@ public class RoomDbUtils {
                     employee.getKnowledgeSetStr());
             return true;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(updateEmployees):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(updateEmployees):\n" + e.getMessage(), e);
             return false;
         }
     }
@@ -88,18 +84,22 @@ public class RoomDbUtils {
             AppDatabase.getInstance(context).employeeDao().insertAll(employees);
             return true;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(insertEmployees):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(insertEmployees):\n" + e.getMessage(), e);
             return false;
         }
     }
 
     public static Employee getEmployeeById(int id, Context context) {
         try {
-            return AppDatabase.
+            Employee e = AppDatabase.
                     getInstance(context).
                     employeeDao().findById(id);
+
+            e.setKnowledgeSet(context);
+
+            return e;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage());
+            Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
             return null;
         }
     }

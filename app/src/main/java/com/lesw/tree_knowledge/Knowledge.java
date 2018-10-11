@@ -148,7 +148,9 @@ public class Knowledge {
 
         Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
 
-        knowledge.count(employee, context);
+        if (knowledge != null) {
+            knowledge.count(employee, context);
+        }
     }
 
     static TreeNode generateHRTree(Knowledge knowledge, Context context){
