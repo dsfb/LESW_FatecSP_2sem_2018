@@ -156,12 +156,12 @@ public class DummyDB {
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
+            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+
             Employee[] employees = Employee.populateData();
             val = RoomDbUtils.insertEmployees(employees, this.context);
 
             Log.d("TreeKnowledge", "Inserção(Empregados) aconteceu: " + val + "!");
-
-            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
 
             //getting all table records
             companyEmployees = RoomDbUtils.getAllEmployees(this.context);

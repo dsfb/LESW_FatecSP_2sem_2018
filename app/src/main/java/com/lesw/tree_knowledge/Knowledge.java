@@ -44,7 +44,8 @@ public class Knowledge {
     @Ignore
     private Set<Employee> employeeSet = new HashSet<>();
 
-    @Ignore
+    public Knowledge() {}
+
     public Knowledge(String name) {
         this.name = name;
     }
