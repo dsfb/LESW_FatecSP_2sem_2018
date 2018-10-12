@@ -25,6 +25,9 @@ public interface KnowledgeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Knowledge... knowledges);
 
+    @Query("UPDATE knowledge SET children_set = :children  WHERE id = :tid")
+    int updateKnowledgeByChildren(int tid, String children);
+
     @Delete
     void delete(Knowledge knowledge);
 }

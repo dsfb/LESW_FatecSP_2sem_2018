@@ -15,6 +15,13 @@ public class RoomDbUtils {
     public static boolean insertKnowledgeArray(Knowledge[] knowledgeArray, Context context) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
+
+            for (Knowledge knowledge : knowledgeArray) {
+                if (knowledge != null) {
+                    knowledge.manageUp(context);
+                }
+            }
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage(), e);
@@ -24,9 +31,15 @@ public class RoomDbUtils {
 
     public static Knowledge getKnowledgeById(int id, Context context) {
         try {
-            return AppDatabase.
+            Knowledge k = AppDatabase.
                     getInstance(context).
                     knowledgeDao().findById(id);
+
+            if (k != null) {
+                k.populateChildren(context);
+            }
+
+            return k;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getKnowledgeById):\n" + e.getMessage(), e);
             return null;
@@ -35,9 +48,15 @@ public class RoomDbUtils {
 
     public static List<Knowledge> getAllKnowledge(Context context) {
         try {
-            return AppDatabase.
+            List<Knowledge> knowledgeList = AppDatabase.
                     getInstance(context).
                     knowledgeDao().getAll();
+
+            for (Knowledge knowledge : knowledgeList) {
+                knowledge.populateChildren(context);
+            }
+
+            return knowledgeList;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getAllKnowledge):\n" + e.getMessage(), e);
             List<Knowledge> knowledge = new ArrayList<>();
@@ -74,7 +93,7 @@ public class RoomDbUtils {
                     employee.getKnowledgeSetStr());
             return true;
         } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(updateEmployees):\n" + e.getMessage(), e);
+            Log.e("TreeKnowledge", "Error(updateEmployee):\n" + e.getMessage(), e);
             return false;
         }
     }
@@ -101,6 +120,17 @@ public class RoomDbUtils {
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
             return null;
+        }
+    }
+
+    public static boolean updateKnowledgeByChildren(Knowledge knowledge, Context context) {
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByChildren(knowledge.getId(),
+                    knowledge.getChildrenSetStr());
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateKnowledgeByChildren):\n" + e.getMessage(), e);
+            return false;
         }
     }
 }

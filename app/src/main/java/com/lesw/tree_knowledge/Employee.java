@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.Observable;
+import java.util.TreeSet;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -52,7 +50,7 @@ class Employee {
     private String knowledgeSetStr;
 
     @Ignore
-    private static Type listType = new TypeToken<List<Integer>>(){}.getType();
+    private static Type setType = new TypeToken<TreeSet<Integer>>(){}.getType();
 
     @Ignore
     private static Gson gson = new Gson();
@@ -71,11 +69,11 @@ class Employee {
         knowledgeSet = new HashSet<>();
         knowledgeSet.add(Knowledge.ROOT);
 
-        List<Integer> list = new ArrayList<>();
+        Set<Integer> set = new TreeSet<>();
         for (Knowledge k : knowledgeSet) {
-            list.add(k.getId());
+            set.add(k.getId());
         }
-        this.knowledgeSetStr = gson.toJson(list, listType);
+        this.knowledgeSetStr = gson.toJson(set, setType);
     }
 
     public Employee(String name, String role) {
@@ -99,9 +97,9 @@ class Employee {
 
     public void setKnowledgeSet(Context context) {
         knowledgeSet = new HashSet<>();
-        List<Integer> list = new ArrayList<>();
-        list = gson.fromJson(this.knowledgeSetStr, listType);
-        for (int i : list) {
+        Set<Integer> set;
+        set = gson.fromJson(this.knowledgeSetStr, setType);
+        for (int i : set) {
             knowledgeSet.add(RoomDbUtils.getKnowledgeById(i, context));
         }
     }
@@ -176,12 +174,12 @@ class Employee {
         if(knowledge != null){
             knowledgeSet.add(knowledge);
 
-            List<Integer> list = new ArrayList<>();
+            Set<Integer> set = new TreeSet<>();
             for (Knowledge k : knowledgeSet) {
-                list.add(k.getId());
+                set.add(k.getId());
             }
 
-            this.knowledgeSetStr = gson.toJson(list, listType);
+            this.knowledgeSetStr = gson.toJson(set, setType);
 
             knowledge.count(this, context);
             Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);

@@ -3,11 +3,12 @@ package com.lesw.tree_knowledge;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.Observable;
 
 public class DummyDB {
 
@@ -19,6 +20,10 @@ public class DummyDB {
     private List<Certification> companyCertifications;
     private Employee loggedUser;
     private Context context;
+
+    private static Type listType = new TypeToken<List<Integer>>(){}.getType();
+
+    private static Gson gson = new Gson();
 
     public static DummyDB getInstance(Context context){
         if(instance == null){
@@ -151,6 +156,10 @@ public class DummyDB {
             Log.d("TK", "(I)company_employees.size(): " + companyEmployees.size());
 
             companyKnowledges = RoomDbUtils.getAllKnowledge(this.context);
+
+            for (Knowledge k : companyKnowledges) {
+                k.manageUp(this.context);
+            }
 
             Log.d("TK", "(I)company_knowledges.size(): " + companyKnowledges.size());
 

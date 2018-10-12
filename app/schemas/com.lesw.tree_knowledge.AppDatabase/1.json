@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c3ad364e0dde11f3843f946dd091107b",
+    "identityHash": "66c5fe83b5bde29208e47aaf2dd78fa0",
     "entities": [
       {
         "tableName": "knowledge",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `up` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `up` INTEGER NOT NULL, `children_set` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -25,6 +25,12 @@
             "columnName": "up",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "childrenSetStr",
+            "columnName": "children_set",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -151,7 +157,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c3ad364e0dde11f3843f946dd091107b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"66c5fe83b5bde29208e47aaf2dd78fa0\")"
     ]
   }
 }

@@ -4,19 +4,18 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.unnamed.b.atv.model.TreeNode;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-
-import io.reactivex.Observable;
+import java.util.TreeSet;
 
 @Entity(tableName = "knowledge")
 public class Knowledge {
@@ -39,7 +38,16 @@ public class Knowledge {
     private int up;
 
     @Ignore
+    private static Type setType = new TypeToken<Set<Integer>>(){}.getType();
+
+    @Ignore
+    private static Gson gson = new Gson();
+
+    @Ignore
     private List<Knowledge> children = new ArrayList<>();
+
+    @ColumnInfo(name = "children_set")
+    private String childrenSetStr;
 
     @Ignore
     private Set<Employee> employeeSet = new HashSet<>();
@@ -47,11 +55,21 @@ public class Knowledge {
     @Ignore
     public Knowledge(String name) {
         this.name = name;
+        this.up = 0;
+        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
     }
 
+    @Ignore
     public Knowledge(String name, int up) {
         this.name = name;
         this.up = up;
+        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+    }
+
+    public Knowledge(String name, int up, String childrenSetStr) {
+        this.name = name;
+        this.up = up;
+        this.childrenSetStr = childrenSetStr;
     }
 
     public void manageUp(Context context) {
@@ -59,6 +77,7 @@ public class Knowledge {
 
         if (knowledge != null) {
             knowledge.addChild(this);
+            RoomDbUtils.updateKnowledgeByChildren(knowledge, context);
         }
     }
 
@@ -95,6 +114,15 @@ public class Knowledge {
 
     private void addChild(Knowledge knowledge) {
         children.add(knowledge);
+
+        Set<Integer> set = new TreeSet<>();
+        for (Knowledge k : children) {
+            if (k != null) {
+                set.add(k.getId());
+            }
+        }
+
+        this.childrenSetStr = gson.toJson(set, setType);
     }
 
     public String getName() {
@@ -115,6 +143,19 @@ public class Knowledge {
 
     public void setUp(int up) {
         this.up = up;
+    }
+
+    public String getChildrenSetStr() {
+        return childrenSetStr;
+    }
+
+    public void populateChildren(Context context) {
+        Set<Integer> set = gson.fromJson(childrenSetStr, setType);
+
+        for (int i : set) {
+            Knowledge k = RoomDbUtils.getKnowledgeById(i, context);
+            this.addChild(k);
+        }
     }
 
     public int getWarningCount() {
@@ -198,6 +239,7 @@ public class Knowledge {
     static TreeNode generateUserTree(Employee employee, Context context){
         Knowledge rootKnowledge = employee.getRootKnowledge(context);
         Set<Knowledge> knowledgeSet = employee.getKnowledgeSet();
+        Set<Integer> set = gson.fromJson(employee.getKnowledgeSetStr(), setType);
 
         if(rootKnowledge == null) return new TreeNode(new IconTreeItem(R.string.fa_leaf,
                 "Árvore do Conhecimento",
@@ -208,7 +250,7 @@ public class Knowledge {
                 ColorEnum.GREEN, null)).setViewHolder(new TreeHolder(context));
 
         for (Knowledge child : rootKnowledge.getChildren()) {
-            if(knowledgeSet.contains(child)) {
+            if (set.contains(child.getId())) {
                 root.addChild(generateUserItem(child, knowledgeSet));
             }
         }
