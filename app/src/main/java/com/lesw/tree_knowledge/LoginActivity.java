@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        DummyDB.initializeInstance(getApplicationContext());
     }
 
     public void login() {
@@ -73,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Autenticando...");
         progressDialog.show();
 
-        final Employee employee = DummyDB.getInstance(getApplicationContext()).findEmployee(_emailText.getText().toString(),
+        final Employee employee = DummyDB.getInstance().findEmployee(_emailText.getText().toString(),
                 _passwordText.getText().toString());
 
         if (employee != null) {
@@ -83,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        DummyDB.getInstance(getApplicationContext()).loginEmployee(_emailText.getText().toString());
+                        DummyDB.getInstance().loginEmployee(_emailText.getText().toString());
                         onLoginSuccess(employee);
                         progressDialog.setMessage("Autenticação bem-sucedida!");
                         // onLoginFailed();

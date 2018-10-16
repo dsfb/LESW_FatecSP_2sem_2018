@@ -71,7 +71,7 @@ public class SignupActivity extends AppCompatActivity {
 
         String pin = _pinText.getText().toString();
 
-        final Employee employee = DummyDB.getInstance(getApplicationContext()).findEmployeeByEmail(email);
+        final Employee employee = DummyDB.getInstance().findEmployeeByEmail(email);
 
         if (employee != null) {
             if (employee.isPrimeiroAcesso()) {

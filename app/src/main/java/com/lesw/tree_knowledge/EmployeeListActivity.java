@@ -34,7 +34,7 @@ public class EmployeeListActivity extends ListActivity {
         String title = intent.getStringExtra("TITLE");
         int id = intent.getIntExtra("ID", 0);
 
-        DummyDB db = DummyDB.getInstance(getApplicationContext());
+        DummyDB db = DummyDB.getInstance();
         knowledge = Knowledge.getById(id, db.getCompanyRoot());
 
         if(db.getLoggedUser().getFunction().equals(RoleEnum.HR)){

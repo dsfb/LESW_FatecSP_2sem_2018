@@ -25,14 +25,15 @@ public class DummyDB {
 
     private static Gson gson = new Gson();
 
-    public static DummyDB getInstance(Context context){
+    public static void initializeInstance(Context context) {
         if(instance == null){
             instance = new DummyDB();
             instance.context = context;
             instance.initData();
         }
+    }
 
-        instance.context = context;
+    public static DummyDB getInstance(){
         return instance;
     }
 
@@ -98,9 +99,13 @@ public class DummyDB {
         return null;
     }
 
+    public void addKnowledgeToList(Knowledge k) {
+        this.companyKnowledges.add(k);
+    }
+
     public void addKnowledgeToRoot(String nome) {
         Knowledge k = new Knowledge(nome, Knowledge.ROOT.getId());
-        this.companyKnowledges.add(k);
+        this.addKnowledgeToList(k);
     }
 
     public Knowledge findKnowlegde(String nome) {
@@ -117,8 +122,12 @@ public class DummyDB {
         companyCertifications.add(certification);
     }
 
+    public void fillCompanyKnowledges() {
+        companyKnowledges = RoomDbUtils.getAllKnowledge(this.context);
+    }
+
     private void initData(){
-        Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+        Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context, this.companyKnowledges);
 
         if (Knowledge.ROOT == null) {
             List<Knowledge> fakeKnowledges = new ArrayList<>();
@@ -143,39 +152,79 @@ public class DummyDB {
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
-            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context);
+            //getting all knowledge table records
+            this.fillCompanyKnowledges();
+
+            for (Knowledge knowledge : this.companyKnowledges) {
+                knowledge.manageUp(context);
+            }
+
+            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context, this.companyKnowledges);
 
             Employee[] employees = Employee.populateData();
             val = RoomDbUtils.insertEmployees(employees, this.context);
 
             Log.d("TreeKnowledge", "Inserção(Empregados) aconteceu: " + val + "!");
 
-            //getting all table records
+            //getting all employee table records
             companyEmployees = RoomDbUtils.getAllEmployees(this.context);
 
             Log.d("TK", "(I)company_employees.size(): " + companyEmployees.size());
-
-            companyKnowledges = RoomDbUtils.getAllKnowledge(this.context);
-
-            for (Knowledge k : companyKnowledges) {
-                k.manageUp(this.context);
-            }
 
             Log.d("TK", "(I)company_knowledges.size(): " + companyKnowledges.size());
 
             Employee e3 = RoomDbUtils.getEmployeeById(3, this.context);
 
-            if (e3 == null) {
-                Log.d("TK", "(I)empregado(Rodrigo Silva): null!");
-            }
-
             e3.addKnowledge(companyKnowledges.get(8), this.context);
-            e3.addKnowledge(companyKnowledges.get(10), this.context);
+            e3.addKnowledge(companyKnowledges.get(9), this.context);
             e3.addKnowledge(companyKnowledges.get(5), this.context);
 
             val = RoomDbUtils.updateEmployee(e3, this.context);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Rodrigo Silva) aconteceu: " + val + "!");
+
+            Employee e1 = RoomDbUtils.getEmployeeById(1, this.context);
+
+            e1.addKnowledge(companyKnowledges.get(7), this.context);
+            e1.addKnowledge(companyKnowledges.get(8), this.context);
+            e1.addKnowledge(companyKnowledges.get(9), this.context);
+            e1.addKnowledge(companyKnowledges.get(10), this.context);
+            e1.addKnowledge(companyKnowledges.get(11), this.context);
+
+            val = RoomDbUtils.updateEmployee(e1, this.context);
+
+            Log.d("TreeKnowledge", "Atualização(Empregado: Diego Alves) aconteceu: " + val + "!");
+
+            Employee e2 = RoomDbUtils.getEmployeeById(2, this.context);
+
+            e2.addKnowledge(companyKnowledges.get(5), this.context);
+            e2.addKnowledge(companyKnowledges.get(6), this.context);
+
+            val = RoomDbUtils.updateEmployee(e2, this.context);
+
+            Log.d("TreeKnowledge", "Atualização(Empregado: Pedro Santana) aconteceu: " + val + "!");
+
+            Employee e4 = RoomDbUtils.getEmployeeById(4, this.context);
+
+            e4.addKnowledge(companyKnowledges.get(5), this.context);
+            e4.addKnowledge(companyKnowledges.get(6), this.context);
+
+            val = RoomDbUtils.updateEmployee(e4, this.context);
+
+            Log.d("TreeKnowledge", "Atualização(Empregado: Márcia Garcia) aconteceu: " + val + "!");
+
+            Employee e5 = RoomDbUtils.getEmployeeById(5, this.context);
+
+            e5.addKnowledge(companyKnowledges.get(3), this.context);
+            e5.addKnowledge(companyKnowledges.get(4), this.context);
+            e5.addKnowledge(companyKnowledges.get(5), this.context);
+            e5.addKnowledge(companyKnowledges.get(6), this.context);
+            e5.addKnowledge(companyKnowledges.get(10), this.context);
+            e5.addKnowledge(companyKnowledges.get(11), this.context);
+
+            val = RoomDbUtils.updateEmployee(e5, this.context);
+
+            Log.d("TreeKnowledge", "Atualização(Empregado: Roger Flores) aconteceu: " + val + "!");
         }
 
         //getting all table records
@@ -183,34 +232,13 @@ public class DummyDB {
 
         Log.d("TK", "company_employees.size(): " + companyEmployees.size());
 
-        companyKnowledges = RoomDbUtils.getAllKnowledge(this.context);
+        this.fillCompanyKnowledges();
 
         Log.d("TK", "company_knowledges.size(): " + companyKnowledges.size());
 
-        for (Knowledge k : companyKnowledges) {
-
-            k.manageUp(this.context);
-        }
-
 
 
         /*
-        e1.addKnowledge(k8);
-        e1.addKnowledge(k9);
-        e1.addKnowledge(k10);
-        e1.addKnowledge(k11);
-        e1.addKnowledge(k12);
-
-
-        e2.addKnowledge(k6);
-        e2.addKnowledge(k7);
-        */
-
-
-        /*
-        e4.addKnowledge(k6);
-        e4.addKnowledge(k7);
-
         e5.addKnowledge(k4);
         e5.addKnowledge(k5);
         e5.addKnowledge(k11);
@@ -241,7 +269,15 @@ public class DummyDB {
         return companyEmployees;
     }
 
+    public List<Knowledge> getCompanyKnowledges() {
+        return companyKnowledges;
+    }
+
     public List<Certification> getCompanyCertifications() { return companyCertifications; }
+
+    public Context getContext() {
+        return context;
+    }
 
     public Knowledge getCompanyRoot() {
         return Knowledge.ROOT;

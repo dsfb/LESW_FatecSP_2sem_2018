@@ -34,7 +34,7 @@ public class UserTreeFragment extends Fragment implements TreeNode.TreeNodeClick
 
         TreeNode root = TreeNode.root();
 
-        DummyDB db = DummyDB.getInstance(getContext());
+        DummyDB db = DummyDB.getInstance();
 
         Employee employee = db.findEmployeeByEmail(this.getActivity().getIntent().getStringExtra("EMAIL"));
 

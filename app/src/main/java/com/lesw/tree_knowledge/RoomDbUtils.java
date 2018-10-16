@@ -29,14 +29,14 @@ public class RoomDbUtils {
         }
     }
 
-    public static Knowledge getKnowledgeById(int id, Context context) {
+    public static Knowledge getKnowledgeById(int id, Context context, List<Knowledge> knowledgeList) {
         try {
             Knowledge k = AppDatabase.
                     getInstance(context).
                     knowledgeDao().findById(id);
 
             if (k != null) {
-                k.populateChildren(context);
+                k.populateChildren(knowledgeList);
             }
 
             return k;
@@ -53,7 +53,7 @@ public class RoomDbUtils {
                     knowledgeDao().getAll();
 
             for (Knowledge knowledge : knowledgeList) {
-                knowledge.populateChildren(context);
+                knowledge.populateChildren(knowledgeList);
             }
 
             return knowledgeList;
@@ -71,7 +71,7 @@ public class RoomDbUtils {
                     employeeDao().getAll();
 
             for (Employee e : employees) {
-                e.setKnowledgeSet(context);
+                e.setKnowledgeSet();
             }
 
             return employees;
@@ -114,7 +114,7 @@ public class RoomDbUtils {
                     getInstance(context).
                     employeeDao().findById(id);
 
-            e.setKnowledgeSet(context);
+            e.setKnowledgeSet();
 
             return e;
         } catch (Exception e) {

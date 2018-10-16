@@ -37,7 +37,7 @@ public class MenuActivity extends AppCompatActivity {
 
         if(intent != null) {
             String email = intent.getStringExtra("EMAIL");
-            Employee employee = DummyDB.getInstance(getApplicationContext()).findEmployeeByEmail(email);
+            Employee employee = DummyDB.getInstance().findEmployeeByEmail(email);
 
             if(employee != null) {
                 userRole = employee.getFunction();

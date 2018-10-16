@@ -44,7 +44,7 @@ public class SearchFragment extends Fragment implements SearchView.OnQueryTextLi
     public void refreshEmployeeList() {
         employeeList = new ArrayList<>();
 
-        for (String[] anEmployeeList : DummyDB.getInstance(getContext()).getEmployeeList()) {
+        for (String[] anEmployeeList : DummyDB.getInstance().getEmployeeList()) {
             Employee employee = new Employee(anEmployeeList[0], anEmployeeList[1]);
             employeeList.add(employee);
         }

@@ -95,12 +95,12 @@ class Employee {
         this.function = function;
     }
 
-    public void setKnowledgeSet(Context context) {
+    public void setKnowledgeSet() {
         knowledgeSet = new HashSet<>();
         Set<Integer> set;
         set = gson.fromJson(this.knowledgeSetStr, setType);
         for (int i : set) {
-            knowledgeSet.add(RoomDbUtils.getKnowledgeById(i, context));
+            knowledgeSet.add(Knowledge.getKnowledgeFromList(i));
         }
     }
 
@@ -181,17 +181,24 @@ class Employee {
 
             this.knowledgeSetStr = gson.toJson(set, setType);
 
-            knowledge.count(this, context);
-            Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
-            addKnowledge(up, context);
+            knowledge.count(this);
+            if (knowledge.getUp() > 0) {
+                Knowledge up = Knowledge.getKnowledgeFromList(knowledge.getUp());
+                addKnowledge(up, context);
+            }
         }
     }
 
-    public Knowledge getRootKnowledge(Context context){
+    public Knowledge getRootKnowledge(){
         for (Knowledge knowledge : knowledgeSet) {
-            Knowledge up = RoomDbUtils.getKnowledgeById(knowledge.getUp(), context);
-            if(up == null) return knowledge;
+            if (knowledge.getUp() == 0) {
+                return knowledge;
+            }
+
+            Knowledge up = Knowledge.getKnowledgeFromList(knowledge.getUp());
+            if(up.getUp() == 0) return up;
         }
+
         return null;
     }
 

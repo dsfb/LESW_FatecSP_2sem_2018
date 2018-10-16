@@ -104,7 +104,7 @@ public class UploadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    DummyDB db = DummyDB.getInstance(getContext());
+                    DummyDB db = DummyDB.getInstance();
                     //public Certification(String knowledge, String userName, String date, String status)
                     Certification ce = new Certification(_txtKnowledge.getText().toString(),
                             db.getLoggedEmployeeName(), testDateTxt.getText().toString(),

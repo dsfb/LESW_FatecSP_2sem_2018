@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -73,9 +74,9 @@ public class Knowledge {
     }
 
     public void manageUp(Context context) {
-        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
+        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.up);
 
-        if (knowledge != null) {
+        if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.addChild(this);
             RoomDbUtils.updateKnowledgeByChildren(knowledge, context);
         }
@@ -149,12 +150,25 @@ public class Knowledge {
         return childrenSetStr;
     }
 
-    public void populateChildren(Context context) {
+    public static Knowledge getKnowledgeFromList(int id) {
+        for (Knowledge k : DummyDB.getInstance().getCompanyKnowledges()) {
+            if (k.getId() == id) {
+                return k;
+            }
+        }
+
+        return new Knowledge("NotFound!", -1);
+    }
+
+    public void populateChildren(List<Knowledge> knowledgeList) {
         Set<Integer> set = gson.fromJson(childrenSetStr, setType);
 
         for (int i : set) {
-            Knowledge k = RoomDbUtils.getKnowledgeById(i, context);
-            this.addChild(k);
+            Knowledge k = Knowledge.getKnowledgeFromList(i);
+
+            if (k.getUp() > 0) {
+                this.addChild(k);
+            }
         }
     }
 
@@ -175,7 +189,7 @@ public class Knowledge {
             if(child.redLeaf()) return true;
         }
 
-        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
+        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
         return knowledge != null && knowledge.blackLeaf(context);
     }
 
@@ -183,14 +197,15 @@ public class Knowledge {
         return (getCount() <= getWarningCount());
     }
 
-    void count(Employee employee, Context context) {
+    void count(Employee employee) {
         employeeSet.add(employee);
         count = employeeSet.size();
 
-        Knowledge knowledge = RoomDbUtils.getKnowledgeById(this.up, context);
 
-        if (knowledge != null) {
-            knowledge.count(employee, context);
+        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
+
+        if (knowledge.getUp() >= 0) {
+            knowledge.count(employee);
         }
     }
 
@@ -237,7 +252,7 @@ public class Knowledge {
     }
 
     static TreeNode generateUserTree(Employee employee, Context context){
-        Knowledge rootKnowledge = employee.getRootKnowledge(context);
+        Knowledge rootKnowledge = employee.getRootKnowledge();
         Set<Knowledge> knowledgeSet = employee.getKnowledgeSet();
         Set<Integer> set = gson.fromJson(employee.getKnowledgeSetStr(), setType);
 
@@ -250,21 +265,21 @@ public class Knowledge {
                 ColorEnum.GREEN, null)).setViewHolder(new TreeHolder(context));
 
         for (Knowledge child : rootKnowledge.getChildren()) {
-            if (set.contains(child.getId())) {
-                root.addChild(generateUserItem(child, knowledgeSet));
+            if (child != null && set.contains(child.getId())) {
+                root.addChild(generateUserItem(child, set));
             }
         }
 
         return root;
     }
 
-    private static TreeNode generateUserItem(Knowledge knowledge, Set<Knowledge> knowledgeSet){
+    private static TreeNode generateUserItem(Knowledge knowledge, Set<Integer> set){
         TreeNode node = new TreeNode(new IconTreeItem(R.string.fa_leaf, knowledge.getName(),
                 ColorEnum.GREEN, null));
 
         for (Knowledge child : knowledge.getChildren()) {
-            if(knowledgeSet.contains(child)) {
-                node.addChild(generateUserItem(child, knowledgeSet));
+            if(child != null && set.contains(child.getId())) {
+                node.addChild(generateUserItem(child, set));
             }
         }
 

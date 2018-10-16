@@ -37,7 +37,7 @@ public class EmployeeActivity extends AppCompatActivity {
 
         mTitle.setText(employeeName + ", " + employeeRole);
 
-        Employee employee = DummyDB.getInstance(getApplicationContext()).findEmployeeByName(employeeName);
+        Employee employee = DummyDB.getInstance().findEmployeeByName(employeeName);
         if(employee == null) return;
 
         TreeNode tn = Knowledge.generateUserTree(employee, getApplicationContext());
