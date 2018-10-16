@@ -170,6 +170,14 @@ class Employee {
         return knowledgeSet;
     }
 
+    public void addKnowledgeArrayById(List<Integer> ids, Context context) {
+        for (int id : ids) {
+            Knowledge k = RoomDbUtils.getInstance().getKnowledgeById(id);
+
+            this.addKnowledge(k, context);
+        }
+    }
+
     public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
             knowledgeSet.add(knowledge);

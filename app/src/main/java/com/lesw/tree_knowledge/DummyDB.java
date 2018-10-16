@@ -8,14 +8,17 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DummyDB {
 
     private static DummyDB instance;
 
+    /*
     private List<Employee> companyEmployees;
     private List<Knowledge> companyKnowledges;
+    */
     private Employee lastFoundEmployee;
     private List<Certification> companyCertifications;
     private Employee loggedUser;
@@ -38,17 +41,21 @@ public class DummyDB {
     }
 
     private DummyDB() {
+        /*
         this.companyEmployees = new ArrayList<>();
         this.companyKnowledges = new ArrayList<>();
+        */
         this.companyCertifications = new ArrayList<>();
     }
 
+    /*
     public void addEmployee(Employee employee) {
         companyEmployees.add(employee);
     }
+    */
 
     public Employee findEmployeeByEmail(String email) {
-        for (Employee e : companyEmployees) {
+        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
             if (e.getEmail().equalsIgnoreCase(email)) {
                 this.lastFoundEmployee = e;
                 return e;
@@ -57,7 +64,7 @@ public class DummyDB {
         return null;
     }
     public Employee findEmployeeByName(String name) {
-        for (Employee e : companyEmployees) {
+        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
             if (e.getName().equalsIgnoreCase(name)) {
                 this.lastFoundEmployee = e;
                 return e;
@@ -72,12 +79,11 @@ public class DummyDB {
             this.lastFoundEmployee.login();
             this.loggedUser = this.lastFoundEmployee;
         } else {
-            for (Employee e : companyEmployees) {
-                if (e.getEmail().equalsIgnoreCase(email)) {
-                    this.lastFoundEmployee = e;
-                    e.login();
-                    this.loggedUser = e;
-                }
+            Employee e = findEmployeeByEmail(email);
+            if (e != null) {
+                this.lastFoundEmployee = e;
+                e.login();
+                this.loggedUser = e;
             }
         }
     }
@@ -91,7 +97,7 @@ public class DummyDB {
     }
 
     public Employee findEmployee(String email, String password) {
-        for (Employee e : companyEmployees) {
+        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
             if (e.getEmail().equalsIgnoreCase(email) && e.getPassword().equals(password)) {
                 return e;
             }
@@ -99,17 +105,8 @@ public class DummyDB {
         return null;
     }
 
-    public void addKnowledgeToList(Knowledge k) {
-        this.companyKnowledges.add(k);
-    }
-
-    public void addKnowledgeToRoot(String nome) {
-        Knowledge k = new Knowledge(nome, Knowledge.ROOT.getId());
-        this.addKnowledgeToList(k);
-    }
-
     public Knowledge findKnowlegde(String nome) {
-        for (Knowledge k : companyKnowledges) {
+        for (Knowledge k : RoomDbUtils.getInstance().getAllKnowledge()) {
             if (k.getName().equals(nome)) {
                 return k;
             }
@@ -122,12 +119,8 @@ public class DummyDB {
         companyCertifications.add(certification);
     }
 
-    public void fillCompanyKnowledges() {
-        companyKnowledges = RoomDbUtils.getAllKnowledge(this.context);
-    }
-
     private void initData(){
-        Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context, this.companyKnowledges);
+        Knowledge.ROOT = RoomDbUtils.getInstance().getKnowledgeById(1);
 
         if (Knowledge.ROOT == null) {
             List<Knowledge> fakeKnowledges = new ArrayList<>();
@@ -148,93 +141,91 @@ public class DummyDB {
 
             Knowledge[] fakeKnowledgeArray = knowledges;
 
-            boolean val = RoomDbUtils.insertKnowledgeArray(fakeKnowledgeArray, this.context);
+            boolean val = RoomDbUtils.getInstance().insertKnowledgeArray(fakeKnowledgeArray);
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
-            //getting all knowledge table records
-            this.fillCompanyKnowledges();
-
-            for (Knowledge knowledge : this.companyKnowledges) {
+            for (Knowledge knowledge : RoomDbUtils.getInstance().getAllKnowledge()) {
                 knowledge.manageUp(context);
             }
 
-            Knowledge.ROOT = RoomDbUtils.getKnowledgeById(1, this.context, this.companyKnowledges);
+            Knowledge.ROOT = RoomDbUtils.getInstance().getKnowledgeById(1);
 
             Employee[] employees = Employee.populateData();
-            val = RoomDbUtils.insertEmployees(employees, this.context);
+            val = RoomDbUtils.getInstance().insertEmployees(employees);
 
             Log.d("TreeKnowledge", "Inserção(Empregados) aconteceu: " + val + "!");
 
-            //getting all employee table records
-            companyEmployees = RoomDbUtils.getAllEmployees(this.context);
+            Log.d("TK", "(I)company_employees.size(): " + RoomDbUtils.
+                    getInstance().getAllEmployees().size());
 
-            Log.d("TK", "(I)company_employees.size(): " + companyEmployees.size());
+            Log.d("TK", "(I)company_knowledges.size(): " + RoomDbUtils.
+                    getInstance().getAllKnowledge().size());
 
-            Log.d("TK", "(I)company_knowledges.size(): " + companyKnowledges.size());
+            List<Integer> list = new ArrayList<Integer>();
 
-            Employee e3 = RoomDbUtils.getEmployeeById(3, this.context);
+            Employee e3 = RoomDbUtils.getInstance().getEmployeeById(3);
 
-            e3.addKnowledge(companyKnowledges.get(8), this.context);
-            e3.addKnowledge(companyKnowledges.get(9), this.context);
-            e3.addKnowledge(companyKnowledges.get(5), this.context);
+            Collections.addAll(list, 9, 10, 6);
 
-            val = RoomDbUtils.updateEmployee(e3, this.context);
+            e3.addKnowledgeArrayById(list, this.context);
+
+            val = RoomDbUtils.getInstance().updateEmployee(e3);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Rodrigo Silva) aconteceu: " + val + "!");
 
-            Employee e1 = RoomDbUtils.getEmployeeById(1, this.context);
+            Employee e1 = RoomDbUtils.getInstance().getEmployeeById(1);
 
-            e1.addKnowledge(companyKnowledges.get(7), this.context);
-            e1.addKnowledge(companyKnowledges.get(8), this.context);
-            e1.addKnowledge(companyKnowledges.get(9), this.context);
-            e1.addKnowledge(companyKnowledges.get(10), this.context);
-            e1.addKnowledge(companyKnowledges.get(11), this.context);
+            list.clear();
 
-            val = RoomDbUtils.updateEmployee(e1, this.context);
+            Collections.addAll(list, 8, 9, 10, 11, 12);
+
+            e1.addKnowledgeArrayById(list, this.context);
+
+            val = RoomDbUtils.getInstance().updateEmployee(e1);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Diego Alves) aconteceu: " + val + "!");
 
-            Employee e2 = RoomDbUtils.getEmployeeById(2, this.context);
+            Employee e2 = RoomDbUtils.getInstance().getEmployeeById(2);
 
-            e2.addKnowledge(companyKnowledges.get(5), this.context);
-            e2.addKnowledge(companyKnowledges.get(6), this.context);
+            list.clear();
 
-            val = RoomDbUtils.updateEmployee(e2, this.context);
+            Collections.addAll(list, 6, 7);
+
+            e2.addKnowledgeArrayById(list, this.context);
+
+            val = RoomDbUtils.getInstance().updateEmployee(e2);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Pedro Santana) aconteceu: " + val + "!");
 
-            Employee e4 = RoomDbUtils.getEmployeeById(4, this.context);
+            Employee e4 = RoomDbUtils.getInstance().getEmployeeById(4);
 
-            e4.addKnowledge(companyKnowledges.get(5), this.context);
-            e4.addKnowledge(companyKnowledges.get(6), this.context);
+            list.clear();
 
-            val = RoomDbUtils.updateEmployee(e4, this.context);
+            Collections.addAll(list, 6, 7);
+
+            e4.addKnowledgeArrayById(list, this.context);
+
+            val = RoomDbUtils.getInstance().updateEmployee(e4);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Márcia Garcia) aconteceu: " + val + "!");
 
-            Employee e5 = RoomDbUtils.getEmployeeById(5, this.context);
+            Employee e5 = RoomDbUtils.getInstance().getEmployeeById(5);
 
-            e5.addKnowledge(companyKnowledges.get(3), this.context);
-            e5.addKnowledge(companyKnowledges.get(4), this.context);
-            e5.addKnowledge(companyKnowledges.get(5), this.context);
-            e5.addKnowledge(companyKnowledges.get(6), this.context);
-            e5.addKnowledge(companyKnowledges.get(10), this.context);
-            e5.addKnowledge(companyKnowledges.get(11), this.context);
+            list.clear();
 
-            val = RoomDbUtils.updateEmployee(e5, this.context);
+            Collections.addAll(list, 4,5, 6, 7, 11, 12);
+
+            e5.addKnowledgeArrayById(list, this.context);
+
+            val = RoomDbUtils.getInstance().updateEmployee(e5);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Roger Flores) aconteceu: " + val + "!");
         }
 
-        //getting all table records
-        companyEmployees = RoomDbUtils.getAllEmployees(this.context);
+        Log.d("TK", "company_employees.size(): " + RoomDbUtils.getInstance().getAllEmployees().size());
 
-        Log.d("TK", "company_employees.size(): " + companyEmployees.size());
-
-        this.fillCompanyKnowledges();
-
-        Log.d("TK", "company_knowledges.size(): " + companyKnowledges.size());
+        Log.d("TK", "company_knowledges.size(): " +RoomDbUtils.getInstance().getAllKnowledge().size());
 
 
 
@@ -266,11 +257,11 @@ public class DummyDB {
     }
 
     public List<Employee> getCompanyEmployees() {
-        return companyEmployees;
+        return RoomDbUtils.getInstance().getAllEmployees();
     }
 
     public List<Knowledge> getCompanyKnowledges() {
-        return companyKnowledges;
+        return RoomDbUtils.getInstance().getAllKnowledge();
     }
 
     public List<Certification> getCompanyCertifications() { return companyCertifications; }
@@ -288,7 +279,7 @@ public class DummyDB {
 
         if (k != null) {
             Employee the_emp = null;
-            for (Employee e : companyEmployees) {
+            for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
                 if (e.getName().equalsIgnoreCase(userName)) {
                     the_emp = e;
                     break;
@@ -345,7 +336,7 @@ public class DummyDB {
 
     public List<String[]> getEmployeeList() {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : companyEmployees) {
+        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
             String[] stringArray = {e.getName(), e.getRole()};
             employeeList.add(stringArray);
         }
@@ -355,7 +346,7 @@ public class DummyDB {
 
     public List<String[]> getEmployeeListByKnowledge(String knowledge) {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : companyEmployees) {
+        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
             if (e.hasAKnowledge(knowledge)) {
                 String[] stringArray = {e.getName(), e.getRole()};
                 employeeList.add(stringArray);

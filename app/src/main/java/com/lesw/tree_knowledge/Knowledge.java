@@ -78,7 +78,7 @@ public class Knowledge {
 
         if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.addChild(this);
-            RoomDbUtils.updateKnowledgeByChildren(knowledge, context);
+            RoomDbUtils.getInstance().updateKnowledgeByChildren(knowledge);
         }
     }
 

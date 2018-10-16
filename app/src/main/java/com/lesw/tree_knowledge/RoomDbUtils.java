@@ -7,12 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDbUtils {
-    public static boolean insertKnowledgeByNameAndUp(String name, int up, Context context) {
-        Knowledge[] knowledgeArray = {new Knowledge(name, up)};
-        return RoomDbUtils.insertKnowledgeArray(knowledgeArray, context);
+    private static RoomDbUtils instance;
+    private Context context;
+
+    public static void initialize(Context context) {
+        if (instance == null) {
+            instance = new RoomDbUtils();
+            instance.context = context;
+        }
     }
 
-    public static boolean insertKnowledgeArray(Knowledge[] knowledgeArray, Context context) {
+    public static RoomDbUtils getInstance() {
+        return instance;
+    }
+
+    public boolean insertKnowledgeByNameAndUp(String name, int up) {
+        Knowledge[] knowledgeArray = {new Knowledge(name, up)};
+        return this.insertKnowledgeArray(knowledgeArray);
+    }
+
+    public boolean insertKnowledgeArray(Knowledge[] knowledgeArray) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
 
@@ -29,14 +43,14 @@ public class RoomDbUtils {
         }
     }
 
-    public static Knowledge getKnowledgeById(int id, Context context, List<Knowledge> knowledgeList) {
+    public Knowledge getKnowledgeById(int id) {
         try {
             Knowledge k = AppDatabase.
                     getInstance(context).
                     knowledgeDao().findById(id);
 
             if (k != null) {
-                k.populateChildren(knowledgeList);
+                k.populateChildren(this.getAllKnowledge());
             }
 
             return k;
@@ -46,7 +60,7 @@ public class RoomDbUtils {
         }
     }
 
-    public static List<Knowledge> getAllKnowledge(Context context) {
+    public List<Knowledge> getAllKnowledge() {
         try {
             List<Knowledge> knowledgeList = AppDatabase.
                     getInstance(context).
@@ -64,7 +78,7 @@ public class RoomDbUtils {
         }
     }
 
-    public static List<Employee> getAllEmployees(Context context) {
+    public List<Employee> getAllEmployees() {
         try {
             List<Employee> employees = AppDatabase.
                     getInstance(context).
@@ -82,12 +96,12 @@ public class RoomDbUtils {
         }
     }
 
-    public static boolean insertEmployee(Employee employee, Context context) {
+    public boolean insertEmployee(Employee employee) {
         Employee[] employees = { employee };
-        return RoomDbUtils.insertEmployees(employees, context);
+        return this.insertEmployees(employees);
     }
 
-    public static boolean updateEmployee(Employee employee, Context context) {
+    public boolean updateEmployee(Employee employee) {
         try {
             AppDatabase.getInstance(context).employeeDao().updateEmployeeByKnowledgeSet(employee.getId(),
                     employee.getKnowledgeSetStr());
@@ -98,7 +112,7 @@ public class RoomDbUtils {
         }
     }
 
-    public static boolean insertEmployees(Employee[] employees, Context context) {
+    public boolean insertEmployees(Employee[] employees) {
         try {
             AppDatabase.getInstance(context).employeeDao().insertAll(employees);
             return true;
@@ -108,7 +122,7 @@ public class RoomDbUtils {
         }
     }
 
-    public static Employee getEmployeeById(int id, Context context) {
+    public Employee getEmployeeById(int id) {
         try {
             Employee e = AppDatabase.
                     getInstance(context).
@@ -123,7 +137,7 @@ public class RoomDbUtils {
         }
     }
 
-    public static boolean updateKnowledgeByChildren(Knowledge knowledge, Context context) {
+    public boolean updateKnowledgeByChildren(Knowledge knowledge) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByChildren(knowledge.getId(),
                     knowledge.getChildrenSetStr());

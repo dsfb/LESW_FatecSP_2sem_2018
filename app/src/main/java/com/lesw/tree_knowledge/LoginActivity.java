@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        RoomDbUtils.initialize(getApplicationContext());
         DummyDB.initializeInstance(getApplicationContext());
     }
 
