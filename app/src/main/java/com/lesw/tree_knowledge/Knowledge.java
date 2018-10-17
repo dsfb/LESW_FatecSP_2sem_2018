@@ -5,7 +5,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +14,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 @Entity(tableName = "knowledge")
@@ -160,14 +161,28 @@ public class Knowledge {
         return new Knowledge("NotFound!", -1);
     }
 
+    private Map<Integer, Knowledge> getMapFromList(List<Knowledge> knowledgeList) {
+        TreeMap<Integer, Knowledge> map = new TreeMap<>();
+
+        for (Knowledge k : knowledgeList) {
+            map.put(k.getId(), k);
+        }
+
+        return map;
+    }
+
     public void populateChildren(List<Knowledge> knowledgeList) {
+        Map<Integer, Knowledge> map = this.getMapFromList(knowledgeList);
+
         Set<Integer> set = gson.fromJson(childrenSetStr, setType);
 
         for (int i : set) {
-            Knowledge k = Knowledge.getKnowledgeFromList(i);
+            if (map.containsKey(i)) {
+                Knowledge k = map.get(i);
 
-            if (k.getUp() > 0) {
-                this.addChild(k);
+                if (k.getUp() > 0) {
+                    this.addChild(k);
+                }
             }
         }
     }
