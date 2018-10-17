@@ -105,11 +105,11 @@ public class UploadFragment extends Fragment {
             public void onClick(View v) {
                 if (validate()) {
                     DummyDB db = DummyDB.getInstance();
-                    //public Certification(String knowledge, String userName, String date, String status)
+
                     Certification ce = new Certification(_txtKnowledge.getText().toString(),
                             db.getLoggedEmployeeName(), testDateTxt.getText().toString(),
                             "PENDENTE", _txtCertification.getText().toString());
-                    db.addCertification(ce);
+                    RoomDbUtils.getInstance().insertCertification(ce);
                     Toast.makeText(getActivity(), "Competência adicionada com sucesso!", Toast.LENGTH_SHORT).show();
                     testDateTxt.setText("");
                     _txtKnowledge.setText("");

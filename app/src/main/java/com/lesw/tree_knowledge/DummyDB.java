@@ -15,12 +15,7 @@ public class DummyDB {
 
     private static DummyDB instance;
 
-    /*
-    private List<Employee> companyEmployees;
-    private List<Knowledge> companyKnowledges;
-    */
     private Employee lastFoundEmployee;
-    private List<Certification> companyCertifications;
     private Employee loggedUser;
     private Context context;
 
@@ -41,18 +36,8 @@ public class DummyDB {
     }
 
     private DummyDB() {
-        /*
-        this.companyEmployees = new ArrayList<>();
-        this.companyKnowledges = new ArrayList<>();
-        */
-        this.companyCertifications = new ArrayList<>();
+        super();
     }
-
-    /*
-    public void addEmployee(Employee employee) {
-        companyEmployees.add(employee);
-    }
-    */
 
     public Employee findEmployeeByEmail(String email) {
         for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
@@ -113,10 +98,6 @@ public class DummyDB {
         }
 
         return null;
-    }
-
-    public void addCertification(Certification certification) {
-        companyCertifications.add(certification);
     }
 
     private void initData(){
@@ -221,50 +202,53 @@ public class DummyDB {
             val = RoomDbUtils.getInstance().updateEmployee(e5);
 
             Log.d("TreeKnowledge", "Atualização(Empregado: Roger Flores) aconteceu: " + val + "!");
+
+            String[][] certificationArray = {
+                    {"C#", "Diego Alves", "18/10/2017", "PENDENTE", "C# Certificado XPTO!"},
+                    {"C++", "Diego Alves", "31/10/2017", "PENDENTE", "C++ Certificado XPTO!"},
+                    {"PMBOK", "Pedro Santana", "07/09/2017", "APROVADO", "PMBOK Certificado XPTO!"},
+                    {"Mandarim Básico", "Diego Alves", "01/08/2017", "REPROVADO", "Beginner Chinese Mandarin Certificate!"},
+                    {"C++", "Rodrigo Silva", "26/09/2017", "APROVADO", "C++ 2017 Certificate XPTO!"},
+                    {"Estruturas de Dados", "Rodrigo Silva", "31/06/2017", "REPROVADO", "Estruturas de Dados Certificado!"},
+                    {"SQL Server 2013", "Diego Alves", "03/09/2017", "APROVADO", "Microsoft SQL Server 2013 Certificate XPTO!"},
+                    {"Machine Learning", "Mariana Garcia", "02/10/2017", "PENDENTE", "Machine Learning Certificado XPTO!"},
+                    {"JavaFX", "Mariana Garcia", "18/07/2017", "PENDENTE", "JavaFX Certificado XPTO!"},
+            };
+
+            int index = 0;
+
+            Certification[] certifications = new Certification[certificationArray.length];
+
+            for (String[] aCertificationList : certificationArray) {
+                Certification certification = new Certification(aCertificationList[0], aCertificationList[1],
+                        aCertificationList[2], aCertificationList[3], aCertificationList[4]);
+
+                certifications[index++] = certification;
+            }
+
+            val = RoomDbUtils.getInstance().insertCertificationArray(certifications);
+
+            Log.d("TreeKnowledge", "Inserção(Certificados) aconteceu: " + val + "!");
         }
 
         Log.d("TK", "company_employees.size(): " + RoomDbUtils.getInstance().getAllEmployees().size());
 
         Log.d("TK", "company_knowledges.size(): " +RoomDbUtils.getInstance().getAllKnowledge().size());
 
-
-
-        /*
-        e5.addKnowledge(k4);
-        e5.addKnowledge(k5);
-        e5.addKnowledge(k11);
-        e5.addKnowledge(k12);
-        e5.addKnowledge(k6);
-        e5.addKnowledge(k7);
-        */
-        String[][] certificationArray = {
-                {"C#", "Diego Alves", "18/10/2017", "PENDENTE", "C# Certificado XPTO!"},
-                {"C++", "Diego Alves", "31/10/2017", "PENDENTE", "C++ Certificado XPTO!"},
-                {"PMBOK", "Pedro Santana", "07/09/2017", "APROVADO", "PMBOK Certificado XPTO!"},
-                {"Mandarim Básico", "Diego Alves", "01/08/2017", "REPROVADO", "Beginner Chinese Mandarin Certificate!"},
-                {"C++", "Rodrigo Silva", "26/09/2017", "APROVADO", "C++ 2017 Certificate XPTO!"},
-                {"Estruturas de Dados", "Rodrigo Silva", "31/06/2017", "REPROVADO", "Estruturas de Dados Certificado!"},
-                {"SQL Server 2013", "Diego Alves", "03/09/2017", "APROVADO", "Microsoft SQL Server 2013 Certificate XPTO!"},
-                {"Machine Learning", "Mariana Garcia", "02/10/2017", "PENDENTE", "Machine Learning Certificado XPTO!"},
-                {"JavaFX", "Mariana Garcia", "18/07/2017", "PENDENTE", "JavaFX Certificado XPTO!"},
-        };
-
-        for (String[] aCertificationList : certificationArray) {
-            Certification certification = new Certification(aCertificationList[0], aCertificationList[1],
-                    aCertificationList[2], aCertificationList[3], aCertificationList[4]);
-            this.companyCertifications.add(certification);
-        }
+        Log.d("TK", "company_certifications.size(): " +RoomDbUtils.getInstance().getAllCertifications().size());
     }
 
     public List<Employee> getCompanyEmployees() {
         return RoomDbUtils.getInstance().getAllEmployees();
     }
 
-    public List<Knowledge> getCompanyKnowledges() {
+    public List<Knowledge> getCompanyKnowledgeList() {
         return RoomDbUtils.getInstance().getAllKnowledge();
     }
 
-    public List<Certification> getCompanyCertifications() { return companyCertifications; }
+    public List<Certification> getCompanyCertifications() {
+        return RoomDbUtils.getInstance().getAllCertifications();
+    }
 
     public Context getContext() {
         return context;
@@ -279,7 +263,7 @@ public class DummyDB {
 
         if (k != null) {
             Employee the_emp = null;
-            for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
+            for (Employee e : this.getCompanyEmployees()) {
                 if (e.getName().equalsIgnoreCase(userName)) {
                     the_emp = e;
                     break;
@@ -299,7 +283,7 @@ public class DummyDB {
     public boolean approveCertification(String knowledge, String userName, String date, String certification) {
         Certification the_certification = null;
 
-        for (Certification cert : companyCertifications) {
+        for (Certification cert : this.getCompanyCertifications()) {
             if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
                     cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
                 the_certification = cert;
@@ -318,7 +302,7 @@ public class DummyDB {
     public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
         Certification the_certification = null;
 
-        for (Certification cert : companyCertifications) {
+        for (Certification cert : this.getCompanyCertifications()) {
             if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
                     cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
                 the_certification = cert;
@@ -336,7 +320,7 @@ public class DummyDB {
 
     public List<String[]> getEmployeeList() {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
+        for (Employee e : this.getCompanyEmployees()) {
             String[] stringArray = {e.getName(), e.getRole()};
             employeeList.add(stringArray);
         }
@@ -346,7 +330,7 @@ public class DummyDB {
 
     public List<String[]> getEmployeeListByKnowledge(String knowledge) {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
+        for (Employee e : this.getCompanyEmployees()) {
             if (e.hasAKnowledge(knowledge)) {
                 String[] stringArray = {e.getName(), e.getRole()};
                 employeeList.add(stringArray);

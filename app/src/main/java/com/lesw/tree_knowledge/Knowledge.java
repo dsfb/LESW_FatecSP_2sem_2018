@@ -166,7 +166,7 @@ public class Knowledge {
     }
 
     public static Knowledge getKnowledgeFromList(int id) {
-        for (Knowledge k : DummyDB.getInstance().getCompanyKnowledges()) {
+        for (Knowledge k : DummyDB.getInstance().getCompanyKnowledgeList()) {
             if (k.getId() == id) {
                 return k;
             }

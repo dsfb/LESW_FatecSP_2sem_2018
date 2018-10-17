@@ -142,6 +142,37 @@ public class RoomDbUtils {
             return false;
         }
     }
+
+    public boolean insertCertification(Certification certification) {
+        Certification[] certifications = { certification };
+
+        return this.insertCertificationArray(certifications);
+    }
+
+    public boolean insertCertificationArray(Certification[] certificationArray) {
+        try {
+            AppDatabase.getInstance(context).certificationDao().insertAll(certificationArray);
+
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(insertCertificationArray):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public List<Certification> getAllCertifications() {
+        try {
+            List<Certification> certifications = AppDatabase.
+                    getInstance(context).
+                    certificationDao().getAll();
+
+            return certifications;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getAllCertifications):\n" + e.getMessage(), e);
+            List<Certification> certifications = new ArrayList<>();
+            return certifications;
+        }
+    }
 }
 
 

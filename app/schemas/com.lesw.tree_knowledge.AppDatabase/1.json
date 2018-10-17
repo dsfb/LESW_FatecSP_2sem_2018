@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7069724079fb540816b7b4fd718ed8be",
+    "identityHash": "39bd567cc8894b5c46fe9d4cdacc2b09",
     "entities": [
       {
         "tableName": "knowledge",
@@ -49,7 +49,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Certification",
+        "tableName": "certification",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `knowledge` TEXT, `userName` TEXT, `date` TEXT, `status` TEXT, `certification` TEXT)",
         "fields": [
           {
@@ -163,7 +163,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7069724079fb540816b7b4fd718ed8be\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"39bd567cc8894b5c46fe9d4cdacc2b09\")"
     ]
   }
 }
