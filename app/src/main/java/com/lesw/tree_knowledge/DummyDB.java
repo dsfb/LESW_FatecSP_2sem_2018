@@ -126,17 +126,17 @@ public class DummyDB {
             List<Knowledge> fakeKnowledges = new ArrayList<>();
 
             Knowledge[] knowledges = {new Knowledge("Árvore do Conhecimento"),
-                    new Knowledge("Lógica de Programação", 1),
-                    new Knowledge("Microsoft Windows", 1),
-                    new Knowledge("Java", 2),
-                    new Knowledge("Python", 2),
-                    new Knowledge("Word 2013", 3),
-                    new Knowledge("Excel 2013", 3),
-                    new Knowledge("JavaFX", 4),
-                    new Knowledge("JPA", 4),
-                    new Knowledge("JAX-RS", 4),
-                    new Knowledge("NumPy", 5),
-                    new Knowledge("PyTorch", 5)
+                    new Knowledge("Lógica de Programação", 1, 1),
+                    new Knowledge("Microsoft Windows", 1, 1),
+                    new Knowledge("Java", 2, 2),
+                    new Knowledge("Python", 2, 2),
+                    new Knowledge("Word 2013", 3, 2),
+                    new Knowledge("Excel 2013", 3, 2),
+                    new Knowledge("JavaFX", 4, 3),
+                    new Knowledge("JPA", 4, 3),
+                    new Knowledge("JAX-RS", 4, 3),
+                    new Knowledge("NumPy", 5, 3),
+                    new Knowledge("PyTorch", 5, 3)
             };
 
             Knowledge[] fakeKnowledgeArray = knowledges;

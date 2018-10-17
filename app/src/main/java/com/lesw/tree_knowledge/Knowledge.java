@@ -39,6 +39,9 @@ public class Knowledge {
     @ColumnInfo(name = "up")
     private int up;
 
+    @ColumnInfo(name = "level")
+    private int level;
+
     @Ignore
     private static Type setType = new TypeToken<Set<Integer>>(){}.getType();
 
@@ -59,18 +62,21 @@ public class Knowledge {
         this.name = name;
         this.up = 0;
         this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+        this.level = 0;
     }
 
     @Ignore
-    public Knowledge(String name, int up) {
+    public Knowledge(String name, int up, int level) {
         this.name = name;
         this.up = up;
+        this.level = level;
         this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
     }
 
-    public Knowledge(String name, int up, String childrenSetStr) {
+    public Knowledge(String name, int up, int level, String childrenSetStr) {
         this.name = name;
         this.up = up;
+        this.level = level;
         this.childrenSetStr = childrenSetStr;
     }
 
@@ -147,6 +153,14 @@ public class Knowledge {
         this.up = up;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public String getChildrenSetStr() {
         return childrenSetStr;
     }
@@ -158,7 +172,7 @@ public class Knowledge {
             }
         }
 
-        return new Knowledge("NotFound!", -1);
+        return new Knowledge("NotFound!", -1, 0);
     }
 
     private Map<Integer, Knowledge> getMapFromList(List<Knowledge> knowledgeList) {

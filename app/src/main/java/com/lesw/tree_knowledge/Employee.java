@@ -65,6 +65,7 @@ class Employee {
         };
     }
 
+    @Ignore
     public Employee() {
         knowledgeSet = new HashSet<>();
         knowledgeSet.add(Knowledge.ROOT);
@@ -76,6 +77,7 @@ class Employee {
         this.knowledgeSetStr = gson.toJson(set, setType);
     }
 
+    @Ignore
     public Employee(String name, String role) {
         this();
 

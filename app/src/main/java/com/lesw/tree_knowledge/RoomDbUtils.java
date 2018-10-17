@@ -21,11 +21,6 @@ public class RoomDbUtils {
         return instance;
     }
 
-    public boolean insertKnowledgeByNameAndUp(String name, int up) {
-        Knowledge[] knowledgeArray = {new Knowledge(name, up)};
-        return this.insertKnowledgeArray(knowledgeArray);
-    }
-
     public boolean insertKnowledgeArray(Knowledge[] knowledgeArray) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
