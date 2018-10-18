@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.annotation.CheckForSigned;
+
 @Entity(tableName = "knowledge")
 public class Knowledge {
 
@@ -30,7 +32,7 @@ public class Knowledge {
     @ColumnInfo(name = "name")
     private String name;
 
-    @Ignore
+    @ColumnInfo(name = "count")
     private int count = 0;
 
     @Ignore
@@ -57,12 +59,17 @@ public class Knowledge {
     @Ignore
     private Set<Employee> employeeSet = new HashSet<>();
 
+    @ColumnInfo(name = "employee_set")
+    private String employeeSetStr;
+
     @Ignore
     public Knowledge(String name) {
         this.name = name;
         this.up = 0;
-        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
         this.level = 0;
+        this.count = 0;
+        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+        this.employeeSetStr = gson.toJson(new TreeSet<Integer>(), setType);
     }
 
     @Ignore
@@ -70,14 +77,26 @@ public class Knowledge {
         this.name = name;
         this.up = up;
         this.level = level;
+        this.count = 0;
         this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+        this.employeeSetStr = gson.toJson(new TreeSet<Integer>(), setType);
     }
 
-    public Knowledge(String name, int up, int level, String childrenSetStr) {
+    public Knowledge(String name, int up, int level, int count, String childrenSetStr, String employeeSetStr) {
         this.name = name;
         this.up = up;
         this.level = level;
+        this.count = count;
         this.childrenSetStr = childrenSetStr;
+        this.employeeSetStr = employeeSetStr;
+
+        Set<Integer> set = gson.fromJson(this.employeeSetStr, setType);
+
+        for (int id : set) {
+            Employee employee = DummyDB.getInstance().findEmployeeById(id);
+
+            employeeSet.add(employee);
+        }
     }
 
     public void manageUp(Context context) {
@@ -165,6 +184,14 @@ public class Knowledge {
         return childrenSetStr;
     }
 
+    public String getEmployeeSetStr() {
+        return employeeSetStr;
+    }
+
+    public void setEmployeeSetStr(String employeeSetStr) {
+        this.employeeSetStr = employeeSetStr;
+    }
+
     public static Knowledge getKnowledgeFromList(int id) {
         for (Knowledge k : DummyDB.getInstance().getCompanyKnowledgeList()) {
             if (k.getId() == id) {
@@ -228,8 +255,15 @@ public class Knowledge {
 
     void count(Employee employee) {
         employeeSet.add(employee);
+
+        Set<Integer> set = gson.fromJson(this.employeeSetStr, setType);
+
+        set.add(employee.getId());
+
+        employeeSetStr = gson.toJson(set, setType);
         count = employeeSet.size();
 
+        RoomDbUtils.getInstance().updateKnowledgeByCountingAndEmployee(this);
 
         Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
 

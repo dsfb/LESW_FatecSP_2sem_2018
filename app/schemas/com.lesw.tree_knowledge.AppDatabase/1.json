@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "39bd567cc8894b5c46fe9d4cdacc2b09",
+    "identityHash": "103d61e9177ca21c375193fd2dec3c9c",
     "entities": [
       {
         "tableName": "knowledge",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `up` INTEGER NOT NULL, `level` INTEGER NOT NULL, `children_set` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `count` INTEGER NOT NULL, `up` INTEGER NOT NULL, `level` INTEGER NOT NULL, `children_set` TEXT, `employee_set` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -19,6 +19,12 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "count",
+            "columnName": "count",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "up",
@@ -35,6 +41,12 @@
           {
             "fieldPath": "childrenSetStr",
             "columnName": "children_set",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "employeeSetStr",
+            "columnName": "employee_set",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -163,7 +175,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"39bd567cc8894b5c46fe9d4cdacc2b09\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"103d61e9177ca21c375193fd2dec3c9c\")"
     ]
   }
 }

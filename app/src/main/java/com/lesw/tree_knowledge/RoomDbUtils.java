@@ -143,6 +143,39 @@ public class RoomDbUtils {
         }
     }
 
+    public boolean updateKnowledgeByCounting(Knowledge knowledge) {
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCounting(knowledge.getId(),
+                    knowledge.getCount());
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateKnowledgeByCounting):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public boolean updateKnowledgeByEmployee(Knowledge knowledge) {
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByEmployee(knowledge.getId(),
+                    knowledge.getEmployeeSetStr());
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateKnowledgeByEmployee):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public boolean updateKnowledgeByCountingAndEmployee(Knowledge knowledge) {
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCountingAndEmployee(knowledge.getId(),
+                    knowledge.getCount(), knowledge.getEmployeeSetStr());
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateKnowledgeByCountingAndEmployee):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
+
     public boolean insertCertification(Certification certification) {
         Certification[] certifications = { certification };
 

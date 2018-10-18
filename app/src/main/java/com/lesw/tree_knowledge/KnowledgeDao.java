@@ -28,6 +28,15 @@ public interface KnowledgeDao {
     @Query("UPDATE knowledge SET children_set = :children  WHERE id = :tid")
     int updateKnowledgeByChildren(int tid, String children);
 
+    @Query("UPDATE knowledge SET count = :count  WHERE id = :tid")
+    int updateKnowledgeByCounting(int tid, int count);
+
+    @Query("UPDATE knowledge SET employee_set = :employeeSet  WHERE id = :tid")
+    int updateKnowledgeByEmployee(int tid, String employeeSet);
+
+    @Query("UPDATE knowledge SET employee_set = :employeeSet, count = :count WHERE id = :tid")
+    int updateKnowledgeByCountingAndEmployee(int tid, int count, String employeeSet);
+
     @Delete
     void delete(Knowledge knowledge);
 }

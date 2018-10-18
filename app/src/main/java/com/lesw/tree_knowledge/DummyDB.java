@@ -82,11 +82,21 @@ public class DummyDB {
     }
 
     public Employee findEmployee(String email, String password) {
-        for (Employee e : RoomDbUtils.getInstance().getAllEmployees()) {
+        for (Employee e : this.getCompanyEmployees()) {
             if (e.getEmail().equalsIgnoreCase(email) && e.getPassword().equals(password)) {
                 return e;
             }
         }
+        return null;
+    }
+
+    public Employee findEmployeeById(int id) {
+        for (Employee e : this.getCompanyEmployees()) {
+            if (e.getId() == id) {
+                return e;
+            }
+        }
+
         return null;
     }
 
