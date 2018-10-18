@@ -281,38 +281,24 @@ public class DummyDB {
     }
 
     public boolean approveCertification(String knowledge, String userName, String date, String certification) {
-        Certification the_certification = null;
-
         for (Certification cert : this.getCompanyCertifications()) {
             if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
                     cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                the_certification = cert;
-                break;
+                RoomDbUtils.getInstance().updateCertificationByStatus(cert.getId(), "APROVADO");
+                return true;
             }
-        }
-
-        if (the_certification != null) {
-            the_certification.setStatus("APROVADO");
-            return true;
         }
 
         return false;
     }
 
     public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
-        Certification the_certification = null;
-
         for (Certification cert : this.getCompanyCertifications()) {
             if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
                     cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                the_certification = cert;
-                break;
+                RoomDbUtils.getInstance().updateCertificationByStatus(cert.getId(), "REPROVADO");
+                return true;
             }
-        }
-
-        if (the_certification != null) {
-            the_certification.setStatus("REPROVADO");
-            return true;
         }
 
         return false;

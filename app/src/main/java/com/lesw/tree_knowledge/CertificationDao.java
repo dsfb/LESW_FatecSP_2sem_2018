@@ -25,4 +25,7 @@ public interface CertificationDao {
 
     @Delete
     void delete(Certification certification);
+
+    @Query("UPDATE certification SET status = :status  WHERE id = :tid")
+    int updateCertificationByStatus(int tid, String status);
 }

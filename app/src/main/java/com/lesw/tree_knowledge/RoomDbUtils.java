@@ -173,6 +173,17 @@ public class RoomDbUtils {
             return certifications;
         }
     }
+
+    public boolean updateCertificationByStatus(int id, String status) {
+        try {
+            AppDatabase.getInstance(context).certificationDao().updateCertificationByStatus(id,
+                    status);
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateCertificationByStatus):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
 }
 
 
