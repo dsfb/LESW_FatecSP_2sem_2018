@@ -5,20 +5,71 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
-public class RoomDbUtils {
-    private static RoomDbUtils instance;
+public class RoomDbManager {
+    private static RoomDbManager instance;
     private Context context;
 
     public static void initialize(Context context) {
         if (instance == null) {
-            instance = new RoomDbUtils();
+            instance = new RoomDbManager();
             instance.context = context;
         }
     }
 
-    public static RoomDbUtils getInstance() {
+    public static RoomDbManager getInstance() {
         return instance;
+    }
+
+    private Map<Integer, Employee> employeeByIdMap = new TreeMap<>();
+
+    private Map<String, Employee> employeeByNameMap = new TreeMap<>();
+
+    private Map<String, Employee> employeeByEmailMap = new TreeMap<>();
+
+    private Map<Integer, Knowledge> knowledgeByIdMap = new TreeMap<>();
+
+    private Map<String, Knowledge> knowledgeByNameMap = new TreeMap<>();
+
+    private Map<Integer, Certification> certificationMap = new TreeMap<>();
+
+    private void populateKnowledgeMap() {
+        List<Knowledge> knowledgeList = this.getAllKnowledge();
+
+        knowledgeByIdMap.clear();
+        knowledgeByNameMap.clear();
+
+        for (Knowledge knowledge : knowledgeList) {
+            knowledgeByIdMap.put(knowledge.getId(), knowledge);
+            knowledgeByNameMap.put(knowledge.getName(), knowledge);
+            knowledge.populateChildren(this.getAllKnowledge());
+        }
+    }
+
+    private void populateEmployeeMaps() {
+        List<Employee> employeeList = this.getAllEmployees();
+
+        employeeByIdMap.clear();
+        employeeByEmailMap.clear();
+        employeeByNameMap.clear();
+
+        for (Employee employee : employeeList) {
+            employeeByIdMap.put(employee.getId(), employee);
+            employeeByEmailMap.put(employee.getEmail(), employee);
+            employeeByNameMap.put(employee.getName(), employee);
+        }
+    }
+
+    private void populateCertificationMap() {
+        List<Certification> certificationList = this.getAllCertifications();
+
+        certificationMap.clear();
+
+        for (Certification certification : certificationList) {
+            certificationMap.put(certification.getId(), certification);
+        }
     }
 
     public boolean insertKnowledgeArray(Knowledge[] knowledgeArray) {
@@ -31,6 +82,8 @@ public class RoomDbUtils {
                 }
             }
 
+            this.populateKnowledgeMap();
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage(), e);
@@ -40,9 +93,20 @@ public class RoomDbUtils {
 
     public Knowledge getKnowledgeById(int id) {
         try {
-            Knowledge k = AppDatabase.
-                    getInstance(context).
-                    knowledgeDao().findById(id);
+            Knowledge k = this.knowledgeByIdMap.get(id);
+
+
+
+            return k;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getKnowledgeById):\n" + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public Knowledge getKnowledgeByName(String name) {
+        try {
+            Knowledge k = this.knowledgeByNameMap.get(name);
 
             if (k != null) {
                 k.populateChildren(this.getAllKnowledge());
@@ -55,7 +119,11 @@ public class RoomDbUtils {
         }
     }
 
-    public List<Knowledge> getAllKnowledge() {
+    public Map<Integer, Knowledge> getKnowledgeByIdMap() {
+        return this.knowledgeByIdMap;
+    }
+
+    private List<Knowledge> getAllKnowledge() {
         try {
             List<Knowledge> knowledgeList = AppDatabase.
                     getInstance(context).
@@ -73,7 +141,19 @@ public class RoomDbUtils {
         }
     }
 
-    public List<Employee> getAllEmployees() {
+    public Map<Integer, Employee> getEmployeeByIdMap() {
+        return this.employeeByIdMap;
+    }
+
+    public Map<String, Employee> getEmployeeByNameMap() {
+        return employeeByNameMap;
+    }
+
+    public Map<String, Employee> getEmployeeByEmailMap() {
+        return employeeByEmailMap;
+    }
+
+    private List<Employee> getAllEmployees() {
         try {
             List<Employee> employees = AppDatabase.
                     getInstance(context).
@@ -100,6 +180,9 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).employeeDao().updateEmployeeByKnowledgeSet(employee.getId(),
                     employee.getKnowledgeSetStr());
+
+            this.employeeByIdMap.put(employee.getId(), employee);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateEmployee):\n" + e.getMessage(), e);
@@ -110,6 +193,9 @@ public class RoomDbUtils {
     public boolean insertEmployees(Employee[] employees) {
         try {
             AppDatabase.getInstance(context).employeeDao().insertAll(employees);
+
+            this.populateEmployeeMaps();
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertEmployees):\n" + e.getMessage(), e);
@@ -119,11 +205,41 @@ public class RoomDbUtils {
 
     public Employee getEmployeeById(int id) {
         try {
-            Employee e = AppDatabase.
-                    getInstance(context).
-                    employeeDao().findById(id);
+            Employee e = this.employeeByIdMap.get(id);
 
-            e.setKnowledgeSet();
+            if (e != null) {
+                e.setKnowledgeSet();
+            }
+
+            return e;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public Employee getEmployeeByEmail(String email) {
+        try {
+            Employee e = this.employeeByEmailMap.get(email);
+
+            if (e != null) {
+                e.setKnowledgeSet();
+            }
+
+            return e;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public Employee getEmployeeByName(String name) {
+        try {
+            Employee e = this.employeeByNameMap.get(name);
+
+            if (e != null) {
+                e.setKnowledgeSet();
+            }
 
             return e;
         } catch (Exception e) {
@@ -136,6 +252,9 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByChildren(knowledge.getId(),
                     knowledge.getChildrenSetStr());
+
+            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateKnowledgeByChildren):\n" + e.getMessage(), e);
@@ -147,6 +266,9 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCounting(knowledge.getId(),
                     knowledge.getCount());
+
+            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateKnowledgeByCounting):\n" + e.getMessage(), e);
@@ -158,6 +280,9 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByEmployee(knowledge.getId(),
                     knowledge.getEmployeeSetStr());
+
+            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateKnowledgeByEmployee):\n" + e.getMessage(), e);
@@ -169,6 +294,9 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCountingAndEmployee(knowledge.getId(),
                     knowledge.getCount(), knowledge.getEmployeeSetStr());
+
+            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateKnowledgeByCountingAndEmployee):\n" + e.getMessage(), e);
@@ -186,6 +314,8 @@ public class RoomDbUtils {
         try {
             AppDatabase.getInstance(context).certificationDao().insertAll(certificationArray);
 
+            this.populateCertificationMap();
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertCertificationArray):\n" + e.getMessage(), e);
@@ -193,7 +323,11 @@ public class RoomDbUtils {
         }
     }
 
-    public List<Certification> getAllCertifications() {
+    public Map<Integer, Certification> getCertificationMap() {
+        return this.certificationMap;
+    }
+
+    private List<Certification> getAllCertifications() {
         try {
             List<Certification> certifications = AppDatabase.
                     getInstance(context).
@@ -207,14 +341,44 @@ public class RoomDbUtils {
         }
     }
 
-    public boolean updateCertificationByStatus(int id, String status) {
+    public boolean updateCertificationByStatus(Certification certification) {
         try {
-            AppDatabase.getInstance(context).certificationDao().updateCertificationByStatus(id,
-                    status);
+            AppDatabase.getInstance(context).certificationDao().updateCertificationByStatus(certification.getId(),
+                    certification.getStatus());
+
+            this.certificationMap.put(certification.getId(), certification);
+
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(updateCertificationByStatus):\n" + e.getMessage(), e);
             return false;
+        }
+    }
+
+    public int getNumberOfKnowledge() {
+        try {
+            return AppDatabase.getInstance(context).knowledgeDao().getNumberOfRows();
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getNumberOfKnowledge):\n" + e.getMessage(), e);
+            return -1;
+        }
+    }
+
+    public int getNumberOfEmployee() {
+        try {
+            return AppDatabase.getInstance(context).employeeDao().getNumberOfRows();
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getNumberOfEmployee):\n" + e.getMessage(), e);
+            return -1;
+        }
+    }
+
+    public int getNumberOfCertification() {
+        try {
+            return AppDatabase.getInstance(context).certificationDao().getNumberOfRows();
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getNumberOfCertification):\n" + e.getMessage(), e);
+            return -1;
         }
     }
 }

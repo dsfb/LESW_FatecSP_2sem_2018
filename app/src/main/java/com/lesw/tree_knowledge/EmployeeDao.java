@@ -23,6 +23,9 @@ public interface EmployeeDao {
     @Query("SELECT * FROM employee WHERE id LIKE :id LIMIT 1")
     Employee findById(int id);
 
+    @Query("SELECT COUNT(*) FROM employee")
+    int getNumberOfRows();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Employee... employees);
 

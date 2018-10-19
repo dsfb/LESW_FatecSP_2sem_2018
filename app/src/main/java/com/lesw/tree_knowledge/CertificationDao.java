@@ -20,6 +20,9 @@ public interface CertificationDao {
             + "userName LIKE :last LIMIT 1")
     Certification findByName(String first, String last);
 
+    @Query("SELECT COUNT(*) FROM certification")
+    int getNumberOfRows();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Certification... certifications);
 

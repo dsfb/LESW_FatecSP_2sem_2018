@@ -109,7 +109,7 @@ public class UploadFragment extends Fragment {
                     Certification ce = new Certification(_txtKnowledge.getText().toString(),
                             db.getLoggedEmployeeName(), testDateTxt.getText().toString(),
                             "PENDENTE", _txtCertification.getText().toString());
-                    RoomDbUtils.getInstance().insertCertification(ce);
+                    RoomDbManager.getInstance().insertCertification(ce);
                     Toast.makeText(getActivity(), "Competência adicionada com sucesso!", Toast.LENGTH_SHORT).show();
                     testDateTxt.setText("");
                     _txtKnowledge.setText("");

@@ -7,7 +7,6 @@ import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -102,7 +101,11 @@ class Employee {
         Set<Integer> set;
         set = gson.fromJson(this.knowledgeSetStr, setType);
         for (int i : set) {
-            knowledgeSet.add(Knowledge.getKnowledgeFromList(i));
+            Knowledge k = Knowledge.getKnowledgeFromList(i);
+
+            if (k.getUp() > -1) {
+                knowledgeSet.add(k);
+            }
         }
     }
 
@@ -174,7 +177,7 @@ class Employee {
 
     public void addKnowledgeArrayById(List<Integer> ids, Context context) {
         for (int id : ids) {
-            Knowledge k = RoomDbUtils.getInstance().getKnowledgeById(id);
+            Knowledge k = RoomDbManager.getInstance().getKnowledgeById(id);
 
             this.addKnowledge(k, context);
         }

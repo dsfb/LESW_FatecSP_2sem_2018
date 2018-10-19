@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class ApprovalsFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
     private ListView lv;
@@ -52,7 +54,7 @@ public class ApprovalsFragment extends Fragment implements SearchView.OnQueryTex
 
         lv.setOnItemClickListener(this);
 
-        adapter = new KnowledgeListAdapter(getContext(), DummyDB.getInstance().getCompanyCertifications());
+        adapter = new KnowledgeListAdapter(getContext(), new ArrayList<>(RoomDbManager.getInstance().getCertificationMap().values()));
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
     }

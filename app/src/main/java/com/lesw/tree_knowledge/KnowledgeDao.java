@@ -22,6 +22,9 @@ public interface KnowledgeDao {
     @Query("SELECT * FROM knowledge WHERE id LIKE :id LIMIT 1")
     Knowledge findById(int id);
 
+    @Query("SELECT COUNT(*) FROM knowledge")
+    int getNumberOfRows();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Knowledge... knowledges);
 

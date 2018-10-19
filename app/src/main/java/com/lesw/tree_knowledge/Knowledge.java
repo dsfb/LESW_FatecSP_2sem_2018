@@ -19,8 +19,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.annotation.CheckForSigned;
-
 @Entity(tableName = "knowledge")
 public class Knowledge {
 
@@ -104,7 +102,7 @@ public class Knowledge {
 
         if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.addChild(this);
-            RoomDbUtils.getInstance().updateKnowledgeByChildren(knowledge);
+            RoomDbManager.getInstance().updateKnowledgeByChildren(knowledge);
         }
     }
 
@@ -193,10 +191,10 @@ public class Knowledge {
     }
 
     public static Knowledge getKnowledgeFromList(int id) {
-        for (Knowledge k : DummyDB.getInstance().getCompanyKnowledgeList()) {
-            if (k.getId() == id) {
-                return k;
-            }
+        Knowledge k = RoomDbManager.getInstance().getKnowledgeById(id);
+
+        if (k != null) {
+            return k;
         }
 
         return new Knowledge("NotFound!", -1, 0);
@@ -246,7 +244,7 @@ public class Knowledge {
         }
 
         Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
-        return knowledge != null && knowledge.blackLeaf(context);
+        return knowledge.getUp() > -1 && knowledge.blackLeaf(context);
     }
 
     private boolean redLeaf(){
@@ -263,7 +261,7 @@ public class Knowledge {
         employeeSetStr = gson.toJson(set, setType);
         count = employeeSet.size();
 
-        RoomDbUtils.getInstance().updateKnowledgeByCountingAndEmployee(this);
+        RoomDbManager.getInstance().updateKnowledgeByCountingAndEmployee(this);
 
         Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
 
