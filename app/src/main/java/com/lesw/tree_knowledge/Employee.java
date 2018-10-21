@@ -101,7 +101,7 @@ class Employee {
         Set<Integer> set;
         set = gson.fromJson(this.knowledgeSetStr, setType);
         for (int i : set) {
-            Knowledge k = Knowledge.getKnowledgeFromList(i);
+            Knowledge k = Knowledge.getKnowledgeFromIdMap(i);
 
             if (k.getUp() > -1) {
                 knowledgeSet.add(k);
@@ -196,7 +196,7 @@ class Employee {
 
             knowledge.count(this);
             if (knowledge.getUp() > 0) {
-                Knowledge up = Knowledge.getKnowledgeFromList(knowledge.getUp());
+                Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
                 addKnowledge(up, context);
             }
         }
@@ -208,7 +208,7 @@ class Employee {
                 return knowledge;
             }
 
-            Knowledge up = Knowledge.getKnowledgeFromList(knowledge.getUp());
+            Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
             if(up.getUp() == 0) return up;
         }
 

@@ -304,6 +304,20 @@ public class RoomDbManager {
         }
     }
 
+    public boolean updateKnowledgeByWarningCount(Knowledge knowledge) {
+        try {
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByWarningCount(knowledge.getId(),
+                    knowledge.getWarningCount());
+
+            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+
+            return true;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(updateKnowledgeByWarningCount):\n" + e.getMessage(), e);
+            return false;
+        }
+    }
+
     public boolean insertCertification(Certification certification) {
         Certification[] certifications = { certification };
 

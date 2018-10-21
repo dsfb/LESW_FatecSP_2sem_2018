@@ -40,6 +40,9 @@ public interface KnowledgeDao {
     @Query("UPDATE knowledge SET employee_set = :employeeSet, count = :count WHERE id = :tid")
     int updateKnowledgeByCountingAndEmployee(int tid, int count, String employeeSet);
 
+    @Query("UPDATE knowledge SET warning_count = :warningCount WHERE id = :tid")
+    int updateKnowledgeByWarningCount(int tid, int warningCount);
+
     @Delete
     void delete(Knowledge knowledge);
 }

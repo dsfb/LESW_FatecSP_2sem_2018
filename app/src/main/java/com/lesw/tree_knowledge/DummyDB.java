@@ -176,7 +176,7 @@ public class DummyDB {
 
             list.clear();
 
-            Collections.addAll(list, 6, 7);
+            Collections.addAll(list, 4, 6, 7);
 
             e2.addKnowledgeArrayById(list, this.context);
 
@@ -200,7 +200,7 @@ public class DummyDB {
 
             list.clear();
 
-            Collections.addAll(list, 4,5, 6, 7, 11, 12);
+            Collections.addAll(list, 4, 5, 6, 7, 11, 12);
 
             e5.addKnowledgeArrayById(list, this.context);
 

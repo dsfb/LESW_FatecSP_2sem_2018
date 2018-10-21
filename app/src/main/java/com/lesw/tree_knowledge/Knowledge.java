@@ -33,7 +33,7 @@ public class Knowledge {
     @ColumnInfo(name = "count")
     private int count = 0;
 
-    @Ignore
+    @ColumnInfo(name = "warning_count")
     private int warningCount = 1;
 
     @ColumnInfo(name = "up")
@@ -80,11 +80,12 @@ public class Knowledge {
         this.employeeSetStr = gson.toJson(new TreeSet<Integer>(), setType);
     }
 
-    public Knowledge(String name, int up, int level, int count, String childrenSetStr, String employeeSetStr) {
+    public Knowledge(String name, int up, int level, int count, int warningCount, String childrenSetStr, String employeeSetStr) {
         this.name = name;
         this.up = up;
         this.level = level;
         this.count = count;
+        this.warningCount = warningCount;
         this.childrenSetStr = childrenSetStr;
         this.employeeSetStr = employeeSetStr;
 
@@ -98,7 +99,7 @@ public class Knowledge {
     }
 
     public void manageUp(Context context) {
-        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.up);
+        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.up);
 
         if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.addChild(this);
@@ -190,7 +191,7 @@ public class Knowledge {
         this.employeeSetStr = employeeSetStr;
     }
 
-    public static Knowledge getKnowledgeFromList(int id) {
+    public static Knowledge getKnowledgeFromIdMap(int id) {
         Knowledge k = RoomDbManager.getInstance().getKnowledgeById(id);
 
         if (k != null) {
@@ -232,6 +233,7 @@ public class Knowledge {
 
     public void setWarningCount(int warningCount) {
         this.warningCount = warningCount;
+        RoomDbManager.getInstance().updateKnowledgeByWarningCount(this);
     }
 
     private boolean greenLeaf(){
@@ -243,7 +245,7 @@ public class Knowledge {
             if(child.redLeaf()) return true;
         }
 
-        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
+        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.getUp());
         return knowledge.getUp() > -1 && knowledge.blackLeaf(context);
     }
 
@@ -263,7 +265,7 @@ public class Knowledge {
 
         RoomDbManager.getInstance().updateKnowledgeByCountingAndEmployee(this);
 
-        Knowledge knowledge = Knowledge.getKnowledgeFromList(this.getUp());
+        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.getUp());
 
         if (knowledge.getUp() >= 0) {
             knowledge.count(employee);
