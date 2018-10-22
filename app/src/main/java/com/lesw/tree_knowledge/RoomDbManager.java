@@ -72,6 +72,12 @@ public class RoomDbManager {
         }
     }
 
+    public void restoreDB() {
+        this.populateKnowledgeMap();
+        this.populateCertificationMap();
+        this.populateEmployeeMaps();
+    }
+
     public boolean insertKnowledgeArray(Knowledge[] knowledgeArray) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
@@ -94,8 +100,6 @@ public class RoomDbManager {
     public Knowledge getKnowledgeById(int id) {
         try {
             Knowledge k = this.knowledgeByIdMap.get(id);
-
-
 
             return k;
         } catch (Exception e) {
@@ -182,6 +186,8 @@ public class RoomDbManager {
                     employee.getKnowledgeSetStr());
 
             this.employeeByIdMap.put(employee.getId(), employee);
+            this.employeeByEmailMap.put(employee.getEmail(), employee);
+            this.employeeByNameMap.put(employee.getName(), employee);
 
             return true;
         } catch (Exception e) {
@@ -245,6 +251,17 @@ public class RoomDbManager {
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
             return null;
+        }
+    }
+
+    public boolean checkEmployeeByEmail(String email) {
+        try {
+            Employee e = this.employeeByEmailMap.get(email);
+
+            return e != null;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(checkEmployeeByEmail):\n" + e.getMessage(), e);
+            return false;
         }
     }
 

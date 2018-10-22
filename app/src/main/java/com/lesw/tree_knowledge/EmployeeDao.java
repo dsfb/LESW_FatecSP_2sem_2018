@@ -26,6 +26,9 @@ public interface EmployeeDao {
     @Query("SELECT COUNT(*) FROM employee")
     int getNumberOfRows();
 
+    @Query("SELECT COUNT(*) FROM employee WHERE email LIKE :email")
+    int checkEmployeeByEmail(String email);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Employee... employees);
 

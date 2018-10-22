@@ -71,7 +71,9 @@ class Employee {
 
         Set<Integer> set = new TreeSet<>();
         for (Knowledge k : knowledgeSet) {
-            set.add(k.getId());
+            if (k != null) {
+                set.add(k.getId());
+            }
         }
         this.knowledgeSetStr = gson.toJson(set, setType);
     }

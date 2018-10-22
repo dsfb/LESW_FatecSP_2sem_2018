@@ -106,6 +106,8 @@ public class DummyDB {
     }
 
     private void initData(){
+        RoomDbManager.getInstance().restoreDB();
+
         Knowledge.ROOT = RoomDbManager.getInstance().getKnowledgeById(1);
 
         if (Knowledge.ROOT == null) {

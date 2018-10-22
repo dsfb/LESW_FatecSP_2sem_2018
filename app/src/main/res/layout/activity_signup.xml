@@ -20,7 +20,6 @@
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/tree_logo_desc" />
 
-        <!--  Name Label
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,11 +29,10 @@
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions"
                 android:hint="@string/name" />
         </android.support.design.widget.TextInputLayout>
-        -->
 
-        <!--  Role Label
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/role" />
         </android.support.design.widget.TextInputLayout>
-        -->
 
         <!--  Email Label -->
         <android.support.design.widget.TextInputLayout
