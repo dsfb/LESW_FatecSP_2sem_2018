@@ -13,10 +13,12 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position % 2) {
+        switch (position % 3) {
             case 0:
-                return "Acompanhamento";
+                return "Competências";
             case 1:
+                return "Acompanhamento";
+            case 2:
                 return "Pesquisa";
         }
         return "";
@@ -24,8 +26,10 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position % 2) {
+        switch (position % 3) {
             case 0:
+                return new UserTreeFragment();
+            case 1:
                 return new ManagerTreeFragment();
             default:
                 return SearchFragment.newInstance();

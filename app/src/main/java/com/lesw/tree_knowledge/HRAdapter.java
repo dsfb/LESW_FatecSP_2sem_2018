@@ -13,12 +13,14 @@ public class HRAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position % 4) {
+        switch (position % 5) {
             case 0:
-                return "Certificações";
+                return "Competências";
             case 1:
-                return "Acompanhamento";
+                return "Certificações";
             case 2:
+                return "Acompanhamento";
+            case 3:
                 return "Pesquisa";
             default:
                 return "Cadastro";
@@ -27,12 +29,14 @@ public class HRAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position % 4) {
+        switch (position % 5) {
             case 0:
-                return ApprovalsFragment.newInstance();
+                return new UserTreeFragment();
             case 1:
-                return new HRTreeFragment();
+                return ApprovalsFragment.newInstance();
             case 2:
+                return new HRTreeFragment();
+            case 3:
                 return SearchFragment.newInstance();
             default:
                 return new HRSignupFragment();
