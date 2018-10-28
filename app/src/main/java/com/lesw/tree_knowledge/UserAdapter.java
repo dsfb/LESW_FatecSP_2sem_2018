@@ -13,27 +13,32 @@ public class UserAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position % 2) {
+        switch (position % this.getCount()) {
             case 0:
                 return "Competências";
             case 1:
-                return "Adicionar";
+                return "Adicionar Competência";
+            case 2:
+                return "Nova Competência";
         }
         return "";
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position % 2) {
+        switch (position % this.getCount()) {
             case 0:
-                return new UserTreeFragment();
             default:
+                return new UserTreeFragment();
+            case 1:
                 return new UploadFragment();
+            case 2:
+                return new InsertNewKnowledgeFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

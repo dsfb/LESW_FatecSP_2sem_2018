@@ -1063,4 +1063,14 @@
     <string name="role">Cargo</string>
     <string name="pin">PIN</string>
     <string name="create_employee">Cadastrar funcionário</string>
+    <string name="change_employee_level">Mudar nível de funcionário</string>
+    <string name="change_employee_level_description">Selecione o funcionário que mudará de nível:</string>
+    <string name="change_employee_level_description2">Selecione o novo nível deste funcionário:</string>
+    <string name="user_level">Nível User</string>
+    <string name="rh_level">Nível RH</string>
+    <string name="manager_level">Nível Manager</string>
+    <string name="select_level_tree">Selecione o nível da Árvore:</string>
+    <string name="select_parent_knowledge_tree">Selecione a competência mãe:</string>
+    <string name="add_knowledge_tree">Adicionar competência na Árvore</string>
+    <string name="set_knowledge_name_tree_description">Insira o nome da nova competência:</string>
 </resources>

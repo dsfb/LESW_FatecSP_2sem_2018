@@ -13,38 +13,53 @@ public class HRAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position % 5) {
+        switch (position % this.getCount()) {
             case 0:
                 return "Competências";
             case 1:
+            default:
                 return "Certificações";
             case 2:
                 return "Acompanhamento";
             case 3:
                 return "Pesquisa";
-            default:
-                return "Cadastro";
+            case 4:
+                return "Adicionar Competência";
+            case 5:
+                return "Nova Competência";
+            case 6:
+                return "Mudança de Nível";
+            case 7:
+                return "Ver por Nível";
+
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position % 5) {
+        switch (position % this.getCount()) {
             case 0:
                 return new UserTreeFragment();
             case 1:
+            default:
                 return ApprovalsFragment.newInstance();
             case 2:
                 return new HRTreeFragment();
             case 3:
                 return SearchFragment.newInstance();
-            default:
-                return new HRSignupFragment();
+            case 4:
+                return new UploadFragment();
+            case 5:
+                return new InsertNewKnowledgeFragment();
+            case 6:
+                return new ChangeLevelFragment();
+            case 7:
+                return new LevelKnowledgeFragment();
         }
     }
 
     @Override
     public int getCount() {
-        return 4;
+        return 8;
     }
 }
