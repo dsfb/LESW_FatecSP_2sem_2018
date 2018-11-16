@@ -17,7 +17,7 @@
         <!-- &lt;!&ndash;</intent-filter>&ndash;&gt; -->
         <!-- </activity> -->
         <activity
-            android:name="com.lesw.tree_knowledge.LoginActivity"
+            android:name="com.lesw.tree_knowledge.view.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
@@ -27,16 +27,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lesw.tree_knowledge.SignupActivity"
+            android:name="com.lesw.tree_knowledge.view.SignupActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan|adjustResize" />
         <activity
-            android:name="com.lesw.tree_knowledge.MenuActivity"
+            android:name="com.lesw.tree_knowledge.view.MenuActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.lesw.tree_knowledge.EmployeeListActivity"
+            android:name="com.lesw.tree_knowledge.view.EmployeeListActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name="com.lesw.tree_knowledge.EmployeeActivity" />
-        <activity android:name="com.lesw.tree_knowledge.ApprovalActivity"/>
+        <activity android:name="com.lesw.tree_knowledge.view.EmployeeActivity" />
+        <activity android:name="com.lesw.tree_knowledge.view.ApprovalActivity"/>
     </application>
 </manifest>
