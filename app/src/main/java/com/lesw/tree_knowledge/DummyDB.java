@@ -269,30 +269,36 @@ public class DummyDB {
         return false;
     }
 
-    public boolean approveCertification(String knowledge, String userName, String date, String certification) {
-        for (Certification cert : RoomDbManager.getInstance().getCertificationMap().values()) {
-            if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
-                    cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                cert.setStatus("APROVADO");
+    private boolean handleCertification(String knowledge, String userName, String date, String certification, String status) {
+        try {
+            Certification cert = RoomDbManager.getInstance().getSingleCertification(userName, certification, knowledge);
+            if (cert.getDate().equals(date)) {
+                cert.setStatus(status);
                 RoomDbManager.getInstance().updateCertificationByStatus(cert);
                 return true;
             }
+        } catch (RuntimeException e) {
+
         }
 
         return false;
     }
 
-    public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
-        for (Certification cert : RoomDbManager.getInstance().getCertificationMap().values()) {
-            if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
-                    cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                cert.setStatus("REPROVADO");
-                RoomDbManager.getInstance().updateCertificationByStatus(cert);
-                return true;
+    public boolean approveCertification(String knowledge, String userName, String date, String certification) {
+        boolean result = handleCertification(knowledge, userName, date, certification, "APROVADO");
+
+        if (result) {
+            if (handleApprovedCertificationInCommonCase(knowledge, userName)) {
+                Employee the_emp = RoomDbManager.getInstance().getEmployeeByName(userName);
+                RoomDbManager.getInstance().updateEmployee(the_emp);
             }
         }
 
-        return false;
+        return result;
+    }
+
+    public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
+        return handleCertification(knowledge, userName, date, certification, "REPROVADO");
     }
 
     public List<String[]> getEmployeeList() {

@@ -20,6 +20,10 @@ public interface CertificationDao {
             + "userName LIKE :last LIMIT 1")
     Certification findByName(String first, String last);
 
+    @Query("SELECT * FROM certification WHERE certification LIKE :certification AND "
+            + "userName LIKE :username AND knowledge LIKE :knowledge LIMIT 1")
+    Certification findByCondition(String certification, String username, String knowledge);
+
     @Query("SELECT COUNT(*) FROM certification")
     int getNumberOfRows();
 

@@ -372,6 +372,15 @@ public class RoomDbManager {
         }
     }
 
+    protected Certification getSingleCertification(String username, String certification,
+                                                   String knowledge) {
+        try {
+            return AppDatabase.getInstance(context).certificationDao().findByCondition(certification, username, knowledge);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
     public boolean updateCertificationByStatus(Certification certification) {
         try {
             AppDatabase.getInstance(context).certificationDao().updateCertificationByStatus(certification.getId(),
