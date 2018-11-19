@@ -39,5 +39,4 @@
         <activity android:name="com.lesw.tree_knowledge.EmployeeActivity" />
         <activity android:name="com.lesw.tree_knowledge.ApprovalActivity"/>
     </application>
-
 </manifest>

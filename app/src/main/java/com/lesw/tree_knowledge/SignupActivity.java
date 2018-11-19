@@ -1,6 +1,7 @@
 package com.lesw.tree_knowledge;
 
 import android.app.ProgressDialog;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +18,8 @@ import butterknife.ButterKnife;
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
 
-    // @BindView(R.id.input_name) EditText _nameText;
-    // @BindView(R.id.role_input) EditText _roleText;
+    @BindView(R.id.input_name) EditText _nameText;
+    @BindView(R.id.role_input) EditText _roleText;
     @BindView(R.id.input_email) EditText _emailText;
     @BindView(R.id.input_pin) EditText _pinText;
     @BindView(R.id.input_password) EditText _passwordText;
@@ -67,50 +68,43 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
+        String name = _nameText.getText().toString();
+
         String email = _emailText.getText().toString();
+
+        String role = _roleText.getText().toString();
 
         String pin = _pinText.getText().toString();
 
-        final Employee employee = DummyDB.getInstance().findEmployeeByEmail(email);
+        String password = _passwordText.getText().toString();
 
-        if (employee != null) {
-            if (employee.isPrimeiroAcesso()) {
-                if (pin.equals(employee.getPin())) {
-                    String password = _passwordText.getText().toString();
-
-                    employee.setPassword(password);
-
-                    final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                            R.style.AppTheme_Dark_Dialog);
-
-                    progressDialog.setMessage("Liberando conta...");
-
-                    progressDialog.setIndeterminate(true);
-                    progressDialog.show();
-
-                    new android.os.Handler().postDelayed(
-                            new Runnable() {
-                                public void run() {
-                                    // On complete call either onSignupSuccess or onSignupFailed
-                                    // depending on success
-                                    onSignupSuccess(employee);
-                                    // onSignupFailed();
-                                    progressDialog.dismiss();
-                                }
-                            }, 3000);
-
-                }
-                else {
-                    onSignupFailed("O PIN informado é inválido.");
-                }
-            }
-            else {
-                onSignupFailed("A conta já foi ativada.");
-            }
+        if (RoomDbManager.getInstance().checkEmployeeByEmail(email)) {
+            onSignupFailed("A conta já foi ativada.");
+            return;
         }
-        else {
-            onSignupFailed("A conta não foi cadastrada pelo RH.");
-        }
+
+        Employee employee = new Employee(name, role, email, pin, password, RoleEnum.USER);
+
+        RoomDbManager.getInstance().insertEmployee(employee);
+
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+
+        progressDialog.setMessage("Liberando conta...");
+
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        // On complete call either onSignupSuccess or onSignupFailed
+                        // depending on success
+                        onSignupSuccess(employee);
+                        // onSignupFailed();
+                        progressDialog.dismiss();
+                    }
+                }, 3000);
     }
 
 

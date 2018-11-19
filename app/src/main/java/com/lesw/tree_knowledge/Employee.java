@@ -1,26 +1,84 @@
 package com.lesw.tree_knowledge;
 
-import java.util.HashSet;
-import java.util.Set;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
 
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+@Entity(tableName = "employee")
 class Employee {
 
-    private Integer id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "role")
     private String role;
+
+    @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "pin")
     private String pin;
+
+    @ColumnInfo(name = "password")
     private String password;
+
+    @ColumnInfo(name = "function")
     private RoleEnum function;
+
+    @Ignore
     private Boolean logged = false;
 
-    private Set<Knowledge> knowledgeList;
+    @Ignore
+    private Set<Knowledge> knowledgeSet;
 
-    public Employee() {
-        knowledgeList = new HashSet<>();
-        knowledgeList.add(Knowledge.ROOT);
+    @ColumnInfo(name = "knowledge_set")
+    private String knowledgeSetStr;
+
+    @Ignore
+    private static Type setType = new TypeToken<TreeSet<Integer>>(){}.getType();
+
+    @Ignore
+    private static Gson gson = new Gson();
+
+    public static Employee[] populateData() {
+        return new Employee[] {
+                new Employee("Diego Alves", "Desenvolvedor Java", "diego.alves@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee("Pedro Santana", "Gerente de projetos", "pedro.santana@acme.com", "1234", "123456", RoleEnum.MANAGER),
+                new Employee("Rodrigo Silva", "Desenvolvedor Java", "rodrigo.silva@acme.com", "1234", "123456", RoleEnum.USER),
+                new Employee("Mariana Garcia", "Coordenadora", "mariana.garcia@acme.com", "1234", "123456", RoleEnum.HR),
+                new Employee("Roger Flores", "Desenvolvedor Python", "roger.flores@acme.com", "1234", "123456", RoleEnum.USER)
+        };
     }
 
+    @Ignore
+    public Employee() {
+        knowledgeSet = new HashSet<>();
+        knowledgeSet.add(Knowledge.ROOT);
+
+        Set<Integer> set = new TreeSet<>();
+        for (Knowledge k : knowledgeSet) {
+            if (k != null) {
+                set.add(k.getId());
+            }
+        }
+        this.knowledgeSetStr = gson.toJson(set, setType);
+    }
+
+    @Ignore
     public Employee(String name, String role) {
         this();
 
@@ -28,17 +86,37 @@ class Employee {
         this.role = role;
     }
 
-    public Employee(int id, String name, String role, String email, String pin, String password,
+    public Employee(String name, String role, String email, String pin, String password,
                     RoleEnum function) {
         this();
 
-        this.id = id;
         this.name = name;
         this.role = role;
         this.email = email;
         this.pin = pin;
         this.password = password;
         this.function = function;
+    }
+
+    public void setKnowledgeSet() {
+        knowledgeSet = new HashSet<>();
+        Set<Integer> set;
+        set = gson.fromJson(this.knowledgeSetStr, setType);
+        for (int i : set) {
+            Knowledge k = Knowledge.getKnowledgeFromIdMap(i);
+
+            if (k.getUp() > -1) {
+                knowledgeSet.add(k);
+            }
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -87,24 +165,55 @@ class Employee {
 
     public void setFunction(RoleEnum function) { this.function = function; }
 
-    public Set<Knowledge> getKnowledgeSet() {
-        return knowledgeList;
+    public String getKnowledgeSetStr() {
+        return knowledgeSetStr;
     }
 
-    public void addKnowledge(Knowledge knowledge){
+    public void setKnowledgeSetStr(String knowledgeSetStr) {
+        this.knowledgeSetStr = knowledgeSetStr;
+    }
+
+    public Set<Knowledge> getKnowledgeSet() {
+        return knowledgeSet;
+    }
+
+    public void addKnowledgeArrayById(List<Integer> ids, Context context) {
+        for (int id : ids) {
+            Knowledge k = RoomDbManager.getInstance().getKnowledgeById(id);
+
+            this.addKnowledge(k, context);
+        }
+    }
+
+    public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
-            knowledgeList.add(knowledge);
+            knowledgeSet.add(knowledge);
+
+            Set<Integer> set = new TreeSet<>();
+            for (Knowledge k : knowledgeSet) {
+                set.add(k.getId());
+            }
+
+            this.knowledgeSetStr = gson.toJson(set, setType);
+
             knowledge.count(this);
-            if(knowledge.getUp() != null){
-                addKnowledge(knowledge.getUp());
+            if (knowledge.getUp() > 0) {
+                Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
+                addKnowledge(up, context);
             }
         }
     }
 
     public Knowledge getRootKnowledge(){
-        for (Knowledge knowledge : knowledgeList) {
-            if(knowledge.getUp() == null) return knowledge;
+        for (Knowledge knowledge : knowledgeSet) {
+            if (knowledge.getUp() == 0) {
+                return knowledge;
+            }
+
+            Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
+            if(up.getUp() == 0) return up;
         }
+
         return null;
     }
 
@@ -121,7 +230,7 @@ class Employee {
     }
 
     public boolean hasAKnowledge(String knowledgeName) {
-        for (Knowledge knowledge : knowledgeList) {
+        for (Knowledge knowledge : knowledgeSet) {
             if (knowledge.getName().equals(knowledgeName)) {
                 return true;
             }

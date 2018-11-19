@@ -1,25 +1,41 @@
 package com.lesw.tree_knowledge;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
+@Entity(tableName = "certification")
 public class Certification {
 
-    private Integer id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "knowledge")
     private String knowledge;
+
+    @ColumnInfo(name = "userName")
     private String userName;
+
+    @ColumnInfo(name = "date")
     private String date;
+
+    @ColumnInfo(name = "status")
     private String status;
+
+    @ColumnInfo(name = "certification")
     private String certification;
 
-    public Certification() {
-    }
-
     public Certification(String knowledge, String userName, String date, String status, String certification) {
-//        this.id = id;
         this.knowledge = knowledge;
         this.userName = userName;
         this.date = date;
         this.status = status;
         this.certification = certification;
     }
+
+    public int getId() { return this.id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getUserName() {
         return userName;

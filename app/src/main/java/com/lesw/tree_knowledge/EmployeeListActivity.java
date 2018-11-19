@@ -56,7 +56,7 @@ public class EmployeeListActivity extends ListActivity {
         TextView mTitle = (TextView) toolbarTop.findViewById(R.id.toolbar_title);
         if(title != null){
             mTitle.setText(title);
-            employeeList = DummyDB.getInstance().getEmployeeListByKnowledge(title);
+            employeeList = db.getEmployeeListByKnowledge(title);
         } else {
             mTitle.setText("Detalhes da competência");
             employeeList = new ArrayList<>();

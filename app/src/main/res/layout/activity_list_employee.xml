@@ -12,7 +12,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.ihc.tree_knowledge.EmployeeListActivity">
+    tools:context="com.lesw.tree_knowledge.EmployeeListActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_top"

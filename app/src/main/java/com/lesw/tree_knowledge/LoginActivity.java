@@ -50,10 +50,13 @@ public class LoginActivity extends AppCompatActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
+                //finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+
+        RoomDbManager.initialize(getApplicationContext());
+        DummyDB.initializeInstance(getApplicationContext());
     }
 
     public void login() {
@@ -112,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+                // this.finish();
             }
         }
     }
