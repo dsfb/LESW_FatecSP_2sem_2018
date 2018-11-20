@@ -23,61 +23,6 @@ public class RoomDbManager {
         return instance;
     }
 
-    private Map<Integer, Employee> employeeByIdMap = new TreeMap<>();
-
-    private Map<String, Employee> employeeByNameMap = new TreeMap<>();
-
-    private Map<String, Employee> employeeByEmailMap = new TreeMap<>();
-
-    private Map<Integer, Knowledge> knowledgeByIdMap = new TreeMap<>();
-
-    private Map<String, Knowledge> knowledgeByNameMap = new TreeMap<>();
-
-    private Map<Integer, Certification> certificationMap = new TreeMap<>();
-
-    private void populateKnowledgeMap() {
-        List<Knowledge> knowledgeList = this.getAllKnowledge();
-
-        knowledgeByIdMap.clear();
-        knowledgeByNameMap.clear();
-
-        for (Knowledge knowledge : knowledgeList) {
-            knowledgeByIdMap.put(knowledge.getId(), knowledge);
-            knowledgeByNameMap.put(knowledge.getName(), knowledge);
-            knowledge.populateChildren(this.getAllKnowledge());
-        }
-    }
-
-    private void populateEmployeeMaps() {
-        List<Employee> employeeList = this.getAllEmployees();
-
-        employeeByIdMap.clear();
-        employeeByEmailMap.clear();
-        employeeByNameMap.clear();
-
-        for (Employee employee : employeeList) {
-            employeeByIdMap.put(employee.getId(), employee);
-            employeeByEmailMap.put(employee.getEmail(), employee);
-            employeeByNameMap.put(employee.getName(), employee);
-        }
-    }
-
-    private void populateCertificationMap() {
-        List<Certification> certificationList = this.getAllCertifications();
-
-        certificationMap.clear();
-
-        for (Certification certification : certificationList) {
-            certificationMap.put(certification.getId(), certification);
-        }
-    }
-
-    public void restoreDB() {
-        this.populateKnowledgeMap();
-        this.populateCertificationMap();
-        this.populateEmployeeMaps();
-    }
-
     public boolean insertKnowledgeArray(Knowledge[] knowledgeArray) {
         try {
             AppDatabase.getInstance(context).knowledgeDao().insertAll(knowledgeArray);
@@ -88,8 +33,6 @@ public class RoomDbManager {
                 }
             }
 
-            this.populateKnowledgeMap();
-
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertKnowledgeArray):\n" + e.getMessage(), e);
@@ -99,7 +42,7 @@ public class RoomDbManager {
 
     public Knowledge getKnowledgeById(int id) {
         try {
-            Knowledge k = this.knowledgeByIdMap.get(id);
+            Knowledge k = AppDatabase.getInstance(context).knowledgeDao().findById(id);
 
             return k;
         } catch (Exception e) {
@@ -110,11 +53,7 @@ public class RoomDbManager {
 
     public Knowledge getKnowledgeByName(String name) {
         try {
-            Knowledge k = this.knowledgeByNameMap.get(name);
-
-            if (k != null) {
-                k.populateChildren(this.getAllKnowledge());
-            }
+            Knowledge k = AppDatabase.getInstance(context).knowledgeDao().findByName(name);
 
             return k;
         } catch (Exception e) {
@@ -123,19 +62,11 @@ public class RoomDbManager {
         }
     }
 
-    public Map<Integer, Knowledge> getKnowledgeByIdMap() {
-        return this.knowledgeByIdMap;
-    }
-
-    private List<Knowledge> getAllKnowledge() {
+    protected List<Knowledge> getAllKnowledge() {
         try {
             List<Knowledge> knowledgeList = AppDatabase.
                     getInstance(context).
                     knowledgeDao().getAll();
-
-            for (Knowledge knowledge : knowledgeList) {
-                knowledge.populateChildren(knowledgeList);
-            }
 
             return knowledgeList;
         } catch (Exception e) {
@@ -145,19 +76,7 @@ public class RoomDbManager {
         }
     }
 
-    public Map<Integer, Employee> getEmployeeByIdMap() {
-        return this.employeeByIdMap;
-    }
-
-    public Map<String, Employee> getEmployeeByNameMap() {
-        return employeeByNameMap;
-    }
-
-    public Map<String, Employee> getEmployeeByEmailMap() {
-        return employeeByEmailMap;
-    }
-
-    private List<Employee> getAllEmployees() {
+    protected List<Employee> getAllEmployees() {
         try {
             List<Employee> employees = AppDatabase.
                     getInstance(context).
@@ -182,12 +101,7 @@ public class RoomDbManager {
 
     public boolean updateEmployee(Employee employee) {
         try {
-            AppDatabase.getInstance(context).employeeDao().updateEmployeeByKnowledgeSet(employee.getId(),
-                    employee.getKnowledgeSetStr());
-
-            this.employeeByIdMap.put(employee.getId(), employee);
-            this.employeeByEmailMap.put(employee.getEmail(), employee);
-            this.employeeByNameMap.put(employee.getName(), employee);
+            AppDatabase.getInstance(context).employeeDao().updateEmployee(employee);
 
             return true;
         } catch (Exception e) {
@@ -200,8 +114,6 @@ public class RoomDbManager {
         try {
             AppDatabase.getInstance(context).employeeDao().insertAll(employees);
 
-            this.populateEmployeeMaps();
-
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertEmployees):\n" + e.getMessage(), e);
@@ -211,7 +123,7 @@ public class RoomDbManager {
 
     public Employee getEmployeeById(int id) {
         try {
-            Employee e = this.employeeByIdMap.get(id);
+            Employee e = AppDatabase.getInstance(context).employeeDao().findById(id);
 
             if (e != null) {
                 e.setKnowledgeSet();
@@ -226,7 +138,7 @@ public class RoomDbManager {
 
     public Employee getEmployeeByEmail(String email) {
         try {
-            Employee e = this.employeeByEmailMap.get(email);
+            Employee e = AppDatabase.getInstance(context).employeeDao().findByEmail(email);
 
             if (e != null) {
                 e.setKnowledgeSet();
@@ -241,7 +153,7 @@ public class RoomDbManager {
 
     public Employee getEmployeeByName(String name) {
         try {
-            Employee e = this.employeeByNameMap.get(name);
+            Employee e = AppDatabase.getInstance(context).employeeDao().findByName(name);
 
             if (e != null) {
                 e.setKnowledgeSet();
@@ -256,7 +168,7 @@ public class RoomDbManager {
 
     public boolean checkEmployeeByEmail(String email) {
         try {
-            Employee e = this.employeeByEmailMap.get(email);
+            Employee e = AppDatabase.getInstance(context).employeeDao().findByEmail(email);
 
             return e != null;
         } catch (Exception e) {
@@ -267,10 +179,7 @@ public class RoomDbManager {
 
     public boolean updateKnowledgeByChildren(Knowledge knowledge) {
         try {
-            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByChildren(knowledge.getId(),
-                    knowledge.getChildrenSetStr());
-
-            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledge(knowledge);
 
             return true;
         } catch (Exception e) {
@@ -279,40 +188,9 @@ public class RoomDbManager {
         }
     }
 
-    public boolean updateKnowledgeByCounting(Knowledge knowledge) {
-        try {
-            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCounting(knowledge.getId(),
-                    knowledge.getCount());
-
-            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
-
-            return true;
-        } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(updateKnowledgeByCounting):\n" + e.getMessage(), e);
-            return false;
-        }
-    }
-
-    public boolean updateKnowledgeByEmployee(Knowledge knowledge) {
-        try {
-            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByEmployee(knowledge.getId(),
-                    knowledge.getEmployeeSetStr());
-
-            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
-
-            return true;
-        } catch (Exception e) {
-            Log.e("TreeKnowledge", "Error(updateKnowledgeByEmployee):\n" + e.getMessage(), e);
-            return false;
-        }
-    }
-
     public boolean updateKnowledgeByCountingAndEmployee(Knowledge knowledge) {
         try {
-            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByCountingAndEmployee(knowledge.getId(),
-                    knowledge.getCount(), knowledge.getEmployeeSetStr());
-
-            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledge(knowledge);
 
             return true;
         } catch (Exception e) {
@@ -323,10 +201,7 @@ public class RoomDbManager {
 
     public boolean updateKnowledgeByWarningCount(Knowledge knowledge) {
         try {
-            AppDatabase.getInstance(context).knowledgeDao().updateKnowledgeByWarningCount(knowledge.getId(),
-                    knowledge.getWarningCount());
-
-            this.knowledgeByIdMap.put(knowledge.getId(), knowledge);
+            AppDatabase.getInstance(context).knowledgeDao().updateKnowledge(knowledge);
 
             return true;
         } catch (Exception e) {
@@ -345,8 +220,6 @@ public class RoomDbManager {
         try {
             AppDatabase.getInstance(context).certificationDao().insertAll(certificationArray);
 
-            this.populateCertificationMap();
-
             return true;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(insertCertificationArray):\n" + e.getMessage(), e);
@@ -354,11 +227,7 @@ public class RoomDbManager {
         }
     }
 
-    public Map<Integer, Certification> getCertificationMap() {
-        return this.certificationMap;
-    }
-
-    private List<Certification> getAllCertifications() {
+    public List<Certification> getAllCertifications() {
         try {
             List<Certification> certifications = AppDatabase.
                     getInstance(context).
@@ -383,10 +252,7 @@ public class RoomDbManager {
 
     public boolean updateCertificationByStatus(Certification certification) {
         try {
-            AppDatabase.getInstance(context).certificationDao().updateCertificationByStatus(certification.getId(),
-                    certification.getStatus());
-
-            this.certificationMap.put(certification.getId(), certification);
+            AppDatabase.getInstance(context).certificationDao().updateCertification(certification);
 
             return true;
         } catch (Exception e) {

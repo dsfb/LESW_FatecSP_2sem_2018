@@ -6,14 +6,9 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 @Entity(tableName = "employee")
 class Employee {
@@ -42,17 +37,8 @@ class Employee {
     @Ignore
     private Boolean logged = false;
 
-    @Ignore
-    private Set<Knowledge> knowledgeSet;
-
     @ColumnInfo(name = "knowledge_set")
-    private String knowledgeSetStr;
-
-    @Ignore
-    private static Type setType = new TypeToken<TreeSet<Integer>>(){}.getType();
-
-    @Ignore
-    private static Gson gson = new Gson();
+    private Set<Integer> knowledgeSet;
 
     public static Employee[] populateData() {
         return new Employee[] {
@@ -66,16 +52,8 @@ class Employee {
 
     @Ignore
     public Employee() {
-        knowledgeSet = new HashSet<>();
-        knowledgeSet.add(Knowledge.ROOT);
-
-        Set<Integer> set = new TreeSet<>();
-        for (Knowledge k : knowledgeSet) {
-            if (k != null) {
-                set.add(k.getId());
-            }
-        }
-        this.knowledgeSetStr = gson.toJson(set, setType);
+        knowledgeSet = new TreeSet<>();
+        knowledgeSet.add(1);
     }
 
     @Ignore
@@ -86,6 +64,7 @@ class Employee {
         this.role = role;
     }
 
+    @Ignore
     public Employee(String name, String role, String email, String pin, String password,
                     RoleEnum function) {
         this();
@@ -98,15 +77,26 @@ class Employee {
         this.function = function;
     }
 
-    public void setKnowledgeSet() {
-        knowledgeSet = new HashSet<>();
-        Set<Integer> set;
-        set = gson.fromJson(this.knowledgeSetStr, setType);
-        for (int i : set) {
-            Knowledge k = Knowledge.getKnowledgeFromIdMap(i);
+    public Employee(String name, String role, String email, String pin, String password,
+                    RoleEnum function, Set<Integer> knowledgeSet) {
+        this();
 
-            if (k.getUp() > -1) {
-                knowledgeSet.add(k);
+        this.name = name;
+        this.role = role;
+        this.email = email;
+        this.pin = pin;
+        this.password = password;
+        this.function = function;
+        this.knowledgeSet = knowledgeSet;
+    }
+
+    public void setKnowledgeSet() {
+        knowledgeSet = new TreeSet<>();
+        for (int i : knowledgeSet) {
+            Knowledge k = Knowledge.getKnowledgeFromId(i);
+
+            if (k != null) {
+                knowledgeSet.add(k.getId());
             }
         }
     }
@@ -165,16 +155,12 @@ class Employee {
 
     public void setFunction(RoleEnum function) { this.function = function; }
 
-    public String getKnowledgeSetStr() {
-        return knowledgeSetStr;
-    }
-
-    public void setKnowledgeSetStr(String knowledgeSetStr) {
-        this.knowledgeSetStr = knowledgeSetStr;
-    }
-
-    public Set<Knowledge> getKnowledgeSet() {
+    public Set<Integer> getKnowledgeSet() {
         return knowledgeSet;
+    }
+
+    public void setKnowledgeSet(Set<Integer> knowledgeSet) {
+        this.knowledgeSet = knowledgeSet;
     }
 
     public void addKnowledgeArrayById(List<Integer> ids, Context context) {
@@ -187,34 +173,20 @@ class Employee {
 
     public void addKnowledge(Knowledge knowledge, Context context){
         if(knowledge != null){
-            knowledgeSet.add(knowledge);
-
-            Set<Integer> set = new TreeSet<>();
-            for (Knowledge k : knowledgeSet) {
-                set.add(k.getId());
-            }
-
-            this.knowledgeSetStr = gson.toJson(set, setType);
+            knowledgeSet.add(knowledge.getId());
 
             knowledge.count(this);
             if (knowledge.getUp() > 0) {
-                Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
-                addKnowledge(up, context);
+                Knowledge up = Knowledge.getKnowledgeFromId(knowledge.getUp());
+                if (up !=  null) {
+                    addKnowledge(up, context);
+                }
             }
         }
     }
 
     public Knowledge getRootKnowledge(){
-        for (Knowledge knowledge : knowledgeSet) {
-            if (knowledge.getUp() == 0) {
-                return knowledge;
-            }
-
-            Knowledge up = Knowledge.getKnowledgeFromIdMap(knowledge.getUp());
-            if(up.getUp() == 0) return up;
-        }
-
-        return null;
+        return RoomDbManager.getInstance().getKnowledgeById(1);
     }
 
     public void login() {
@@ -229,14 +201,8 @@ class Employee {
         return this.logged;
     }
 
-    public boolean hasAKnowledge(String knowledgeName) {
-        for (Knowledge knowledge : knowledgeSet) {
-            if (knowledge.getName().equals(knowledgeName)) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean hasAKnowledge(int knowledgeId) {
+        return this.knowledgeSet.contains(knowledgeId);
     }
 
     public boolean isPrimeiroAcesso() {

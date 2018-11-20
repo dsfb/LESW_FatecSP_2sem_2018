@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
+
 public class DummyDB {
 
     private static DummyDB instance;
@@ -20,10 +22,6 @@ public class DummyDB {
     private Employee lastFoundEmployee;
     private Employee loggedUser;
     private Context context;
-
-    private static Type listType = new TypeToken<List<Integer>>(){}.getType();
-
-    private static Gson gson = new Gson();
 
     public static void initializeInstance(Context context) {
         if(instance == null){
@@ -106,8 +104,6 @@ public class DummyDB {
     }
 
     private void initData(){
-        RoomDbManager.getInstance().restoreDB();
-
         Knowledge.ROOT = RoomDbManager.getInstance().getKnowledgeById(1);
 
         if (Knowledge.ROOT == null) {
@@ -133,7 +129,7 @@ public class DummyDB {
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
-            for (Knowledge knowledge : RoomDbManager.getInstance().getKnowledgeByIdMap().values()) {
+            for (Knowledge knowledge : RoomDbManager.getInstance().getAllKnowledge()) {
                 knowledge.manageUp(context);
             }
 
@@ -303,19 +299,22 @@ public class DummyDB {
 
     public List<String[]> getEmployeeList() {
         List<String[]> employeeList = new ArrayList<>();
-        Map<String, Employee> map = RoomDbManager.getInstance().getEmployeeByNameMap();
-        for (String nome : map.keySet()) {
-            String[] stringArray = {nome, map.get(nome).getRole()};
+        List<Employee> list = RoomDbManager.getInstance().getAllEmployees();
+        for (Employee emp : list) {
+            String[] stringArray = {emp.getName(), emp.getRole()};
             employeeList.add(stringArray);
         }
 
         return employeeList;
     }
 
-    public List<String[]> getEmployeeListByKnowledge(String knowledge) {
+    public List<String[]> getEmployeeListByKnowledge(int id) {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : RoomDbManager.getInstance().getEmployeeByIdMap().values()) {
-            if (e.hasAKnowledge(knowledge)) {
+        Log.e("TreeKnowledge", "Procurando por empregados com o conhecimento de id: " + id);
+        for (Employee e : RoomDbManager.getInstance().getAllEmployees()) {
+            Log.e("TreeKnowledge", "varrendo o empregado: " + e.getName() + ", com knowledge set: " +
+                    e.getKnowledgeSet());
+            if (e.hasAKnowledge(id)) {
                 String[] stringArray = {e.getName(), e.getRole()};
                 employeeList.add(stringArray);
             }

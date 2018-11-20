@@ -54,7 +54,7 @@ public class ApprovalsFragment extends Fragment implements SearchView.OnQueryTex
 
         lv.setOnItemClickListener(this);
 
-        adapter = new KnowledgeListAdapter(getContext(), new ArrayList<>(RoomDbManager.getInstance().getCertificationMap().values()));
+        adapter = new KnowledgeListAdapter(getContext(), new ArrayList<>(RoomDbManager.getInstance().getAllCertifications()));
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
     }

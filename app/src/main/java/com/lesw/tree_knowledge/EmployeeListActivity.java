@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,7 +36,7 @@ public class EmployeeListActivity extends ListActivity {
         int id = intent.getIntExtra("ID", 0);
 
         DummyDB db = DummyDB.getInstance();
-        knowledge = Knowledge.getById(id, db.getCompanyRoot());
+        knowledge = Knowledge.getById(id);
 
         if(db.getLoggedUser().getFunction().equals(RoleEnum.HR)){
 
@@ -56,7 +57,9 @@ public class EmployeeListActivity extends ListActivity {
         TextView mTitle = (TextView) toolbarTop.findViewById(R.id.toolbar_title);
         if(title != null){
             mTitle.setText(title);
-            employeeList = db.getEmployeeListByKnowledge(title);
+            Log.e("TreeKnowledge", "Tentando popular a lista de empregados para a competência: " + title);
+            employeeList = db.getEmployeeListByKnowledge(id);
+            Log.e("TreeKnowledge", "Tamanho da Lista populada: " + employeeList.size());
         } else {
             mTitle.setText("Detalhes da competência");
             employeeList = new ArrayList<>();

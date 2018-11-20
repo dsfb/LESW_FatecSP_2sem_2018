@@ -3,6 +3,7 @@ package com.lesw.tree_knowledge;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Update;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.OnConflictStrategy;
 
@@ -33,6 +34,6 @@ public interface CertificationDao {
     @Delete
     void delete(Certification certification);
 
-    @Query("UPDATE certification SET status = :status  WHERE id = :tid")
-    int updateCertificationByStatus(int tid, String status);
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateCertification(Certification certification);
 }
