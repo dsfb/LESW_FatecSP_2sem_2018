@@ -100,6 +100,7 @@ public class SignupActivity extends AppCompatActivity {
                     public void run() {
                         // On complete call either onSignupSuccess or onSignupFailed
                         // depending on success
+                        DummyDB.getInstance().loginEmployee(_emailText.getText().toString());
                         onSignupSuccess(employee);
                         // onSignupFailed();
                         progressDialog.dismiss();

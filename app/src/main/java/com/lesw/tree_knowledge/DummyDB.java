@@ -257,6 +257,7 @@ public class DummyDB {
 
             if (the_emp != null) {
                 the_emp.addKnowledge(k, context);
+                RoomDbManager.getInstance().updateEmployee(the_emp);
             }
 
             return true;
@@ -284,9 +285,8 @@ public class DummyDB {
         boolean result = handleCertification(knowledge, userName, date, certification, "APROVADO");
 
         if (result) {
-            if (handleApprovedCertificationInCommonCase(knowledge, userName)) {
-                Employee the_emp = RoomDbManager.getInstance().getEmployeeByName(userName);
-                RoomDbManager.getInstance().updateEmployee(the_emp);
+            if (!handleApprovedCertificationInCommonCase(knowledge, userName)) {
+                // TODO: Arrumar para quando for conhecimento inédito!
             }
         }
 

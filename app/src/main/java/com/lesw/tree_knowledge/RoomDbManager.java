@@ -82,10 +82,6 @@ public class RoomDbManager {
                     getInstance(context).
                     employeeDao().getAll();
 
-            for (Employee e : employees) {
-                e.setKnowledgeSet();
-            }
-
             return employees;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage(), e);
@@ -125,10 +121,6 @@ public class RoomDbManager {
         try {
             Employee e = AppDatabase.getInstance(context).employeeDao().findById(id);
 
-            if (e != null) {
-                e.setKnowledgeSet();
-            }
-
             return e;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
@@ -140,10 +132,6 @@ public class RoomDbManager {
         try {
             Employee e = AppDatabase.getInstance(context).employeeDao().findByEmail(email);
 
-            if (e != null) {
-                e.setKnowledgeSet();
-            }
-
             return e;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getEmployeeById):\n" + e.getMessage(), e);
@@ -154,10 +142,6 @@ public class RoomDbManager {
     public Employee getEmployeeByName(String name) {
         try {
             Employee e = AppDatabase.getInstance(context).employeeDao().findByName(name);
-
-            if (e != null) {
-                e.setKnowledgeSet();
-            }
 
             return e;
         } catch (Exception e) {
