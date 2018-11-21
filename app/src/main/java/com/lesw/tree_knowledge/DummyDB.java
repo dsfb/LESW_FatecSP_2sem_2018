@@ -2,6 +2,7 @@ package com.lesw.tree_knowledge;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -286,7 +287,11 @@ public class DummyDB {
 
         if (result) {
             if (!handleApprovedCertificationInCommonCase(knowledge, userName)) {
-                // TODO: Arrumar para quando for conhecimento inédito!
+                Intent intent = new Intent(this.context, PlaceTreeActivity.class);
+                intent.putExtra("USERNAME", userName);
+                intent.putExtra("KNOWLEDGE", knowledge);
+
+                this.context.startActivity(intent);
             }
         }
 
