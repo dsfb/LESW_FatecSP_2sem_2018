@@ -282,17 +282,11 @@ public class DummyDB {
         return false;
     }
 
-    public boolean approveCertification(String knowledge, String userName, String date, String certification) {
+    public boolean approveCertificationInCommonCase(String knowledge, String userName, String date, String certification) {
         boolean result = handleCertification(knowledge, userName, date, certification, "APROVADO");
 
         if (result) {
-            if (!handleApprovedCertificationInCommonCase(knowledge, userName)) {
-                Intent intent = new Intent(this.context, PlaceTreeActivity.class);
-                intent.putExtra("USERNAME", userName);
-                intent.putExtra("KNOWLEDGE", knowledge);
-
-                this.context.startActivity(intent);
-            }
+            return handleApprovedCertificationInCommonCase(knowledge, userName);
         }
 
         return result;

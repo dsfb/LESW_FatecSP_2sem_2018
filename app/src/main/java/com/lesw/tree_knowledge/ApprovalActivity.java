@@ -1,5 +1,6 @@
 package com.lesw.tree_knowledge;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,13 +40,14 @@ public class ApprovalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //public boolean disapproveCertification(String knowledge, String userName, String date, String certification)
-                if (DummyDB.getInstance().approveCertification(knowledge, username, date, certification)) {
+                if (DummyDB.getInstance().approveCertificationInCommonCase(knowledge, username, date, certification)) {
                     Toast.makeText(getBaseContext(), "A competência foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
-                    if (!DummyDB.getInstance().handleApprovedCertificationInCommonCase(knowledge, username)) {
-                        // TODO: Implementar caso de incorporação de conhecimento na árvore de conhecimento da empresa!
-                    }
                 } else {
-                    Toast.makeText(getBaseContext(), "Opa! Infelizmente, a competência não foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ApprovalActivity.this, PlaceTreeActivity.class);
+                    intent.putExtra("USERNAME", username);
+                    intent.putExtra("KNOWLEDGE", knowledge);
+
+                    startActivity(intent);
                 }
                 finish();
             }

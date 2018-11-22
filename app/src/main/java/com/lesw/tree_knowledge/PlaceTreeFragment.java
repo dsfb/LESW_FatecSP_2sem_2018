@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -85,5 +86,6 @@ public class PlaceTreeFragment extends Fragment implements TreeNode.TreeNodeClic
 
     public void registerParentKnowledge(int parentKnowledgeId) {
         // TODO: implementar o registro de conhecimento inédito filho para um conhecimento pai fornecido!
+        Toast.makeText(getActivity(), "A competência foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
     }
 }

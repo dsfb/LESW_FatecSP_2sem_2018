@@ -9,12 +9,15 @@ import android.util.Log;
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.github.florent37.materialviewpager.header.HeaderDesign;
 
+import javax.annotation.Nullable;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlaceTreeActivity extends AppCompatActivity {
 
     @BindView(R.id.materialViewPager)
+    @Nullable
     MaterialViewPager mViewPager;
     FragmentStatePagerAdapter adapter;
 
@@ -54,9 +57,6 @@ public class PlaceTreeActivity extends AppCompatActivity {
         } else {
             Log.e("PlaceTreeActivity", "intent não tinha knowledgeName ou email");
         }
-
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 }
