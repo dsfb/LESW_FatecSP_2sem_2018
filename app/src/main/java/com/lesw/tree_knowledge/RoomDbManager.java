@@ -76,6 +76,20 @@ public class RoomDbManager {
         }
     }
 
+    protected List<Integer> getAllKnowledgeLevels() {
+        try {
+            List<Integer> knowledgeLevels = AppDatabase.
+                    getInstance(context).
+                    knowledgeDao().getLevels();
+
+            return knowledgeLevels;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getAllKnowledgeLevels):\n" + e.getMessage(), e);
+            List<Integer> knowledge = new ArrayList<>();
+            return knowledge;
+        }
+    }
+
     protected List<Employee> getAllEmployees() {
         try {
             List<Employee> employees = AppDatabase.

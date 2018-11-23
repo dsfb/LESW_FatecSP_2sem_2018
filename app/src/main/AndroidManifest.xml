@@ -38,14 +38,6 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".EmployeeActivity" />
         <activity android:name=".ApprovalActivity" />
-        <activity
-            android:name=".PlaceTreeActivity"
-            android:label="@string/title_activity_place_tree"
-            android:parentActivityName=".MenuActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lesw.tree_knowledge.MenuActivity" />
-        </activity>
     </application>
 
 </manifest>

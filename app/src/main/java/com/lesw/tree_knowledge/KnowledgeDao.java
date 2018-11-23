@@ -29,6 +29,9 @@ public interface KnowledgeDao {
     @Query("SELECT COUNT(*) FROM knowledge")
     int getNumberOfRows();
 
+    @Query("SELECT DISTINCT level FROM knowledge")
+    List<Integer> getLevels();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Knowledge... knowledges);
 

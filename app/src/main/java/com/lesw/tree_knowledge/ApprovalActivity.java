@@ -43,11 +43,7 @@ public class ApprovalActivity extends AppCompatActivity {
                 if (DummyDB.getInstance().approveCertificationInCommonCase(knowledge, username, date, certification)) {
                     Toast.makeText(getBaseContext(), "A competência foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(ApprovalActivity.this, PlaceTreeActivity.class);
-                    intent.putExtra("USERNAME", username);
-                    intent.putExtra("KNOWLEDGE", knowledge);
-
-                    startActivity(intent);
+                    
                 }
                 finish();
             }

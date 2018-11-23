@@ -3,6 +3,7 @@ package com.lesw.tree_knowledge;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,14 +11,19 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -35,6 +41,11 @@ public class UploadFragment extends Fragment {
     Button btnSend;
     @BindView(R.id.input_knowledge) EditText _txtKnowledge;
     @BindView(R.id.input_test) EditText _txtCertification;
+    @BindView(R.id.sp_level_parent_knowledge)
+    Spinner levelParentKnowledge;
+
+    @BindView(R.id.sp_name_parent_knowledge)
+    Spinner nameParentKnowledge;
 
     // this is the action code we use in our intent,
     // this way we know we're looking at the response from our own action
@@ -42,6 +53,9 @@ public class UploadFragment extends Fragment {
     public static final int RESULT_OK = -1;
 
     private String selectedImagePath;
+
+    private List<KnowledgeLevelSpinner> levelSpinner;
+    private List<KnowledgeNameSpinner> nameSpinner;
 
     public UploadFragment() {
         // Required empty public constructor
@@ -56,6 +70,34 @@ public class UploadFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         myCalendar = Calendar.getInstance();
+
+        // Source Design based: https://kvenkataprasad.blogspot.com/2017/05/spinner-example-using-appcompatspinner.html
+        List<Integer> levels = RoomDbManager.getInstance().getAllKnowledgeLevels();
+        List<KnowledgeLevelSpinner> list_kls = new ArrayList<>();
+
+        int counter = 1;
+        for (Integer level : levels) {
+            KnowledgeLevelSpinner kls = new KnowledgeLevelSpinner(String.valueOf(counter), String.valueOf(level));
+            list_kls.add(kls);
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item, list_kls);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        levelParentKnowledge.setAdapter(adapter);
+        levelParentKnowledge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+                // Source: https://stackoverflow.com/questions/2652414/how-do-you-get-the-selected-value-of-a-spinner
+                String selected = parent.getItemAtPosition(position).toString();
+                Toast.makeText(UploadFragment.this.getActivity(), "Você selecionou o nível: " + selected, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         txtImagePath = (TextView) view.findViewById(R.id.txtImagePath);
         btnAttachImage = (Button) view.findViewById(R.id.btnAttachImage);
