@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -54,6 +55,8 @@ public class UploadFragment extends Fragment {
 
     private String selectedImagePath;
 
+    private String selectedKnowledgeName;
+
     private List<KnowledgeLevelSpinner> levelSpinner;
     private List<KnowledgeNameSpinner> nameSpinner;
 
@@ -61,6 +64,34 @@ public class UploadFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    private void setNameSpinner(String selected) {
+        List<Knowledge> list_knowledge = RoomDbManager.getInstance().getAllKnowledgeByLevel(Integer.valueOf(selected));
+        List<KnowledgeNameSpinner> list_kns = new ArrayList<>();
+
+        int counter = 1;
+        for (Knowledge k : list_knowledge) {
+            KnowledgeNameSpinner kns = new KnowledgeNameSpinner(String.valueOf(counter), k.getName());
+            list_kns.add(kns);
+        }
+
+        ArrayAdapter adapter2 = new ArrayAdapter(UploadFragment.this.getActivity(), android.R.layout.simple_spinner_item, list_kns);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        nameParentKnowledge.setAdapter(adapter2);
+        nameParentKnowledge.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedKnowledgeName = parent.getItemAtPosition(position).toString();
+                Toast.makeText(UploadFragment.this.getActivity(), "Você selecionou o conhecimento: " +
+                                selectedKnowledgeName, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,13 +115,15 @@ public class UploadFragment extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(this.getActivity(), android.R.layout.simple_spinner_item, list_kls);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         levelParentKnowledge.setAdapter(adapter);
-        levelParentKnowledge.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        levelParentKnowledge.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
                 // Source: https://stackoverflow.com/questions/2652414/how-do-you-get-the-selected-value-of-a-spinner
+
                 String selected = parent.getItemAtPosition(position).toString();
-                Toast.makeText(UploadFragment.this.getActivity(), "Você selecionou o nível: " + selected, Toast.LENGTH_SHORT).show();
+
+                UploadFragment.this.setNameSpinner(selected);
             }
 
             @Override

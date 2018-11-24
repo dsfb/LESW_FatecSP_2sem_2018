@@ -115,7 +115,9 @@ public class KnowledgeListAdapter extends BaseAdapter implements Filterable {
                                 KnowledgeListAdapter.this.filteredList.get(i).getUserName(),
                                 KnowledgeListAdapter.this.filteredList.get(i).getDate(),
                                 KnowledgeListAdapter.this.filteredList.get(i).getStatus(),
-                                KnowledgeListAdapter.this.filteredList.get(i).getCertification());
+                                KnowledgeListAdapter.this.filteredList.get(i).getCertification(),
+                                KnowledgeListAdapter.this.filteredList.get(i).getLevelParentKnowledge(),
+                                KnowledgeListAdapter.this.filteredList.get(i).getParentKnowledge());
                         filterList.add(bean);
                     }
                 }

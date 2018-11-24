@@ -208,15 +208,15 @@ public class DummyDB {
             Log.d("TreeKnowledge", "Atualização(Empregado: Roger Flores) aconteceu: " + val + "!");
 
             String[][] certificationArray = {
-                    {"C#", "Diego Alves", "18/10/2017", "PENDENTE", "C# Certificado XPTO!"},
-                    {"C++", "Diego Alves", "31/10/2017", "PENDENTE", "C++ Certificado XPTO!"},
-                    {"PMBOK", "Pedro Santana", "07/09/2017", "APROVADO", "PMBOK Certificado XPTO!"},
-                    {"Mandarim Básico", "Diego Alves", "01/08/2017", "REPROVADO", "Beginner Chinese Mandarin Certificate!"},
-                    {"C++", "Rodrigo Silva", "26/09/2017", "APROVADO", "C++ 2017 Certificate XPTO!"},
-                    {"Estruturas de Dados", "Rodrigo Silva", "31/06/2017", "REPROVADO", "Estruturas de Dados Certificado!"},
-                    {"SQL Server 2013", "Diego Alves", "03/09/2017", "APROVADO", "Microsoft SQL Server 2013 Certificate XPTO!"},
-                    {"Machine Learning", "Mariana Garcia", "02/10/2017", "PENDENTE", "Machine Learning Certificado XPTO!"},
-                    {"JavaFX", "Mariana Garcia", "18/07/2017", "PENDENTE", "JavaFX Certificado XPTO!"},
+                    {"C#", "Diego Alves", "18/10/2017", "PENDENTE", "C# Certificado XPTO!", "1", "Lógica de Programação"},
+                    {"C++", "Diego Alves", "31/10/2017", "PENDENTE", "C++ Certificado XPTO!", "1", "Lógica de Programação"},
+                    {"PMBOK", "Pedro Santana", "07/09/2017", "APROVADO", "PMBOK Certificado XPTO!", "0", "Árvore do Conhecimento"},
+                    {"Mandarim Básico", "Diego Alves", "01/08/2017", "REPROVADO", "Beginner Chinese Mandarin Certificate!", "0", "Árvore do Conhecimento"},
+                    {"C++", "Rodrigo Silva", "26/09/2017", "APROVADO", "C++ 2017 Certificate XPTO!", "1", "Lógica de Programação"},
+                    {"Estruturas de Dados", "Rodrigo Silva", "31/06/2017", "REPROVADO", "Estruturas de Dados Certificado!", "1", "Lógica de Programação"},
+                    {"SQL Server 2013", "Diego Alves", "03/09/2017", "APROVADO", "Microsoft SQL Server 2013 Certificate XPTO!", "0", "Árvore do Conhecimento"},
+                    {"Machine Learning", "Mariana Garcia", "02/10/2017", "PENDENTE", "Machine Learning Certificado XPTO!", "0", "Árvore do Conhecimento"},
+                    {"JavaFX", "Mariana Garcia", "18/07/2017", "PENDENTE", "JavaFX Certificado XPTO!", "2", "Java"},
             };
 
             int index = 0;
@@ -225,7 +225,8 @@ public class DummyDB {
 
             for (String[] aCertificationList : certificationArray) {
                 Certification certification = new Certification(aCertificationList[0], aCertificationList[1],
-                        aCertificationList[2], aCertificationList[3], aCertificationList[4]);
+                        aCertificationList[2], aCertificationList[3], aCertificationList[4], aCertificationList[5],
+                        aCertificationList[6]);
 
                 certifications[index++] = certification;
             }

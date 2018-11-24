@@ -25,12 +25,20 @@ public class Certification {
     @ColumnInfo(name = "certification")
     private String certification;
 
-    public Certification(String knowledge, String userName, String date, String status, String certification) {
+    @ColumnInfo(name = "levelParentKnowledge")
+    private String levelParentKnowledge;
+
+    @ColumnInfo(name = "ParentKnowledge")
+    private String parentKnowledge;
+
+    public Certification(String knowledge, String userName, String date, String status, String certification, String levelParentKnowledge, String parentKnowledge) {
         this.knowledge = knowledge;
         this.userName = userName;
         this.date = date;
         this.status = status;
         this.certification = certification;
+        this.levelParentKnowledge = levelParentKnowledge;
+        this.parentKnowledge = parentKnowledge;
     }
 
     public int getId() { return this.id; }
@@ -73,5 +81,21 @@ public class Certification {
 
     public void setCertification(String certification) {
         this.certification = certification;
+    }
+
+    public String getLevelParentKnowledge() {
+        return levelParentKnowledge;
+    }
+
+    public void setLevelParentKnowledge(String levelParentKnowledge) {
+        this.levelParentKnowledge = levelParentKnowledge;
+    }
+
+    public String getParentKnowledge() {
+        return parentKnowledge;
+    }
+
+    public void setParentKnowledge(String parentKnowledge) {
+        this.parentKnowledge = parentKnowledge;
     }
 }

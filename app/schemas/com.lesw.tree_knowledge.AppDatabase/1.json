@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "424a2f65a8434f51062d70368aff71ba",
+    "identityHash": "bce4623e459a6810160776cf49853a46",
     "entities": [
       {
         "tableName": "knowledge",
@@ -45,13 +45,13 @@
             "notNull": true
           },
           {
-            "fieldPath": "childrenSetStr",
+            "fieldPath": "childrenSet",
             "columnName": "children_set",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "employeeSetStr",
+            "fieldPath": "employeeSet",
             "columnName": "employee_set",
             "affinity": "TEXT",
             "notNull": false
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "certification",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `knowledge` TEXT, `userName` TEXT, `date` TEXT, `status` TEXT, `certification` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `knowledge` TEXT, `userName` TEXT, `date` TEXT, `status` TEXT, `certification` TEXT, `levelParentKnowledge` TEXT, `ParentKnowledge` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -103,6 +103,18 @@
           {
             "fieldPath": "certification",
             "columnName": "certification",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "levelParentKnowledge",
+            "columnName": "levelParentKnowledge",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "parentKnowledge",
+            "columnName": "ParentKnowledge",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -163,7 +175,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "knowledgeSetStr",
+            "fieldPath": "knowledgeSet",
             "columnName": "knowledge_set",
             "affinity": "TEXT",
             "notNull": false
@@ -181,7 +193,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"424a2f65a8434f51062d70368aff71ba\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"bce4623e459a6810160776cf49853a46\")"
     ]
   }
 }
