@@ -29,7 +29,8 @@ public class RoomDbManager {
 
             for (Knowledge knowledge : knowledgeArray) {
                 if (knowledge != null) {
-                    knowledge.manageUp(context);
+                    Knowledge k = this.getKnowledgeByName(knowledge.getName());
+                    k.manageUp(context);
                 }
             }
 

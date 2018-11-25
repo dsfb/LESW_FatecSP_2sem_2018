@@ -283,10 +283,10 @@ public class DummyDB {
     }
 
     public boolean approveCertificationInCommonCase(String knowledge, String userName, String date, String certification) {
-        boolean result = handleCertification(knowledge, userName, date, certification, "APROVADO");
+        boolean result = handleApprovedCertificationInCommonCase(knowledge, userName);
 
         if (result) {
-            return handleApprovedCertificationInCommonCase(knowledge, userName);
+            return handleCertification(knowledge, userName, date, certification, "APROVADO");
         }
 
         return result;

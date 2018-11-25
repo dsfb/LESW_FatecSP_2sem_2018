@@ -46,6 +46,7 @@ public class ApprovalActivity extends AppCompatActivity {
                     Intent intent = new Intent(ApprovalActivity.this, PlaceTreeActivity.class);
                     intent.putExtra("USERNAME", username);
                     intent.putExtra("KNOWLEDGE", knowledge);
+                    intent.putExtra("CERTIFICATION", certification);
 
                     startActivity(intent);
                 }

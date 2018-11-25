@@ -20,6 +20,7 @@ public class Knowledge {
 
     public static Knowledge ROOT = null;
 
+    // TODO: make it autoincrementable...!
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -142,16 +143,6 @@ public class Knowledge {
 
     public static Knowledge getKnowledgeFromId(int id) {
         return RoomDbManager.getInstance().getKnowledgeById(id);
-    }
-
-    private Map<Integer, Knowledge> getMapFromList(List<Knowledge> knowledgeList) {
-        TreeMap<Integer, Knowledge> map = new TreeMap<>();
-
-        for (Knowledge k : knowledgeList) {
-            map.put(k.getId(), k);
-        }
-
-        return map;
     }
 
     public int getWarningCount() {

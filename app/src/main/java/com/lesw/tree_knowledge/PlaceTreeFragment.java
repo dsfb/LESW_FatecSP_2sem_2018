@@ -16,6 +16,7 @@ import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
 import java.io.Serializable;
+import java.util.Set;
 
 
 public class PlaceTreeFragment extends Fragment implements TreeNode.TreeNodeClickListener {
@@ -25,6 +26,7 @@ public class PlaceTreeFragment extends Fragment implements TreeNode.TreeNodeClic
 
     private String knowledgeName;
     private String userName;
+    private String certification;
 
     @Nullable
     @Override
@@ -34,6 +36,7 @@ public class PlaceTreeFragment extends Fragment implements TreeNode.TreeNodeClic
 
         knowledgeName = getArguments().getString("knowledgeName");
         userName = getArguments().getString("userName");
+        certification = getArguments().getString("certification");
 
         return view;
     }
@@ -85,7 +88,23 @@ public class PlaceTreeFragment extends Fragment implements TreeNode.TreeNodeClic
     }
 
     public void registerParentKnowledge(int parentKnowledgeId) {
-        // TODO: implementar o registro de conhecimento inédito filho para um conhecimento pai fornecido!
+        Knowledge parent = RoomDbManager.getInstance().getKnowledgeById(parentKnowledgeId);
+        Knowledge k = new Knowledge(knowledgeName, parentKnowledgeId, parent.getLevel() + 1);
+        Employee e = RoomDbManager.getInstance().getEmployeeByName(userName);
+        Set<Integer> s = k.getEmployeeSet();
+        s.add(e.getId());
+        k.setEmployeeSet(s);
+        Knowledge[] k_a = new Knowledge[1];
+        k_a[0] = k;
+        RoomDbManager.getInstance().insertKnowledgeArray(k_a);
+        k = RoomDbManager.getInstance().getKnowledgeByName(knowledgeName);
+        e.addKnowledge(k, this.getActivity());
+        RoomDbManager.getInstance().updateEmployee(e);
+        String aprovadoStatus = "APROVADO";
+        Certification c = RoomDbManager.getInstance().getSingleCertification(userName, certification, knowledgeName);
+        c.setStatus(aprovadoStatus);
+        RoomDbManager.getInstance().updateCertificationByStatus(c);
         Toast.makeText(getActivity(), "A competência foi aprovada com sucesso!", Toast.LENGTH_SHORT).show();
+        this.getActivity().finish();
     }
 }

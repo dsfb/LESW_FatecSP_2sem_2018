@@ -34,11 +34,13 @@ public class PlaceTreeActivity extends AppCompatActivity {
         if(intent != null) {
             String knowledgeName = intent.getStringExtra("KNOWLEDGE");
             String userName = intent.getStringExtra("USERNAME");
+            String certification = intent.getStringExtra("CERTIFICATION");
 
             adapter = new PlaceTreeAdapter(getSupportFragmentManager());
 
             ((PlaceTreeAdapter) adapter).setUserName(userName);
             ((PlaceTreeAdapter) adapter).setKnowledgeName(knowledgeName);
+            ((PlaceTreeAdapter) adapter).setCertification(certification);
 
             mViewPager.getViewPager().setAdapter(adapter);
 

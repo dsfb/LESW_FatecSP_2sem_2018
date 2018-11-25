@@ -9,6 +9,7 @@ import android.util.Log;
 public class PlaceTreeAdapter extends FragmentStatePagerAdapter {
     private String knowledgeName;
     private String userName;
+    private String certification;
 
     PlaceTreeAdapter(FragmentManager fm) {
         super(fm);
@@ -20,6 +21,10 @@ public class PlaceTreeAdapter extends FragmentStatePagerAdapter {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void setCertification(String certification) {
+        this.certification = certification;
     }
 
     @Override
@@ -47,6 +52,7 @@ public class PlaceTreeAdapter extends FragmentStatePagerAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putString("userName", userName);
                 bundle.putString("knowledgeName", knowledgeName);
+                bundle.putString("certification", certification);
 
                 Fragment f = new PlaceTreeFragment();
                 f.setArguments(bundle);
