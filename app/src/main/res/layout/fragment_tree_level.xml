@@ -26,21 +26,31 @@
             android:orientation="vertical"
             >
 
-            <android.support.v7.widget.SearchView
-                android:id="@+id/search_view"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:iconifiedByDefault="false"
-                android:padding="2dp"
-                android:queryHint="Pesquisar competência..."
+                android:text="@string/select_level_tree" />
+
+            <Spinner
+                android:id="@+id/sp_select_level_tree"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:spinnerMode="dropdown"
+                android:background="@color/white"
                 />
 
-            <ListView
-                android:id="@+id/lv"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="wrap_content"
+                android:text="@string/selected_knowledge" />
 
+            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/lv_level_tree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

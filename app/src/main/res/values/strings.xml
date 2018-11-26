@@ -1074,4 +1074,5 @@
     <string name="add_knowledge_tree">Adicionar competência na Árvore</string>
     <string name="set_knowledge_name_tree_description">Insira o nome da nova competência:</string>
     <string name="title_activity_place_tree">PlaceTreeActivity</string>
+    <string name="selected_knowledge">Competências selecionadas:</string>
 </resources>

@@ -20,6 +20,12 @@ public interface KnowledgeDao {
     @Query("SELECT * FROM knowledge WHERE id IN (:knowledgeIds)")
     List<Knowledge> loadAllByIds(int[] knowledgeIds);
 
+    @Query("SELECT * FROM knowledge WHERE level LIKE :level")
+    List<Knowledge> loadAllByLevel(int level);
+
+    @Query("SELECT DISTINCT level FROM knowledge")
+    List<Integer> getLevels();
+
     @Query("SELECT * FROM knowledge WHERE name LIKE :name LIMIT 1")
     Knowledge findByName(String name);
 
