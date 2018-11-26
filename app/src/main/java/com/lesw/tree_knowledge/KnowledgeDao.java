@@ -29,6 +29,9 @@ public interface KnowledgeDao {
     @Query("SELECT * FROM knowledge WHERE name LIKE :name LIMIT 1")
     Knowledge findByName(String name);
 
+    @Query("SELECT * FROM knowledge WHERE name LIKE :name AND level LIKE :level LIMIT 1")
+    Knowledge findByNameAndLevel(String name, String level);
+
     @Query("SELECT * FROM knowledge WHERE id LIKE :id LIMIT 1")
     Knowledge findById(int id);
 

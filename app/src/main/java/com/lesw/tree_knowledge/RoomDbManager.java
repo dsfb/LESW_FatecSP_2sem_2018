@@ -63,6 +63,17 @@ public class RoomDbManager {
         }
     }
 
+    public Knowledge getKnowledgeByNameAndLevel(String name, String level) {
+        try {
+            Knowledge k = AppDatabase.getInstance(context).knowledgeDao().findByNameAndLevel(name, level);
+
+            return k;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getKnowledgeByNameAndLevel):\n" + e.getMessage(), e);
+            return null;
+        }
+    }
+
     protected List<Knowledge> getAllKnowledge() {
         try {
             List<Knowledge> knowledgeList = AppDatabase.
