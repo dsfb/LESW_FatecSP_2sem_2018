@@ -51,18 +51,13 @@
                 android:layout_marginEnd="10dp"
                 android:spinnerMode="dropdown" />
 
-            <TextView
-                android:id="@+id/txt_view_set_knowledge_name_tree_description_description2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_knowledge_name_tree_description" />
-
             <EditText
                 android:id="@+id/edit_text_new_knowledge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:inputType="textAutoComplete"
+                android:hint="@string/new_knowledge_insertion"
                 />
 
             <!-- Action Button -->
