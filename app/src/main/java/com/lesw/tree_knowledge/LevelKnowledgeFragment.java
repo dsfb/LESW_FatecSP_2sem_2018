@@ -80,6 +80,7 @@ public class LevelKnowledgeFragment extends Fragment {
     private void refreshListView(int level) {
         List<Knowledge> conhecimentos = RoomDbManager.getInstance().loadKnowledgeListByLevel(level);
 
+        // https://stackoverflow.com/a/268713
         Set<String> conj = new LinkedHashSet<>();
 
         for (int i = 0; i < conhecimentos.size(); i++) {
