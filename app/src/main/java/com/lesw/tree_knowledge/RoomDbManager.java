@@ -5,8 +5,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class RoomDbManager {
     private static RoomDbManager instance;
@@ -125,6 +123,20 @@ public class RoomDbManager {
             return employees;
         } catch (Exception e) {
             Log.e("TreeKnowledge", "Error(getAllEmployees):\n" + e.getMessage(), e);
+            List<Employee> employees = new ArrayList<>();
+            return employees;
+        }
+    }
+
+    protected List<Employee> getEmployeesByFunction(RoleEnum role) {
+        try {
+            List<Employee> employees = AppDatabase.
+                    getInstance(context).
+                    employeeDao().loadAllByFunction(role.toString());
+
+            return employees;
+        } catch (Exception e) {
+            Log.e("TreeKnowledge", "Error(getEmployeesByFunction):\n" + e.getMessage(), e);
             List<Employee> employees = new ArrayList<>();
             return employees;
         }

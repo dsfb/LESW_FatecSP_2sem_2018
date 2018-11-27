@@ -1076,4 +1076,5 @@
     <string name="title_activity_place_tree">PlaceTreeActivity</string>
     <string name="selected_knowledge">Competências selecionadas:</string>
     <string name="new_knowledge_insertion">Insira o nome da nova competência:</string>
+    <string name="select_first_level_employee">Selecione o nível original do funcionário:</string>
 </resources>

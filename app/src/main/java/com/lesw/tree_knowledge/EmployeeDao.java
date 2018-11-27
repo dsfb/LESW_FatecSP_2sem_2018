@@ -20,6 +20,9 @@ public interface EmployeeDao {
     @Query("SELECT * FROM employee WHERE id IN (:employeeIds)")
     List<Employee> loadAllByIds(int[] employeeIds);
 
+    @Query("SELECT * FROM employee WHERE function LIKE :function")
+    List<Employee> loadAllByFunction(String function);
+
     @Query("SELECT * FROM employee WHERE email LIKE :first AND "
             + "password LIKE :last LIMIT 1")
     Employee findByEmailPassword(String first, String last);
