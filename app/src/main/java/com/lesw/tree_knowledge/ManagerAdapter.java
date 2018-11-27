@@ -22,7 +22,7 @@ public class ManagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return "Pesquisa";
             case 3:
-                return "Adicionar";
+                return "Adicionar Competência";
             case 4:
                 return "Nova Competência";
             case 5:
