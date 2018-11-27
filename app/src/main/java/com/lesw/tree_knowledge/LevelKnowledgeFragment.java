@@ -13,7 +13,10 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,10 +80,13 @@ public class LevelKnowledgeFragment extends Fragment {
     private void refreshListView(int level) {
         List<Knowledge> conhecimentos = RoomDbManager.getInstance().loadKnowledgeListByLevel(level);
 
-        String[] dados = new String[conhecimentos.size()];
+        Set<String> conj = new LinkedHashSet<>();
+
         for (int i = 0; i < conhecimentos.size(); i++) {
-            dados[i] = conhecimentos.get(i).getName();
+            conj.add(conhecimentos.get(i).getName());
         }
+
+        String[] dados = conj.toArray(new String[conj.size()]);
 
         adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, dados);
         scrollView.setAdapter(adapter);

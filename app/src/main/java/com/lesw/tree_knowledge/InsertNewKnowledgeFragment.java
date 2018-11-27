@@ -95,6 +95,9 @@ public class InsertNewKnowledgeFragment extends Fragment {
                             k_a[0] = k;
                             RoomDbManager.getInstance().insertKnowledgeArray(k_a);
                             Toast.makeText(getActivity(), "A competência foi inserida com sucesso!", Toast.LENGTH_SHORT).show();
+                            editTextNewKnowledge.setText("");
+                            spinnerLevel.setSelection(0);
+                            spinnerParent.setSelection(0);
                         }
                     }
                 }
