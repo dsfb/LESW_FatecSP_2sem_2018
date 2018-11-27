@@ -2,6 +2,7 @@ package com.lesw.tree_knowledge;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
+
 public class DummyDB {
 
     private static DummyDB instance;
@@ -20,10 +23,6 @@ public class DummyDB {
     private Employee lastFoundEmployee;
     private Employee loggedUser;
     private Context context;
-
-    private static Type listType = new TypeToken<List<Integer>>(){}.getType();
-
-    private static Gson gson = new Gson();
 
     public static void initializeInstance(Context context) {
         if(instance == null){
@@ -106,8 +105,6 @@ public class DummyDB {
     }
 
     private void initData(){
-        RoomDbManager.getInstance().restoreDB();
-
         Knowledge.ROOT = RoomDbManager.getInstance().getKnowledgeById(1);
 
         if (Knowledge.ROOT == null) {
@@ -133,7 +130,7 @@ public class DummyDB {
 
             Log.d("TreeKnowledge", "Inserção(Conhecimentos) aconteceu: " + val + "!");
 
-            for (Knowledge knowledge : RoomDbManager.getInstance().getKnowledgeByIdMap().values()) {
+            for (Knowledge knowledge : RoomDbManager.getInstance().getAllKnowledge()) {
                 knowledge.manageUp(context);
             }
 
@@ -261,6 +258,7 @@ public class DummyDB {
 
             if (the_emp != null) {
                 the_emp.addKnowledge(k, context);
+                RoomDbManager.getInstance().updateEmployee(the_emp);
             }
 
             return true;
@@ -269,47 +267,53 @@ public class DummyDB {
         return false;
     }
 
-    public boolean approveCertification(String knowledge, String userName, String date, String certification) {
-        for (Certification cert : RoomDbManager.getInstance().getCertificationMap().values()) {
-            if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
-                    cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                cert.setStatus("APROVADO");
+    private boolean handleCertification(String knowledge, String userName, String date, String certification, String status) {
+        try {
+            Certification cert = RoomDbManager.getInstance().getSingleCertification(userName, certification, knowledge);
+            if (cert.getDate().equals(date)) {
+                cert.setStatus(status);
                 RoomDbManager.getInstance().updateCertificationByStatus(cert);
                 return true;
             }
+        } catch (RuntimeException e) {
+
         }
 
         return false;
     }
 
-    public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
-        for (Certification cert : RoomDbManager.getInstance().getCertificationMap().values()) {
-            if (cert.getKnowledge().equals(knowledge) && cert.getUserName().equals(userName) &&
-                    cert.getDate().equals(date) && cert.getCertification().equals(certification)) {
-                cert.setStatus("REPROVADO");
-                RoomDbManager.getInstance().updateCertificationByStatus(cert);
-                return true;
-            }
+    public boolean approveCertificationInCommonCase(String knowledge, String userName, String date, String certification) {
+        boolean result = handleApprovedCertificationInCommonCase(knowledge, userName);
+
+        if (result) {
+            return handleCertification(knowledge, userName, date, certification, "APROVADO");
         }
 
-        return false;
+        return result;
+    }
+
+    public boolean disapproveCertification(String knowledge, String userName, String date, String certification) {
+        return handleCertification(knowledge, userName, date, certification, "REPROVADO");
     }
 
     public List<String[]> getEmployeeList() {
         List<String[]> employeeList = new ArrayList<>();
-        Map<String, Employee> map = RoomDbManager.getInstance().getEmployeeByNameMap();
-        for (String nome : map.keySet()) {
-            String[] stringArray = {nome, map.get(nome).getRole()};
+        List<Employee> list = RoomDbManager.getInstance().getAllEmployees();
+        for (Employee emp : list) {
+            String[] stringArray = {emp.getName(), emp.getRole()};
             employeeList.add(stringArray);
         }
 
         return employeeList;
     }
 
-    public List<String[]> getEmployeeListByKnowledge(String knowledge) {
+    public List<String[]> getEmployeeListByKnowledge(int id) {
         List<String[]> employeeList = new ArrayList<>();
-        for (Employee e : RoomDbManager.getInstance().getEmployeeByIdMap().values()) {
-            if (e.hasAKnowledge(knowledge)) {
+        Log.e("TreeKnowledge", "Procurando por empregados com o conhecimento de id: " + id);
+        for (Employee e : RoomDbManager.getInstance().getAllEmployees()) {
+            Log.e("TreeKnowledge", "varrendo o empregado: " + e.getName() + ", com knowledge set: " +
+                    e.getKnowledgeSet());
+            if (e.hasAKnowledge(id)) {
                 String[] stringArray = {e.getName(), e.getRole()};
                 employeeList.add(stringArray);
             }

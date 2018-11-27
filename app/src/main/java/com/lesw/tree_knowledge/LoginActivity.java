@@ -18,14 +18,11 @@ import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
 
     @BindView(R.id.input_email) EditText _emailText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup) TextView _signupLink;
-
-    DummyDB db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +45,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                //finish();
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
@@ -109,18 +106,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                // this.finish();
-            }
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
@@ -133,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("EMAIL", employee.getEmail());
 
         startActivity(intent);
-        //finish();
     }
 
     public void onLoginFailed() {

@@ -5,10 +5,14 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
+import java.util.Set;
 
 @Dao
+@TypeConverters({Converters.class})
 public interface KnowledgeDao {
     @Query("SELECT * FROM knowledge")
     List<Knowledge> getAll();
@@ -16,8 +20,17 @@ public interface KnowledgeDao {
     @Query("SELECT * FROM knowledge WHERE id IN (:knowledgeIds)")
     List<Knowledge> loadAllByIds(int[] knowledgeIds);
 
+    @Query("SELECT * FROM knowledge WHERE level LIKE :level")
+    List<Knowledge> loadAllByLevel(int level);
+
+    @Query("SELECT DISTINCT level FROM knowledge")
+    List<Integer> getLevels();
+
     @Query("SELECT * FROM knowledge WHERE name LIKE :name LIMIT 1")
     Knowledge findByName(String name);
+
+    @Query("SELECT * FROM knowledge WHERE name LIKE :name AND level LIKE :level LIMIT 1")
+    Knowledge findByNameAndLevel(String name, String level);
 
     @Query("SELECT * FROM knowledge WHERE id LIKE :id LIMIT 1")
     Knowledge findById(int id);
@@ -28,20 +41,8 @@ public interface KnowledgeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Knowledge... knowledges);
 
-    @Query("UPDATE knowledge SET children_set = :children  WHERE id = :tid")
-    int updateKnowledgeByChildren(int tid, String children);
-
-    @Query("UPDATE knowledge SET count = :count  WHERE id = :tid")
-    int updateKnowledgeByCounting(int tid, int count);
-
-    @Query("UPDATE knowledge SET employee_set = :employeeSet  WHERE id = :tid")
-    int updateKnowledgeByEmployee(int tid, String employeeSet);
-
-    @Query("UPDATE knowledge SET employee_set = :employeeSet, count = :count WHERE id = :tid")
-    int updateKnowledgeByCountingAndEmployee(int tid, int count, String employeeSet);
-
-    @Query("UPDATE knowledge SET warning_count = :warningCount WHERE id = :tid")
-    int updateKnowledgeByWarningCount(int tid, int warningCount);
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateKnowledge(Knowledge knowledge);
 
     @Delete
     void delete(Knowledge knowledge);

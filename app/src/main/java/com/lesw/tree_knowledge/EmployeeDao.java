@@ -5,10 +5,14 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
+import java.util.Set;
 
 @Dao
+@TypeConverters({Converters.class})
 public interface EmployeeDao {
     @Query("SELECT * FROM employee")
     List<Employee> getAll();
@@ -16,12 +20,21 @@ public interface EmployeeDao {
     @Query("SELECT * FROM employee WHERE id IN (:employeeIds)")
     List<Employee> loadAllByIds(int[] employeeIds);
 
+    @Query("SELECT * FROM employee WHERE function LIKE :function")
+    List<Employee> loadAllByFunction(String function);
+
     @Query("SELECT * FROM employee WHERE email LIKE :first AND "
             + "password LIKE :last LIMIT 1")
-    Employee findByName(String first, String last);
+    Employee findByEmailPassword(String first, String last);
 
     @Query("SELECT * FROM employee WHERE id LIKE :id LIMIT 1")
     Employee findById(int id);
+
+    @Query("SELECT * FROM employee WHERE email LIKE :email LIMIT 1")
+    Employee findByEmail(String email);
+
+    @Query("SELECT * FROM employee WHERE name LIKE :name LIMIT 1")
+    Employee findByName(String name);
 
     @Query("SELECT COUNT(*) FROM employee")
     int getNumberOfRows();
@@ -32,8 +45,8 @@ public interface EmployeeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Employee... employees);
 
-    @Query("UPDATE employee SET knowledge_set = :knowledge_set  WHERE id = :tid")
-    int updateEmployeeByKnowledgeSet(int tid, String knowledge_set);
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateEmployee(Employee employee);
 
     @Delete
     void delete(Employee employee);

@@ -6,13 +6,9 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.unnamed.b.atv.model.TreeNode;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +20,7 @@ public class Knowledge {
 
     public static Knowledge ROOT = null;
 
+    // TODO: make it autoincrementable...!
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -42,64 +39,34 @@ public class Knowledge {
     @ColumnInfo(name = "level")
     private int level;
 
-    @Ignore
-    private static Type setType = new TypeToken<Set<Integer>>(){}.getType();
-
-    @Ignore
-    private static Gson gson = new Gson();
-
-    @Ignore
-    private List<Knowledge> children = new ArrayList<>();
-
     @ColumnInfo(name = "children_set")
-    private String childrenSetStr;
-
-    @Ignore
-    private Set<Employee> employeeSet = new HashSet<>();
+    private Set<Integer> childrenSet;
 
     @ColumnInfo(name = "employee_set")
-    private String employeeSetStr;
+    private Set<Integer> employeeSet;
 
     @Ignore
     public Knowledge(String name) {
-        this.name = name;
-        this.up = 0;
-        this.level = 0;
-        this.count = 0;
-        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
-        this.employeeSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+        this(name, 0, 0);
     }
 
     @Ignore
     public Knowledge(String name, int up, int level) {
-        this.name = name;
-        this.up = up;
-        this.level = level;
-        this.count = 0;
-        this.childrenSetStr = gson.toJson(new TreeSet<Integer>(), setType);
-        this.employeeSetStr = gson.toJson(new TreeSet<Integer>(), setType);
+        this(name, up, level, 0, 1, new TreeSet<Integer>(), new TreeSet<Integer>());
     }
 
-    public Knowledge(String name, int up, int level, int count, int warningCount, String childrenSetStr, String employeeSetStr) {
+    public Knowledge(String name, int up, int level, int count, int warningCount, Set<Integer> childrenSet, Set<Integer> employeeSet) {
         this.name = name;
         this.up = up;
         this.level = level;
         this.count = count;
         this.warningCount = warningCount;
-        this.childrenSetStr = childrenSetStr;
-        this.employeeSetStr = employeeSetStr;
-
-        Set<Integer> set = gson.fromJson(this.employeeSetStr, setType);
-
-        for (int id : set) {
-            Employee employee = DummyDB.getInstance().findEmployeeById(id);
-
-            employeeSet.add(employee);
-        }
+        this.childrenSet = childrenSet;
+        this.employeeSet = employeeSet;
     }
 
     public void manageUp(Context context) {
-        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.up);
+        Knowledge knowledge = Knowledge.getKnowledgeFromId(this.up);
 
         if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.addChild(this);
@@ -107,24 +74,14 @@ public class Knowledge {
         }
     }
 
-    public static Knowledge getById(int id, Knowledge root){
-        List<Knowledge> knowledgeList = getKnowledgeList(root);
-        for (Knowledge knowledge : knowledgeList) {
-            if(knowledge.getId() == id) return knowledge;
-        }
-        return null;
-    }
-
-    private static List<Knowledge> getKnowledgeList(Knowledge root){
-        ArrayList<Knowledge> knowledgeList = new ArrayList<>();
-        generateKnowledgeList(knowledgeList, root);
-        return knowledgeList;
+    public static Knowledge getById(int id){
+        return RoomDbManager.getInstance().getKnowledgeById(id);
     }
 
     private static void generateKnowledgeList(List<Knowledge> list, Knowledge knowledge){
         list.add(knowledge);
-        for (Knowledge child : knowledge.getChildren()) {
-            generateKnowledgeList(list, child);
+        for (Integer childId : knowledge.getChildrenSet()) {
+            generateKnowledgeList(list, RoomDbManager.getInstance().getKnowledgeById(childId));
         }
     }
 
@@ -134,21 +91,14 @@ public class Knowledge {
 
     public void setId(int id) { this.id = id; }
 
-    private List<Knowledge> getChildren() {
-        return children;
+    public Set<Integer> getChildrenSet() {
+        return this.childrenSet;
     }
 
     private void addChild(Knowledge knowledge) {
-        children.add(knowledge);
-
-        Set<Integer> set = new TreeSet<>();
-        for (Knowledge k : children) {
-            if (k != null) {
-                set.add(k.getId());
-            }
+        if (knowledge != null && knowledge.getId() > 0) {
+            this.childrenSet.add(knowledge.getId());
         }
-
-        this.childrenSetStr = gson.toJson(set, setType);
     }
 
     public String getName() {
@@ -179,52 +129,20 @@ public class Knowledge {
         this.level = level;
     }
 
-    public String getChildrenSetStr() {
-        return childrenSetStr;
+    public void setChildrenSet(Set<Integer> childrenSet) {
+        this.childrenSet = childrenSet;
     }
 
-    public String getEmployeeSetStr() {
-        return employeeSetStr;
+    public Set<Integer> getEmployeeSet() {
+        return employeeSet;
     }
 
-    public void setEmployeeSetStr(String employeeSetStr) {
-        this.employeeSetStr = employeeSetStr;
+    public void setEmployeeSet(Set<Integer> employeeSet) {
+        this.employeeSet = employeeSet;
     }
 
-    public static Knowledge getKnowledgeFromIdMap(int id) {
-        Knowledge k = RoomDbManager.getInstance().getKnowledgeById(id);
-
-        if (k != null) {
-            return k;
-        }
-
-        return new Knowledge("NotFound!", -1, 0);
-    }
-
-    private Map<Integer, Knowledge> getMapFromList(List<Knowledge> knowledgeList) {
-        TreeMap<Integer, Knowledge> map = new TreeMap<>();
-
-        for (Knowledge k : knowledgeList) {
-            map.put(k.getId(), k);
-        }
-
-        return map;
-    }
-
-    public void populateChildren(List<Knowledge> knowledgeList) {
-        Map<Integer, Knowledge> map = this.getMapFromList(knowledgeList);
-
-        Set<Integer> set = gson.fromJson(childrenSetStr, setType);
-
-        for (int i : set) {
-            if (map.containsKey(i)) {
-                Knowledge k = map.get(i);
-
-                if (k.getUp() > 0) {
-                    this.addChild(k);
-                }
-            }
-        }
+    public static Knowledge getKnowledgeFromId(int id) {
+        return RoomDbManager.getInstance().getKnowledgeById(id);
     }
 
     public int getWarningCount() {
@@ -241,12 +159,13 @@ public class Knowledge {
     }
 
     private boolean blackLeaf(Context context){
-        for (Knowledge child : children) {
+        for (Integer childId : this.childrenSet) {
+            Knowledge child = RoomDbManager.getInstance().getKnowledgeById(childId);
             if(child.redLeaf()) return true;
         }
 
-        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.getUp());
-        return knowledge.getUp() > -1 && knowledge.blackLeaf(context);
+        Knowledge knowledge = Knowledge.getKnowledgeFromId(this.getUp());
+        return knowledge != null && knowledge.getUp() > -1 && knowledge.blackLeaf(context);
     }
 
     private boolean redLeaf(){
@@ -254,28 +173,23 @@ public class Knowledge {
     }
 
     void count(Employee employee) {
-        employeeSet.add(employee);
+        this.employeeSet.add(employee.getId());
 
-        Set<Integer> set = gson.fromJson(this.employeeSetStr, setType);
-
-        set.add(employee.getId());
-
-        employeeSetStr = gson.toJson(set, setType);
-        count = employeeSet.size();
+        count = this.employeeSet.size();
 
         RoomDbManager.getInstance().updateKnowledgeByCountingAndEmployee(this);
 
-        Knowledge knowledge = Knowledge.getKnowledgeFromIdMap(this.getUp());
+        Knowledge knowledge = Knowledge.getKnowledgeFromId(this.getUp());
 
-        if (knowledge.getUp() >= 0) {
+        if (knowledge != null && knowledge.getUp() >= 0) {
             knowledge.count(employee);
         }
     }
 
     static TreeNode generateHRTree(Knowledge knowledge, Context context){
         TreeNode root = new TreeNode(new IconTreeItem(R.string.fa_leaf, ColorEnum.GREEN, knowledge)).setViewHolder(new TreeHolder(context));
-        for (Knowledge child : knowledge.getChildren()) {
-            root.addChild(generateHRItem(child));
+        for (Integer childId : knowledge.getChildrenSet()) {
+            root.addChild(generateHRItem(RoomDbManager.getInstance().getKnowledgeById(childId)));
         }
         return root;
     }
@@ -284,42 +198,42 @@ public class Knowledge {
         ColorEnum color;
         color = ColorEnum.GREEN;
         TreeNode node = new TreeNode(new IconTreeItem(R.string.fa_leaf, color, knowledge));
-        for (Knowledge child : knowledge.getChildren()) {
-            node.addChild(generateHRItem(child));
+        for (Integer childId : knowledge.getChildrenSet()) {
+            node.addChild(generateHRItem(RoomDbManager.getInstance().getKnowledgeById(childId)));
         }
         return node;
     }
 
     static TreeNode generateManagerTree(Knowledge knowledge, Context context){
         TreeNode root = new TreeNode(new IconTreeItem(R.string.fa_leaf, ColorEnum.GREEN, knowledge)).setViewHolder(new TreeHolder(context));
-        for (Knowledge child : knowledge.getChildren()) {
-            root.addChild(generateManagerItem(child, context));
+        for (Integer childId : knowledge.getChildrenSet()) {
+            root.addChild(generateManagerItem(RoomDbManager.getInstance().getKnowledgeById(childId), context));
         }
         return root;
     }
 
     private static TreeNode generateManagerItem(Knowledge knowledge, Context context){
         ColorEnum color;
-        if(knowledge.redLeaf()){
+        if (knowledge.redLeaf()) {
             color = ColorEnum.RED;
-        } else if(knowledge.blackLeaf(context)){
+        } else if (knowledge.blackLeaf(context)) {
             color = ColorEnum.BLACK;
         } else {
             color = ColorEnum.GREEN;
         }
+
         TreeNode node = new TreeNode(new IconTreeItem(R.string.fa_leaf, color, knowledge));
-        for (Knowledge child : knowledge.getChildren()) {
-            node.addChild(generateManagerItem(child, context));
+        for (Integer childId : knowledge.getChildrenSet()) {
+            node.addChild(generateManagerItem(RoomDbManager.getInstance().getKnowledgeById(childId), context));
         }
         return node;
     }
 
     static TreeNode generateUserTree(Employee employee, Context context){
-        Knowledge rootKnowledge = employee.getRootKnowledge();
-        Set<Knowledge> knowledgeSet = employee.getKnowledgeSet();
-        Set<Integer> set = gson.fromJson(employee.getKnowledgeSetStr(), setType);
+        Knowledge rootKnowledge = Knowledge.ROOT;
+        Set<Integer> set = employee.getKnowledgeSet();
 
-        if(rootKnowledge == null) return new TreeNode(new IconTreeItem(R.string.fa_leaf,
+        if (rootKnowledge == null) return new TreeNode(new IconTreeItem(R.string.fa_leaf,
                 "Árvore do Conhecimento",
                 ColorEnum.GREEN, null)).setViewHolder(new TreeHolder(context));
 
@@ -327,7 +241,8 @@ public class Knowledge {
                 rootKnowledge.getName(),
                 ColorEnum.GREEN, null)).setViewHolder(new TreeHolder(context));
 
-        for (Knowledge child : rootKnowledge.getChildren()) {
+        for (Integer childId : rootKnowledge.getChildrenSet()) {
+            Knowledge child = RoomDbManager.getInstance().getKnowledgeById(childId);
             if (child != null && set.contains(child.getId())) {
                 root.addChild(generateUserItem(child, set));
             }
@@ -340,8 +255,10 @@ public class Knowledge {
         TreeNode node = new TreeNode(new IconTreeItem(R.string.fa_leaf, knowledge.getName(),
                 ColorEnum.GREEN, null));
 
-        for (Knowledge child : knowledge.getChildren()) {
-            if(child != null && set.contains(child.getId())) {
+        for (Integer childId : knowledge.getChildrenSet()) {
+            Knowledge child = RoomDbManager.getInstance().getKnowledgeById(childId);
+
+            if (child != null && set.contains(child.getId())) {
                 node.addChild(generateUserItem(child, set));
             }
         }
