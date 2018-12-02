@@ -30,8 +30,8 @@ public class UploadFragment extends Fragment {
 
     @BindView(R.id.input_test_date) EditText testDateTxt;
     Calendar myCalendar;
-    TextView txtImagePath;
-    Button btnAttachImage;
+
+
     Button btnSend;
     @BindView(R.id.input_knowledge) EditText _txtKnowledge;
     @BindView(R.id.input_test) EditText _txtCertification;
@@ -57,8 +57,6 @@ public class UploadFragment extends Fragment {
 
         myCalendar = Calendar.getInstance();
 
-        txtImagePath = (TextView) view.findViewById(R.id.txtImagePath);
-        btnAttachImage = (Button) view.findViewById(R.id.btnAttachImage);
         btnSend = (Button) view.findViewById(R.id.btn_send);
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -84,21 +82,6 @@ public class UploadFragment extends Fragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
-        btnAttachImage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_on));
-        btnAttachImage.setOnClickListener(new View.OnClickListener() {
-
-                    public void onClick(View arg0) {
-
-                        // in onCreate or any event where your want the user to
-                        // select a file
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent,
-                                "Selecionar imagem"), SELECT_PICTURE);
-                    }
-                });
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,19 +135,6 @@ public class UploadFragment extends Fragment {
         }
 
         return valid;
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                txtImagePath.setText("Imagem anexada.");
-                btnAttachImage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_off));
-                return;
-            }
-        }
-        btnAttachImage.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.button_on));
-        txtImagePath.setText("Erro ao anexar imagem.");
     }
 
     private void updateLabel() {

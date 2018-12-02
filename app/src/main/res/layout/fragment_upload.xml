@@ -103,16 +103,6 @@
                         tools:ignore="KeyboardInaccessibleWidget,TextFields" />
                 </android.support.design.widget.TextInputLayout>
 
-                <Button
-                    android:drawableLeft="@drawable/attach"
-                    android:textSize="12sp"
-                    android:background="@drawable/button_on"
-                    android:textColor="@color/jet"
-                    android:id="@+id/btnAttachImage"
-                    android:text="@string/attach_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
                 <TextView
                     android:id="@+id/txtImagePath"
                     android:layout_width="match_parent"
