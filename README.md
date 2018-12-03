@@ -6,3 +6,7 @@ Este projeto começa de onde o projeto de IHC terminou!
 A página do projeto de IHC, aqui no GitHub, é:
 https://github.com/dsfb/IHC_FatecSP_2sem_2017
 .
+
+O repositório original, espelhado, está em: 
+https://github.com/dsfb/KnowledgeTree_IHC_ADS_FatecSP 
+.
