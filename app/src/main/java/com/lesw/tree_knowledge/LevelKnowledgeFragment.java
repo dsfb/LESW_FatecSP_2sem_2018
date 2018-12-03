@@ -51,7 +51,22 @@ public class LevelKnowledgeFragment extends Fragment {
             levelArray[i] = Integer.toString(levels.get(i));
         }
 
-        spAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, levelArray);
+        spAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, levelArray) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Cast the list item as a text view
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+
+                // Set the text color of list item
+                tv.setTextColor(Color.BLACK);
+
+                // Set the background color of list item
+                tv.setBackgroundColor(Color.WHITE);
+
+                // Return the view
+                return tv;
+            }
+        };
         spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spAdapter);
 
@@ -89,7 +104,22 @@ public class LevelKnowledgeFragment extends Fragment {
 
         String[] dados = conj.toArray(new String[conj.size()]);
 
-        adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, dados);
+        adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, dados) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Cast the list item as a text view
+                TextView tv = (TextView) super.getView(position, convertView, parent);
+
+                // Set the text color of list item
+                tv.setTextColor(Color.BLACK);
+
+                // Set the background color of list item
+                tv.setBackgroundColor(Color.WHITE);
+
+                // Return the view
+                return tv;
+            }
+        };
         scrollView.setAdapter(adapter);
     }
 }
