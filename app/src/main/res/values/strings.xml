@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_version">Versão: 1.1.2</string>
     <string name="app_name">Árvore do Conhecimento</string>
 
     <string name="hello_world">Hello world!</string>
